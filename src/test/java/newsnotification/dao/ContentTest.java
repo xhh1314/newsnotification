@@ -1,5 +1,6 @@
 package newsnotification.dao;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import org.junit.Test;
@@ -34,9 +35,15 @@ public class ContentTest {
 		content.setId(1);
 		content.setTitle("测试");
 		content.setContent("在我小的时候，熬夜还是一件不常见的事情。那个时候身边的人的作息都十分有规律，");
-		content.setReceiveTime(new Date());
+		//content.setReceiveTime(new Date());
 		System.out.println(dao.updateContent(content));
 		
+	}
+	@Test
+	public void regexTest(){
+		String contentDate="2112-01-01";
+		
+		System.out.println(contentDate.matches("^[2][0]\\d{2}\\-\\d{2}\\-\\d{2}"));
 	}
 
 }

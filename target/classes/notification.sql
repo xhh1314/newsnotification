@@ -13,6 +13,7 @@ create table content(
  title varchar(255) not null,
  content text,
  receive_time date,
+ status TINYINT(1),
  create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
  primary key(id)
 );

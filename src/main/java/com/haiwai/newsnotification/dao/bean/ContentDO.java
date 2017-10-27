@@ -10,6 +10,9 @@ import javax.persistence.Id;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.haiwai.newsnotification.manage.util.TimeTransfer;
+import com.haiwai.newsnotification.service.ContentBO;
+
 /**
  * 存储正文的表
  * 
@@ -44,6 +47,22 @@ public class ContentDO implements Serializable {
 	 * 创建内容的时间戳
 	 */
 	private Date createTime;
+	
+	/**
+	 * 文章状态，1表示已发布，0表示未发布
+	 */
+	private int status;
+	
+	public ContentDO(){}
+	
+	public ContentDO(ContentBO bo){
+		this.id=bo.getCid();
+		this.title=bo.getTitle();
+		this.content=bo.getContent();
+		this.receiveTime=TimeTransfer.stringToDate(bo.getReceiveTime());
+		this.status=bo.getStatus();
+	}
+	
 
 	@Id
 	@GeneratedValue
@@ -81,7 +100,6 @@ public class ContentDO implements Serializable {
 	public Date getReceiveTime() {
 		return receiveTime;
 	}
-
 	public void setReceiveTime(Date receiveTime) {
 		this.receiveTime = receiveTime;
 	}
@@ -97,8 +115,17 @@ public class ContentDO implements Serializable {
 		return createTime;
 	}
 
+	
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
+	}
+
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
 	}
 
 }

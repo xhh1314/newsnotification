@@ -95,4 +95,10 @@ public class ContentDaoImpl implements ContentDao {
 		return contentJpa.countContent();
 	}
 
+	@Override
+	public ContentDO getContent(Integer id) {
+		// TODO Auto-generated method stub
+		return contentJpa.findOne(id);
+	}
+
 }
