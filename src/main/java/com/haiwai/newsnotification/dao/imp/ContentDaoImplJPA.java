@@ -19,7 +19,7 @@ import com.haiwai.newsnotification.dao.bean.ContentDO;
 @Repository
 public interface ContentDaoImplJPA extends JpaRepository<ContentDO, Integer> {
 
-	@Query(value = "select id,title,content from content where title like %?1% or content like %?1%", nativeQuery = true)
+	@Query(value = "select id,title,content,receive_time from content where title like %?1% or content like %?1%", nativeQuery = true)
 	List<ContentDO> listByKey(String key);
 
 	@Query(value = "select count(*) from content", nativeQuery = true)
@@ -30,5 +30,8 @@ public interface ContentDaoImplJPA extends JpaRepository<ContentDO, Integer> {
 	Integer updateContent(Integer id, String content);
 
 	ContentDO getContentById(Integer id);
+
+	@Query(value="select id,title,content,receive_time from content limit ?1 ,?2",nativeQuery=true)
+	List<ContentDO> listByLimit(int begin, int offset);
 
 }

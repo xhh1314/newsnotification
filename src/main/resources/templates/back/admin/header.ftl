@@ -11,7 +11,7 @@
     <link href="${ctx}/admin/css/style.min.css?v=v1.0" rel="stylesheet" type="text/css">
 
 </head>
-<body class="fixed-left">
+<body class="fixed-left" onload="initialPage()">
 <div id="wrapper">
      <div class="topbar">
         <div class="topbar-left">
@@ -42,8 +42,7 @@
                     </li>
                     
 
-                  
-
+    
                 
                 </ul>
                 <div class="clearfix"></div>

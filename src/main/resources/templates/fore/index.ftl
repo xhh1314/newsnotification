@@ -1,19 +1,25 @@
 <!DOCTYPE html>
 <html>
+<#assign ctx=request.contextPath />
 <head>
-<script type="text/javascript" src="../jquery-3.1.0.js"></script>
-<script type="text/javascript" src="../semanticui/dist/semantic.min.js"></script>
-<script type="text/javascript" src="../laydate/laydate.js"></script>
-<link rel="stylesheet" type="text/css" href="../semanticui/dist/semantic.min.css">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script type="text/javascript" src="${ctx}/jquery-3.1.0.js"></script>
+<script type="text/javascript" src="${ctx}/semanticui/dist/semantic.min.js"></script>
+<script type="text/javascript" src="${ctx}/laydate/laydate.js"></script>
+<link rel="stylesheet" type="text/css" href="${ctx}/semanticui/dist/semantic.min.css">
 <script type="text/javascript">
 //执行一个laydate实例
 laydate.render({
-  elem: '#input-newsTime' //指定元素
+  elem: '#input-newsTime',calender:true //指定元素
 });
+//解决初次加载时显示不出来问题
+function loadCalender(){
+	laydate.render({
+		  elem: '#input-newsTime',calender:true //指定元素
+		});
+}
 </script>
 <style type="text/css">
-
-
 .notification-nav {position: fixed;top: 0px;left: 0px;height: 60px;margin-bottom: 0px;z-index: 2;min-width:1200px!important;}
 .notification-content {position: fixed;top: 46px;margin-left: auto;margin-right: auto;margin-top: 0px;min-width: 750px;z-index: 1;
 	border-top: none !important;}
@@ -27,9 +33,9 @@ laydate.render({
 .search-button{pointer-events:auto !important;cursor:pointer;}
 </style>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>新闻主题</title>
 </head>
-<body>
+<body onload="loadCalender()">
 	<div class="ui attached stackable menu notification-nav">
 
 		<div class="ui container nav-middle">

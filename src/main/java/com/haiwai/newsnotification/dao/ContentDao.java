@@ -87,4 +87,6 @@ public interface ContentDao {
 	 */
 	Integer countContent();
 
+	ContentDO getContent(Integer id);
+
 }

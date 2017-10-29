@@ -84,8 +84,7 @@ public class ContentDaoImpl implements ContentDao {
 	@Transactional(readOnly=true)
 	public List<ContentDO> listByLimit(int begin, int offset) {
 		// TODO Auto-generated method stub
-		logger.error("该方法没有实现{}", ContentDaoImpl.class);
-		throw new RuntimeException("方法没有实现！");
+		return contentJpa.listByLimit(begin,offset);
 	}
 
 	@Override
@@ -93,6 +92,12 @@ public class ContentDaoImpl implements ContentDao {
 	public Integer countContent() {
 		// TODO Auto-generated method stub
 		return contentJpa.countContent();
+	}
+
+	@Override
+	public ContentDO getContent(Integer id) {
+		// TODO Auto-generated method stub
+		return contentJpa.findOne(id);
 	}
 
 }

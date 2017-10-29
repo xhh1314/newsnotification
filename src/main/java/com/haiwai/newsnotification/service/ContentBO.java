@@ -1,13 +1,14 @@
 package com.haiwai.newsnotification.service;
 
-import java.util.Date;
+import com.haiwai.newsnotification.dao.bean.ContentDO;
+import com.haiwai.newsnotification.manage.util.TimeTransfer;
 
-public class ContentBO {
+public class ContentBO implements Comparable<ContentBO>{
 	
 	/**
 	 * 自增id
 	 */
-	private Integer id;
+	private int cid;
 	/**
 	 * 文章标题
 	 */
@@ -19,13 +20,32 @@ public class ContentBO {
 	/**
 	 * 网新办下发日期
 	 */
-	private Date receiveTime;
-	public Integer getId() {
-		return id;
+	private String receiveTime;
+	/**
+	 * 文章状态
+	 */
+	private int status;
+	
+	public ContentBO(){}
+	
+	public ContentBO(ContentDO content){
+		this.cid=content.getId();
+		this.content=content.getContent();
+		this.title=content.getTitle();
+		this.receiveTime=TimeTransfer.dateToLocalDate(content.getReceiveTime()).toString();
+		this.status=content.getStatus();
 	}
-	public void setId(Integer id) {
-		this.id = id;
+	
+	
+	
+	public Integer getCid() {
+		return cid;
 	}
+
+	public void setCid(Integer cid) {
+		this.cid = cid;
+	}
+
 	public String getTitle() {
 		return title;
 	}
@@ -38,11 +58,33 @@ public class ContentBO {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	public Date getReceiveTime() {
+	
+	public String getReceiveTime() {
 		return receiveTime;
 	}
-	public void setReceiveTime(Date receiveTime) {
+
+	public void setReceiveTime(String receiveTime) {
 		this.receiveTime = receiveTime;
+	}
+
+	
+	public int getStatus() {
+		return status;
+	}
+	public void setStatus(int status) {
+		this.status = status;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	 * 实现一个降序
+	 */
+	@Override
+	public int compareTo(ContentBO o) {
+		// TODO Auto-generated method stub
+		if(this.getCid()==o.getCid())
+			return 0;
+		return this.getCid()>o.getCid()?-1:1;
 	}
 	
 	
