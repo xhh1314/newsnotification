@@ -1,62 +1,4 @@
-
 <#include "/back/admin/header.ftl">
-<div class="row">
-    <div class="col-sm-12">
-        <h3 class="page-title">文章管理</h3>
-    </div>
-    <div class="col-md-12">
-        <table class="ui celled table contentTable" >
-            <thead>
-            <tr>
-                <th width="35%">文章标题</th>
-                <th width="15%">发布时间</th>
-                <th>操作</th>
-            </tr>
-            </thead>
-            <tbody>
-            <#list contents?if_exists as content>
-            <tr cid="${content.cid}">
-                <td class="contentTable-frist">
-                    <a href="${ctx}/content/${content.cid}">${content.title}</a>
-                </td>
-                <td class="contentTable-second">${content.receiveTime}</td>
-                <td class="contentTable-third">
-						<div class="content-conduct">
-							<a href="${ctx}/admin/updateContent/${content.cid}" target="_blank" class="btn btn-primary btn-sm waves-effect waves-light m-b-5">
-							<i class="fa fa-edit"></i> <span>编辑</span></a> 
-								<a href="javascript:void(0)" 
-								class="btn btn-danger btn-sm waves-effect waves-light m-b-5"  onclick="contentDelete(${content.cid})"> <i
-								class="fa fa-trash-o"></i> <span>删除</span></a> 
-						</div>
-					</td>
-            </tr>
-            </#list>
-            </tbody>
-            <tfoot id="pageMenu">
-				<tr>
-					<th colspan="3">
-						<div class="ui right floated pagination menu footPageModule" >
-							<a class="icon item" id="pagePrevious" onclick="pagePrevious()">
-								<i id="pagePreviousImg" class="left chevron icon"></i>
-							</a> <a class="icon item" id="pageNext" onclick="pageNext()"> <i id="pageNextImg"
-								class="right chevron icon"></i>
-							</a>
-						</div>
-					</th>
-				</tr>
-			</tfoot>
-        </table>
-    </div>
-</div>
-<!-- 正文容器底线 -->
-<footer class="footer text-right">
-    2017 © <a href="http://www.haiwainet.cn" target="_blank" style="text-decoration:none;color:#58666E">海外网</a>.
-</footer>
-</div>
-</div>
-</div>
-</div>
-</body>
 <style type="text/css">
 .contentTable{width:1000px !important;font-size:16px;}
 .contentTable-frist{width:50%; !important;}
@@ -74,7 +16,6 @@ var currentPage=${page?if_exists.currentPage};
 var beginPage=${page?if_exists.beginPage};
 var endPage=${page?if_exists.endPage};
 var totalPage=${page?if_exists.totalPage};
-
 function initialPage() {
 	// var a=document.getElementById("pageItem");
 	// 如果总页数小于等于1就不显示页码
@@ -151,4 +92,103 @@ function contentDelete(cid) {
 
 }
 </script>
+
+
+<body class="fixed-left" onload="initialPage()">
+<div id="wrapper">
+     <div class="topbar">
+        <div class="topbar-left">
+            <div class="text-center p-t-10" style="margin: 0 auto;">
+                <div class="pull-left" style="padding-left: 10px;border: 0px solid black;">
+                    <a href="/admin/index">
+                        <img src="${ctx}/admin/images/unicorn.png" width="50" height="50"/>
+                    </a>
+                    <a style="margin-left:20px;vertical-align:50%;font-size:25px;font-weight:bold;color:#059AEC">海外网</a>
+                   
+                </div>
+            </div>
+        </div>
+        <div class="navbar navbar-default" role="navigation" style="border: 0px solid black;">
+               <span style="line-height: 50px;font-size:30px;margin-left:35%">新闻主题</span>
+            <span style="line-height: 50px;margin-left:40%">注销</span>
+        </div>
+    </div>
+    <div class="left side-menu">
+        <div class="sidebar-inner slimscrollleft">
+            <div id="sidebar-menu">
+                <ul>
+                <li #if(active=='article') class="active" #end>
+                        <a href="${ctx }/admin/index" class="waves-effect #if(active=='article') active #end"><i class="fa fa-list" aria-hidden="true"></i><span> 文章管理 </span></a>
+                 </li>
+                    <li #if(active=='publish') class="active" #end>
+                        <a href="${ctx}/admin/contentEdit" class="waves-effect #if(active=='publish') active #end"><i class="fa fa-pencil-square-o" aria-hidden="true"></i><span> 发布文章 </span></a>
+                    </li>
+              
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+    <div class="content-page">
+        <div class="content">
+            <div class="container">
+<div class="row">
+    <div class="col-sm-12">
+        <h3 class="page-title">文章管理</h3>
+    </div>
+    <div class="col-md-12">
+        <table class="ui celled table contentTable" >
+            <thead>
+            <tr>
+                <th width="35%">文章标题</th>
+                <th width="15%">发布时间</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <#list contents?if_exists as content>
+            <tr cid="${content.cid}">
+                <td class="contentTable-frist">
+                    <a href="${ctx}/content/${content.cid}">${content.title}</a>
+                </td>
+                <td class="contentTable-second">${content.receiveTime}</td>
+                <td class="contentTable-third">
+						<div class="content-conduct">
+							<a href="${ctx}/admin/updateContent/${content.cid}" target="_blank" class="btn btn-primary btn-sm waves-effect waves-light m-b-5">
+							<i class="fa fa-edit"></i> <span>编辑</span></a> 
+								<a href="javascript:void(0)" 
+								class="btn btn-danger btn-sm waves-effect waves-light m-b-5"  onclick="contentDelete(${content.cid})"> <i
+								class="fa fa-trash-o"></i> <span>删除</span></a> 
+						</div>
+					</td>
+            </tr>
+            </#list>
+            </tbody>
+            <tfoot id="pageMenu">
+				<tr>
+					<th colspan="3">
+						<div class="ui right floated pagination menu footPageModule" >
+							<a class="icon item" id="pagePrevious" onclick="pagePrevious()">
+								<i id="pagePreviousImg" class="left chevron icon"></i>
+							</a> <a class="icon item" id="pageNext" onclick="pageNext()"> <i id="pageNextImg"
+								class="right chevron icon"></i>
+							</a>
+						</div>
+					</th>
+				</tr>
+			</tfoot>
+        </table>
+    </div>
+</div>
+<!-- 正文容器底线 -->
+<footer class="footer text-right">
+    2017 © <a href="http://www.haiwainet.cn" target="_blank" style="text-decoration:none;color:#58666E">海外网</a>.
+</footer>
+</div>
+</div>
+</div>
+</div>
+</body>
+
 <#include "/back/admin/footer.ftl">

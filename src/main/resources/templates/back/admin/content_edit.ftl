@@ -1,92 +1,4 @@
 <#include "/back/admin/header.ftl">
-<link href="${ctx}/admin/plugins/tagsinput/jquery.tagsinput.css" rel="stylesheet">
-<link href="${ctx}/admin/plugins/select2/dist/css/select2-bootstrap.css" rel="stylesheet">
-<link href="${ctx}/admin/plugins/toggles/toggles.css" rel="stylesheet">
-
-
-<script type="text/javascript" src="${ctx}/jquery-3.1.0.js"></script>
-<!-- 日期控件 -->
-<script type="text/javascript" src="${ctx}/laydate/laydate.js"></script>
-
-<script type="text/javascript" src="${ctx }/ueditor/ueditor.config.js"></script>
-<script type="text/javascript" src="${ctx }/ueditor/ueditor.all.js"></script>
-<script type="text/javascript" src="${ctx}/myJSCSS/my.js"></script>
-<script type="text/javascript" >
-//执行一个laydate实例
-laydate.render({
-  elem: '.contentDate',calender:true //指定元素
-});
-//解决初次加载时显示不出来问题
-function loadCalender(){
-	laydate.render({
-		  elem: '.contentDate',calender:true //指定元素
-		});
-}
-//form序列化转换为json对象 
-$.fn.serializeJson=function(){    
-    var serializeObj={};    
-    var array=this.serializeArray();    
-    var str=this.serialize();    
-    $(array).each(function(){    
-        if(serializeObj[this.name]){    
-            if($.isArray(serializeObj[this.name])){    
-                serializeObj[this.name].push(this.value);    
-            }else{    
-                serializeObj[this.name]=[serializeObj[this.name],this.value];    
-            }    
-        }else{    
-            serializeObj[this.name]=this.value;     
-        }    
-    });    
-    return serializeObj;    
-}  
-
-
-var ue = UE.getEditor('container');
-//取出uEdit编辑器里content内容
-function takeout() {
-	var contents;
-	// 对编辑器的操作最好在编辑器ready之后再做
-	ue.ready(function() {
-		// 获取html内容，返回: <p>hello</p>
-		contents = ue.getContent();
-		// 获取纯文本内容，返回: hello
-		// var txt = ue.getContentTxt();
-	});
-	$("#content").val(contents);
-}
-function saveContent(){
-	takeout();
-	//var form = document.getElementById("articleForm");
-	var formData =$("#articleForm").serializeJson();
-	$.ajax({
-		url :"${ctx}/admin/saveContent",
-		type:"POST",
-		contentType :"application/json",
-		data : JSON.stringify(formData),
-		dataType : "json",
-		success : function(data) {
-			if (data.meta.success == true) {
-				var cid = data.data.cid;
-				$("#cid").val(cid);
-				$("#status").val(data.data.status);
-				alert(data.meta.message);
-			} else {
-				alert(data.meta.message);
-			}
-		},
-		error : function(error) {
-			alert("系统忙！");
-		}
-	});
-	
-}
-
-function returnList(){
-	location.href="${ctx}/admin/index";
-}
-
-</script>
 
 <style rel="stylesheet">
     #tags_tagsinput {
@@ -163,6 +75,47 @@ function returnList(){
  .page-title{margin-left:5px;}
  .articleForm-second div{display:inline-block;}
 </style>
+
+<body class="fixed-left" onload="loadCalender()">
+<div id="wrapper">
+     <div class="topbar">
+        <div class="topbar-left">
+            <div class="text-center p-t-10" style="margin: 0 auto;">
+                <div class="pull-left" style="padding-left: 10px;border: 0px solid black;">
+                    <a href="/admin/index">
+                        <img src="${ctx}/admin/images/unicorn.png" width="50" height="50"/>
+                    </a>
+                    <a style="margin-left:20px;vertical-align:50%;font-size:25px;font-weight:bold;color:#059AEC">海外网</a>
+                   
+                </div>
+            </div>
+        </div>
+        <div class="navbar navbar-default" role="navigation" style="border: 0px solid black;">
+               <span style="line-height: 50px;font-size:30px;margin-left:35%">新闻主题</span>
+            <span style="line-height: 50px;margin-left:40%">注销</span>
+        </div>
+    </div>
+    <div class="left side-menu">
+        <div class="sidebar-inner slimscrollleft">
+            <div id="sidebar-menu">
+                <ul>
+                <li #if(active=='article') class="active" #end>
+                        <a href="${ctx }/admin/index" class="waves-effect #if(active=='article') active #end"><i class="fa fa-list" aria-hidden="true"></i><span> 文章管理 </span></a>
+                 </li>
+                    <li #if(active=='publish') class="active" #end>
+                        <a href="${ctx}/admin/contentEdit" class="waves-effect #if(active=='publish') active #end"><i class="fa fa-pencil-square-o" aria-hidden="true"></i><span> 发布文章 </span></a>
+                    </li>
+              
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+    <div class="content-page">
+        <div class="content">
+            <div class="container">
+<!-- 正文容器分割线 -->
 <div class="row">
     <div class="col-sm-12">
         <h4 class="page-title">
@@ -221,6 +174,100 @@ function returnList(){
 </div>
 </div>
 </body>
+<link href="${ctx}/admin/plugins/tagsinput/jquery.tagsinput.css" rel="stylesheet">
+<link href="${ctx}/admin/plugins/select2/dist/css/select2-bootstrap.css" rel="stylesheet">
+<link href="${ctx}/admin/plugins/toggles/toggles.css" rel="stylesheet">
+<script type="text/javascript" src="${ctx}/jquery-3.1.0.js"></script>
+<!-- 日期控件 -->
+<script type="text/javascript" src="${ctx}/laydate/laydate.js"></script>
+<script type="text/javascript" src="${ctx }/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" src="${ctx }/ueditor/ueditor.all.js"></script>
+<script type="text/javascript" src="${ctx}/myJSCSS/my.js"></script>
+<script type="text/javascript" >
+//执行一个laydate实例
+laydate.render({
+  elem: '.contentDate',calender:true //指定元素
+});
+//解决初次加载时显示不出来问题
+function loadCalender(){
+	laydate.render({
+		  elem: '.contentDate',calender:true //指定元素
+		});
+}
+//form序列化转换为json对象 
+$.fn.serializeJson=function(){    
+    var serializeObj={};    
+    var array=this.serializeArray();    
+    var str=this.serialize();    
+    $(array).each(function(){    
+        if(serializeObj[this.name]){    
+            if($.isArray(serializeObj[this.name])){    
+                serializeObj[this.name].push(this.value);    
+            }else{    
+                serializeObj[this.name]=[serializeObj[this.name],this.value];    
+            }    
+        }else{    
+            serializeObj[this.name]=this.value;     
+        }    
+    });    
+    return serializeObj;    
+} 
+
+//解决初次加载时显示不出来问题
+function loadCalender(){
+	laydate.render({
+		  elem: '#input-newsTime',calender:true //指定元素
+		});
+} 
+
+
+var ue = UE.getEditor('container');
+//取出uEdit编辑器里content内容
+function takeout() {
+	var contents;
+	// 对编辑器的操作最好在编辑器ready之后再做
+	ue.ready(function() {
+		// 获取html内容，返回: <p>hello</p>
+		contents = ue.getContent();
+		// 获取纯文本内容，返回: hello
+		// var txt = ue.getContentTxt();
+	});
+	$("#content").val(contents);
+}
+function saveContent(){
+	takeout();
+	//var form = document.getElementById("articleForm");
+	var formData =$("#articleForm").serializeJson();
+	$.ajax({
+		url :"${ctx}/admin/saveContent",
+		type:"POST",
+		contentType :"application/json",
+		data : JSON.stringify(formData),
+		dataType : "json",
+		success : function(data) {
+			if (data.meta.success == true) {
+				var cid = data.data.cid;
+				$("#cid").val(cid);
+				$("#status").val(data.data.status);
+				alert(data.meta.message);
+			} else {
+				alert(data.meta.message);
+			}
+		},
+		error : function(error) {
+			alert("系统忙！");
+		}
+	});
+	
+}
+
+function returnList(){
+	location.href="${ctx}/admin/index";
+}
+</script>
+
+
+
 <script src="${ctx }/admin/plugins/tagsinput/jquery.tagsinput.min.js"></script>
 <script src="${ctx }/admin/plugins/jquery-multi-select/jquery.quicksearch.js"></script>
 <script src="${ctx }/admin/js/article.js?v=v1.0" type="text/javascript"></script>

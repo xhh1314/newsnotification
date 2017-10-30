@@ -1,5 +1,5 @@
 var mditor, htmlEditor;
-var tale = new $.tale();
+//var tale = new $.tale();
 var attach_url = $('#attach_url').val();
 // 每60秒自动保存一次草稿
 var refreshIntervalId = setInterval("autoSave()", 60 * 1000);

@@ -2,7 +2,6 @@
 <!-- 正文容器 -->
 	<div class="ui raised very padded text container segment notification-content">
 		<h2 class="ui header">${message!""}</h2>
-
 		<div class="ui divided items">
 <#list contents!"" as content>
 			<div class="item">
