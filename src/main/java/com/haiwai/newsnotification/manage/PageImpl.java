@@ -66,11 +66,11 @@ public class PageImpl extends AbstractPage {
 	@Override
 	protected void caculateBeginAndOffset() {
 		// TODO Auto-generated method stub
-	    this.beginNumber=totalNumber-currentPage*eachPageNumber+1;
+	    this.beginNumber=totalNumber-currentPage*eachPageNumber;
 		this.offset=eachPageNumber;
-		if(beginNumber<=0) {
-			this.offset=eachPageNumber+beginNumber-1;
-			beginNumber=1;
+		if(beginNumber<0) {
+			this.offset=eachPageNumber+beginNumber+1;
+			beginNumber=0;
 		}
 	}
 

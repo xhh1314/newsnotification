@@ -31,7 +31,13 @@ public interface ContentDaoImplJPA extends JpaRepository<ContentDO, Integer> {
 
 	ContentDO getContentById(Integer id);
 
-	@Query(value="select id,title,content,receive_time from content limit ?1 ,?2",nativeQuery=true)
+	@Query(value = "select id,title,content,receive_time from content limit ?1 ,?2", nativeQuery = true)
 	List<ContentDO> listByLimit(int begin, int offset);
+
+	@Query(value = "select id,title,content,receive_time from content where receive_time=?1", nativeQuery = true)
+	List<ContentDO> listContentByDate(String date);
+
+	@Query(value = "SELECT id,title,content,receive_time FROM content where create_time>=DATE_SUB(CURDATE(), INTERVAL 6 DAY)", nativeQuery = true)
+	List<ContentDO> listByRecentSevenDay();
 
 }

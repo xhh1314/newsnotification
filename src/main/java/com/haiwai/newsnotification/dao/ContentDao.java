@@ -44,12 +44,12 @@ public interface ContentDao {
 	List<ContentDO> listContent();
 
 	/**
-	 * 根据某一个日常查询内容
+	 * 根据某一个日期查询内容
 	 * 
-	 * @param date
+	 * @param date 日期格式为yyyy-MM-dd
 	 * @return
 	 */
-	List<ContentDO> listByDate(Date date);
+	List<ContentDO> listByDate(String date);
 
 	/**
 	 * 根据关键字查询内容
@@ -88,5 +88,11 @@ public interface ContentDao {
 	Integer countContent();
 
 	ContentDO getContent(Integer id);
+
+	/**
+	 * 返回最近7天创建的数据,以实际创建时期为准
+	 * @return
+	 */
+	List<ContentDO> listByRecentSevenDay();
 
 }

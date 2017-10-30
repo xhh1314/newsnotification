@@ -47,8 +47,7 @@ public class ContentDaoImpl implements ContentDao {
 	@Transactional
 	public void deleteContent(Integer id) {
 		// TODO Auto-generated method stub
-		logger.error("该方法没有实现{}", ContentDaoImpl.class);
-		throw new RuntimeException("方法没有实现！");
+		contentJpa.delete(id);
 	}
 
 	@Override
@@ -60,9 +59,9 @@ public class ContentDaoImpl implements ContentDao {
 
 	@Override
 	@Transactional(readOnly=true)
-	public List<ContentDO> listByDate(Date date) {
+	public List<ContentDO> listByDate(String date) {
 		// TODO Auto-generated method stub
-		return contentJpa.findAll();
+		return contentJpa.listContentByDate(date);
 	}
 
 	@Override
@@ -98,6 +97,12 @@ public class ContentDaoImpl implements ContentDao {
 	public ContentDO getContent(Integer id) {
 		// TODO Auto-generated method stub
 		return contentJpa.findOne(id);
+	}
+
+	@Override
+	public List<ContentDO> listByRecentSevenDay() {
+		// TODO Auto-generated method stub
+		return contentJpa.listByRecentSevenDay();
 	}
 
 }

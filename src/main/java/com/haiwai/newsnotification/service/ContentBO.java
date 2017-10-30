@@ -8,7 +8,7 @@ public class ContentBO implements Comparable<ContentBO>{
 	/**
 	 * 自增id
 	 */
-	private int cid;
+	private Integer cid;
 	/**
 	 * 文章标题
 	 */

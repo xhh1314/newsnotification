@@ -1,6 +1,12 @@
 package com.haiwai.newsnotification.manage.exception;
 
-public class PageException extends RuntimeException{
+/**
+ * 分页参数异常
+ * @author lh
+ * @date 2017年10月30日
+ * @version 1.0
+ */
+public class PageException extends RuntimeException {
 
 	/**
 	 * 

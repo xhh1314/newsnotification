@@ -39,10 +39,11 @@ $.fn.serializeJson=function(){
         }    
     });    
     return serializeObj;    
-};    
+}  
 
-// 取出uEdit编辑器里content内容
+
 var ue = UE.getEditor('container');
+//取出uEdit编辑器里content内容
 function takeout() {
 	var contents;
 	// 对编辑器的操作最好在编辑器ready之后再做
@@ -81,6 +82,9 @@ function saveContent(){
 	
 }
 
+function returnList(){
+	location.href="${ctx}/admin/index";
+}
 
 </script>
 
@@ -168,11 +172,12 @@ function saveContent(){
     <div class="col-md-12">
         <input type="hidden" id="attach_url" value="" />
         <form id="articleForm" method="post">
-            <input type="hidden" name="cid" id="cid" value="0" />
+        <!-- int 类型的值，后台在序列化的时候应该设置为0 -->
+            <input type="hidden" name="cid" id="cid" value="" />
             <input type="hidden" name="status" value="" id="status"/>
             <input type="hidden" name="content" id="content" value=""/>
             <div  style="padding: 0 10px 0 0;">
-                <input class="form-control contentTitle" placeholder="请输入文章标题（必填）" name="title" required
+                <input class="form-control contentTitle" placeholder="请输入文章标题（必填）" name="title" id="title" required
                        value=""/>
             </div>
             <div class="form-group articleForm-second">
@@ -191,6 +196,7 @@ function saveContent(){
             <div id="md-container" class="form-group col-md-12">
                 <!-- 加载uEdit编辑器的容器 -->
     <script id="container" name="uEdit" type="text/plain">
+
     </script>
             </div>
            
@@ -198,17 +204,23 @@ function saveContent(){
             <div class="clearfix"></div>
 
             <div class="text-right">
-                <button class="btn btn-default waves-effect waves-light  returnlist" href="${ctx}/admin/index" >返回列表</button>
+                <button  type="button" class="btn btn-default waves-effect waves-light  returnlist" onclick="returnList()">返回列表</button>
                 <button type="button" class="btn btn-primary waves-effect waves-light savebutton" onclick="saveContent()">
                     保存文章
-                </button>
-                <button type="button" class="btn btn-warning waves-effect waves-light saveDraft" onclick="draftContent()">
-                    存为草稿
                 </button>
             </div>
         </form>
     </div>
 </div>
+<!-- 正文容器底线 -->
+<footer class="footer text-right">
+    2017 © <a href="http://www.haiwainet.cn" target="_blank" style="text-decoration:none;color:#58666E">海外网</a>.
+</footer>
+</div>
+</div>
+</div>
+</div>
+</body>
 <script src="${ctx }/admin/plugins/tagsinput/jquery.tagsinput.min.js"></script>
 <script src="${ctx }/admin/plugins/jquery-multi-select/jquery.quicksearch.js"></script>
 <script src="${ctx }/admin/js/article.js?v=v1.0" type="text/javascript"></script>

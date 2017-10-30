@@ -39,10 +39,16 @@ $.fn.serializeJson=function(){
         }    
     });    
     return serializeObj;    
-}  
+};    
 
 
 var ue = UE.getEditor('container');
+var contentTitle="";
+//如果是编辑文章，则给uEditor赋值
+if(contentTitle!=null && contentTitle!="" ){
+	ue.setContent(contentTitle);
+}
+
 //取出uEdit编辑器里content内容
 function takeout() {
 	var contents;
@@ -172,18 +178,17 @@ function returnList(){
     <div class="col-md-12">
         <input type="hidden" id="attach_url" value="" />
         <form id="articleForm" method="post">
-        <!-- int 类型的值，后台在序列化的时候应该设置为0 -->
-            <input type="hidden" name="cid" id="cid" value="" />
+            <input type="hidden" name="cid" id="cid" value="${(contents.cid)!""}" />
             <input type="hidden" name="status" value="" id="status"/>
             <input type="hidden" name="content" id="content" value=""/>
             <div  style="padding: 0 10px 0 0;">
                 <input class="form-control contentTitle" placeholder="请输入文章标题（必填）" name="title" id="title" required
-                       value=""/>
+                       value="${(contents.title)!""}"/>
             </div>
             <div class="form-group articleForm-second">
              <div class="form-group col-md-6" style="padding: 0 10px 0 0;">
                 <input name="receiveTime" id="receiveTime" type="text" class="form-control contentDate" placeholder="请选择日期（必填）"
-                       value=""/>
+                       value="${(contents.receiveTime)!""}"/>
             </div>
             <div class="form-group col-md-6" style="padding: 0 10px 0 0;">
             <!-- 暂时不用这个标签 -->
@@ -196,7 +201,7 @@ function returnList(){
             <div id="md-container" class="form-group col-md-12">
                 <!-- 加载uEdit编辑器的容器 -->
     <script id="container" name="uEdit" type="text/plain">
-
+${(contents.content)!""}
     </script>
             </div>
            

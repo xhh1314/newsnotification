@@ -70,6 +70,11 @@ public class TimeTransfer {
 		return LocalDate.parse(date,formatter);
 	}
 	
+	public static String getToday(){
+		LocalDate date=LocalDate.now();
+		return date.toString();
+	}
+	
 	
 
 }
