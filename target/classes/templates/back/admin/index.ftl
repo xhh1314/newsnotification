@@ -1,11 +1,12 @@
 <#include "/back/admin/header.ftl">
 <style type="text/css">
+
 .contentTable{width:1000px !important;font-size:16px;}
-.contentTable-frist{width:50%; !important;}
+.contentTable-frist{width:50% !important;}
 .contentTable-second{width:25% !important;text-align: center !important;}
 .contentTable-third{width:25% !important; text-align:center !important;}
-td div .content-conduct{text-align: center !important;}
-td div .content-conduct a{display:inline-block;line-height: 90%;font-size:16px;}
+div .content-conduct{text-align: center !important;}
+div .content-conduct a{display:inline-block;line-height: 24px;font-size:18px;margin:0px;}
 div .footPageModule{font-size:12px !important;}
 </style>
 <script type="text/javascript">
@@ -136,7 +137,7 @@ function contentDelete(cid) {
         <h3 class="page-title">文章管理</h3>
     </div>
     <div class="col-md-12">
-        <table class="ui celled table contentTable" >
+        <table class="ui  fixed  single line selectable celled table contentTable" >
             <thead>
             <tr>
                 <th width="35%">文章标题</th>

@@ -17,8 +17,6 @@ import cn.haiwai.newsnotification.web.filter.PermissionInterceptor;
  */
 @Configuration
 public class WebConfiguration  extends WebMvcConfigurerAdapter{
-	
-	
 		/*
 		 *注册拦截器
 		 *  (non-Javadoc)
