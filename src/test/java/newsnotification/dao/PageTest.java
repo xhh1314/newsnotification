@@ -1,6 +1,6 @@
 package newsnotification.dao;
 
-import com.haiwai.newsnotification.manage.AbstractPage;
+import cn.haiwai.newsnotification.manage.AbstractPage;
 
 public class PageTest {
 	public static void main(String[] args) {

@@ -1,9 +1,9 @@
 <#include "/fore/header.ftl">
 <!-- 正文容器 -->
 	<div class="ui raised very padded text container segment notification-content">
-		<h2 class="ui header">${message!""}</h2>
+		<h3 class="ui header">${message!""}</h3>
 		<div class="ui divided items">
-<#list contents!"" as content>
+<#list contents?if_exists as content>
 			<div class="item">
 				<div class="content">
 					<a class="header" href="${ctx}/content/${content.cid}">${content.title}</a>
@@ -23,4 +23,5 @@
 
 	</div>
 </body>
+
 </html>

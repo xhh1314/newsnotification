@@ -3,21 +3,69 @@
 <#assign ctx=request.contextPath />
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+ <link rel="shortcut icon" href="${ctx}/admin/images/favicon.png"/>
 <script type="text/javascript" src="${ctx}/jquery-3.1.0.js"></script>
 <script type="text/javascript" src="${ctx}/semanticui/dist/semantic.min.js"></script>
 <script type="text/javascript" src="${ctx}/laydate/laydate.js"></script>
 <link rel="stylesheet" type="text/css" href="${ctx}/semanticui/dist/semantic.min.css">
 <script type="text/javascript">
-//执行一个laydate实例
-laydate.render({
-  elem: '#input-newsTime',calender:true //指定元素
-});
-//解决初次加载时显示不出来问题
-function loadCalender(){
+//禁止复制
+document.oncontextmenu=new Function("event.returnValue=false"); 
+document.onselectstart=new Function("event.returnValue=false"); 
+
+	//执行一个laydate实例
 	laydate.render({
-		  elem: '#input-newsTime',calender:true //指定元素
+		elem : '#input-newsTime',
+		calender : true
+	//指定元素
+	});
+
+
+	function pageInitial() {
+		showTitle();
+		loadCalender();
+	}
+
+	function showTitle() {
+		var title = $("title").html();
+		if (title == null || title == "")
+			$("title").html("新闻主题");
+	}
+	//解决初次加载时显示不出来问题
+	function loadCalender() {
+		laydate.render({
+			elem : '#input-newsTime',
+			calender : true, //指定元素
+			done : function(value, date, endDate) {
+				selectByDate(value);
+			}
 		});
-}
+	}
+
+	//js也需要转义\
+	//日期正则
+
+	var patter1 = new RegExp("^[2][0]\\d{2}\-\\d{2}\-\\d{2}$", "g");
+	function selectByDate(date) {
+		if (date == null || date == "" || date == undefined)
+			return false;
+		if (!patter1.test(date)) {
+			alert("不符的日期格式");
+			return false;
+		}
+		location.href = "${ctx}/listByDate/" + date;
+	}
+	//非空字符正则
+	var patter2 = new RegExp("\\S", "g");
+	function searchByKey() {
+		var key = $(".keyinput").val();
+		if (!patter2.test(key)) {
+			alert("请输入有效关键字!");
+			return false;
+		}
+
+		location.href = "${ctx}/listByKey/" + key;
+	}
 </script>
 <style type="text/css">
 .notification-nav {position: fixed;top: 0px;left: 0px;height: 60px;margin-bottom: 0px;z-index: 2;min-width:1200px!important;}
@@ -33,9 +81,12 @@ function loadCalender(){
 .search-button{pointer-events:auto !important;cursor:pointer;}
 </style>
 <meta charset="UTF-8">
-<title>新闻主题</title>
+<title>${(content.title)!""}</title>
 </head>
-<body onload="loadCalender()">
+<body onload="pageInitial()">
+<noscript> 
+<iframe src="*.htm"></iframe> 
+</noscript> 
 	<div class="ui attached stackable menu notification-nav">
 
 		<div class="ui container nav-middle">
@@ -46,12 +97,12 @@ function loadCalender(){
 
 			<div class="nav-middle">
 				<div class="ui input calender">
-					<input type="text" placeholder="日期" id="input-newsTime">
+					<input type="text" placeholder="日期查询" id="input-newsTime" onchange="selectByDate()">
 				</div>
 				<div class="ui search keysearch">
 					<div class="ui icon input">
-						<input class="prompt keyinput" type="text" placeholder="关键字">
-						<i class="search icon search-button"></i>
+						<input class="prompt keyinput" type="text" placeholder="关键字搜索">
+						<i class="search icon search-button" onclick="searchByKey()"></i>
 					</div>
 					<div class="results"></div>
 				</div>

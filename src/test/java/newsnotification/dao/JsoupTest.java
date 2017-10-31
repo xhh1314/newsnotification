@@ -14,9 +14,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.haiwai.newsnotification.NewsNotificationApplication;
-import com.haiwai.newsnotification.dao.ContentDao;
-import com.haiwai.newsnotification.dao.bean.ContentDO;
+import cn.haiwai.newsnotification.NewsNotificationApplication;
+import cn.haiwai.newsnotification.dao.ContentDao;
+import cn.haiwai.newsnotification.dao.bean.ContentDO;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment=WebEnvironment.NONE,classes=NewsNotificationApplication.class)

@@ -66,9 +66,11 @@
         margin-top: 1.4rem;
     }
  .xxxx{border: 1px solid black;}   
- .returnlist{line-height:30px;weidth:50px;color: black;border: none;margin-left:10px;}  
- .savebutton{line-height:30px;weidth:50px;}
- .saveDraft{line-height:30px;weidth:50px;}
+ div .page-title{display:inline-block;}
+ .text-right{margin-left:650px;display:inline-block;}   
+ .returnlist{line-height:30px;width:80px;color: black;border: none;margin-left:10px;}  
+ .savebutton{line-height:30px;width:80px;}
+ .newbutton{line-height:30px;width:80px;}
  .contentTitle{height:30px;width:1000px;margin-left:10px;}
  .contentDate{margin-left:10px;;height:30px;width:200px;}
  .contentTags{height:30px;width:400px;margin-left:50px;}
@@ -92,7 +94,7 @@
         </div>
         <div class="navbar navbar-default" role="navigation" style="border: 0px solid black;">
                <span style="line-height: 50px;font-size:30px;margin-left:35%">新闻主题</span>
-            <span style="line-height: 50px;margin-left:40%">注销</span>
+            <a style="line-height: 50px;margin-left:40%;text-decoration:none;color:#337AB7" href="${ctx }/user/logout">注销</a>
         </div>
     </div>
     <div class="left side-menu">
@@ -117,11 +119,23 @@
             <div class="container">
 <!-- 正文容器分割线 -->
 <div class="row">
-    <div class="col-sm-12">
+     <div class="col-sm-12 page-title" >
         <h4 class="page-title">
-            发布文章
+            编辑文章
         </h4>
     </div>
+    
+            <div class="text-right">
+               
+                <button type="button" class="btn btn-primary waves-effect waves-light savebutton" onclick="saveContent()">
+                    保存
+                </button>
+                <button type="button" class="btn btn-warning waves-effect waves-light newbutton" onclick="newContent()">
+                    新建
+                </button>
+                 <button  type="button" class="btn btn-default waves-effect waves-light  returnlist" onclick="returnList()">返回列表</button>
+            </div>
+    
     <div class="col-md-12">
         <input type="hidden" id="attach_url" value="" />
         <form id="articleForm" method="post">
@@ -151,16 +165,7 @@
 ${(contents.content)!""}
     </script>
             </div>
-           
-            
             <div class="clearfix"></div>
-
-            <div class="text-right">
-                <button  type="button" class="btn btn-default waves-effect waves-light  returnlist" onclick="returnList()">返回列表</button>
-                <button type="button" class="btn btn-primary waves-effect waves-light savebutton" onclick="saveContent()">
-                    保存文章
-                </button>
-            </div>
         </form>
     </div>
 </div>
@@ -181,7 +186,6 @@ ${(contents.content)!""}
 <link href="${ctx}/admin/plugins/tagsinput/jquery.tagsinput.css" rel="stylesheet">
 <link href="${ctx}/admin/plugins/select2/dist/css/select2-bootstrap.css" rel="stylesheet">
 <link href="${ctx}/admin/plugins/toggles/toggles.css" rel="stylesheet">
-<script type="text/javascript" src="${ctx}/jquery-3.1.0.js"></script>
 <!-- 日期控件 -->
 <script type="text/javascript" src="${ctx}/laydate/laydate.js"></script>
 <script type="text/javascript" src="${ctx }/ueditor/ueditor.config.js"></script>
@@ -267,7 +271,9 @@ function saveContent(){
 function returnList(){
 	location.href="${ctx}/admin/index";
 }
-
+function newContent(){
+	window.location.href="${ctx}/admin/contentEdit";
+}
 //解决初次加载时显示不出来问题
 function loadCalender(){
 	laydate.render({

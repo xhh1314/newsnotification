@@ -8,9 +8,6 @@ td div .content-conduct{text-align: center !important;}
 td div .content-conduct a{display:inline-block;line-height: 90%;font-size:16px;}
 div .footPageModule{font-size:12px !important;}
 </style>
-<script type="text/javascript" src="${ctx}/jquery-3.1.1.min.js"></script>
-<link rel="stylesheet" href="${ctx}/semanticui/dist/semantic.min.css">
-<script src="${ctx}/semanticui/dist/semantic.min.js"> </script> 
 <script type="text/javascript">
 var currentPage=${page?if_exists.currentPage};
 var beginPage=${page?if_exists.beginPage};
@@ -100,7 +97,7 @@ function contentDelete(cid) {
         <div class="topbar-left">
             <div class="text-center p-t-10" style="margin: 0 auto;">
                 <div class="pull-left" style="padding-left: 10px;border: 0px solid black;">
-                    <a href="/admin/index">
+                    <a href="${ctx}/admin/index">
                         <img src="${ctx}/admin/images/unicorn.png" width="50" height="50"/>
                     </a>
                     <a style="margin-left:20px;vertical-align:50%;font-size:25px;font-weight:bold;color:#059AEC">海外网</a>
@@ -110,7 +107,8 @@ function contentDelete(cid) {
         </div>
         <div class="navbar navbar-default" role="navigation" style="border: 0px solid black;">
                <span style="line-height: 50px;font-size:30px;margin-left:35%">新闻主题</span>
-            <span style="line-height: 50px;margin-left:40%">注销</span>
+             <a style="line-height: 50px;margin-left:40%;text-decoration:none;color:#337AB7;" href="${ctx}/user/logout">注销</a>
+             <a style="line-height: 50px;margin-left:1%;text-decoration:none;color:#337AB7;cursor: pointer" onclick="resetPassword()">修改密码</a>       
         </div>
     </div>
     <div class="left side-menu">
@@ -150,7 +148,7 @@ function contentDelete(cid) {
             <#list contents?if_exists as content>
             <tr cid="${content.cid}">
                 <td class="contentTable-frist">
-                    <a href="${ctx}/content/${content.cid}">${content.title}</a>
+                    <a href="${ctx}/content/${content.cid}" target="_blank">${content.title}</a>
                 </td>
                 <td class="contentTable-second">${content.receiveTime}</td>
                 <td class="contentTable-third">

@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
-import com.haiwai.newsnotification.manage.util.TimeTransfer;
+import cn.haiwai.newsnotification.manage.util.TimeTransfer;
 
 public class InstantTest {
 
