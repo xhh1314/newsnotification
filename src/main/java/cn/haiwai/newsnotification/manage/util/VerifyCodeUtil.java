@@ -72,6 +72,7 @@ public class VerifyCodeUtil {
 	 * @return
 	 * @throws IOException
 	 */
+	@SuppressWarnings("unused")
 	private static String outputVerifyImage(int w, int h, File outputFile, int verifySize) throws IOException {
 		String verifyCode = generateVerifyCode(verifySize);
 		outputImage(w, h, outputFile, verifyCode);
@@ -88,6 +89,7 @@ public class VerifyCodeUtil {
 	 * @return
 	 * @throws IOException
 	 */
+	@SuppressWarnings("unused")
 	private static String outputVerifyImage(int w, int h, OutputStream os, int verifySize) throws IOException {
 		String verifyCode = generateVerifyCode(verifySize);
 		outputImage(w, h, os, verifyCode);

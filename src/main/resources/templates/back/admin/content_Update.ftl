@@ -93,7 +93,7 @@
             </div>
         </div>
         <div class="navbar navbar-default" role="navigation" style="border: 0px solid black;">
-               <span style="line-height: 50px;font-size:30px;margin-left:35%">新闻主题</span>
+               <span style="line-height: 50px;font-size:30px;margin-left:35%">新闻提示</span>
             <a style="line-height: 50px;margin-left:40%;text-decoration:none;color:#337AB7" href="${ctx }/user/logout">注销</a>
         </div>
     </div>

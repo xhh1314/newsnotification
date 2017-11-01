@@ -93,7 +93,7 @@
             </div>
         </div>
         <div class="navbar navbar-default" role="navigation" style="border: 0px solid black;">
-               <span style="line-height: 50px;font-size:30px;margin-left:35%">新闻主题</span>
+               <span style="line-height: 50px;font-size:30px;margin-left:35%">新闻提示</span>
             <a style="line-height: 50px;margin-left:40%;text-decoration:none;color:#337AB7;" href="${ctx }/user/logout">注销</a>
         </div>
     </div>
@@ -189,7 +189,8 @@
 <script type="text/javascript" src="${ctx}/laydate/laydate.js"></script>
 <script type="text/javascript" src="${ctx }/ueditor/ueditor.config.js"></script>
 <script type="text/javascript" src="${ctx }/ueditor/ueditor.all.js"></script>
-<script type="text/javascript" src="${ctx}/myJSCSS/my.js"></script>
+<script  src="${ctx}/myJSCSS/my.js"></script>
+
 <script type="text/javascript" >
 //执行一个laydate实例
 laydate.render({
@@ -241,46 +242,60 @@ function takeout() {
 	});
 	$("#content").val(contents);
 }
-function saveContent(){
-	takeout();
-	//var form = document.getElementById("articleForm");
-	var formData =$("#articleForm").serializeJson();
-	$.ajax({
-		url :"${ctx}/admin/saveContent",
-		type:"POST",
-		contentType :"application/json",
-		data : JSON.stringify(formData),
-		dataType : "json",
-		success : function(data) {
-			if (data.meta.success == true) {
-				var cid = data.data.cid;
-				$("#cid").val(cid);
-				$("#status").val(data.data.status);
-				alert(data.meta.message);
-			} else {
+
+//保存后弹出提示信息 实现
+var flag=false;
+	$('.savebutton').popup({
+		content : '保存成功',
+		target : $('#md-container'),
+		position : 'top center',
+		on : 'click',
+		onShow : function() {
+			if (flag==true)
+				return true;
+			else
+			return false;
+		}
+
+	});
+
+	function saveContent() {
+		takeout();
+		//var form = document.getElementById("articleForm");
+		var formData = $("#articleForm").serializeJson();
+		$.ajax({
+			async : true,
+			url : "${ctx}/admin/saveContent",
+			type : "POST",
+			contentType : "application/json",
+			data : JSON.stringify(formData),
+			dataType : "json",
+			success : function(data) {
+				if (data.meta.success == true) {
+					var cid = data.data.cid;
+					$("#cid").val(cid);
+					$("#status").val(data.data.status);
+					flag = true;
+				} else {
+					flag=false;
+					alert(data.meta.message);
+				}
+			},
+			error : function(error) {
+				flag=false;
 				alert(data.meta.message);
 			}
-		},
-		error : function(error) {
-			alert("系统忙！");
-		}
-	});
-	
-}
+		});
 
-function returnList(){
-	window.location.href="${ctx}/admin/index";
-}
+	}
 
-function newContent(){
-	window.location.href="${ctx}/admin/contentEdit";
-}
+	function returnList() {
+		window.location.href = "${ctx}/admin/index";
+	}
+
+	function newContent() {
+		window.location.href = "${ctx}/admin/contentEdit";
+	}
 </script>
-
-
-
-<script src="${ctx }/admin/plugins/tagsinput/jquery.tagsinput.min.js"></script>
-<script src="${ctx }/admin/plugins/jquery-multi-select/jquery.quicksearch.js"></script>
-<script src="${ctx }/admin/js/article.js?v=v1.0" type="text/javascript"></script>
 <#include "/back/admin/footer.ftl">
 

@@ -29,7 +29,7 @@ document.onselectstart=new Function("event.returnValue=false");
 	function showTitle() {
 		var title = $("title").html();
 		if (title == null || title == "")
-			$("title").html("新闻主题");
+			$("title").html("新闻提示");
 	}
 	//解决初次加载时显示不出来问题
 	function loadCalender() {
@@ -91,7 +91,7 @@ document.onselectstart=new Function("event.returnValue=false");
 
 		<div class="ui container nav-middle">
 			<div class="nav-left">
-				<a > <i class="home icon"></i>新闻主题
+				<a > <i class="home icon"></i>新闻提示
 				</a>
 			</div>
 
