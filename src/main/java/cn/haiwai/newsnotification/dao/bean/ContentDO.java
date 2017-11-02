@@ -140,7 +140,7 @@ public class ContentDO implements Serializable {
 	/**
 	 * 映射关系写在这里，则中间表的数据由该实体来维护, Tag方写的是mapedBy，保存Tag时不更新中间表数据
 	 */
-	@ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST })
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "content_tag", joinColumns = @JoinColumn(name = "c_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "t_id", referencedColumnName = "id"))
 	public Set<TagDO> getTags() {
 		return tags;
@@ -150,7 +150,7 @@ public class ContentDO implements Serializable {
 		this.tags = tags;
 	}
 
-	private Set<TagDO> transfer(Set<TagBO> tags) {
+	public  Set<TagDO> transfer(Set<TagBO> tags) {
 		if (tags == null)
 			return null;
 		Set<TagDO> ts = new HashSet<TagDO>(16);

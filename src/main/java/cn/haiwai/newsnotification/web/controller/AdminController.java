@@ -90,7 +90,7 @@ public class AdminController {
 	 */
 	@RequestMapping(value = "/saveContent", method = RequestMethod.POST, produces = "application/json")
 	@ResponseBody
-	public Response saveContent(@RequestBody ContentBO content) {
+	public Response saveContent(@RequestBody ContentVO content) {
 		StringBuilder message = new StringBuilder();
 		if (!content.getReceiveTime().matches(datePatter)) {
 			message.append("日期格式不正确;");
@@ -99,11 +99,22 @@ public class AdminController {
 			message.append("标题不能为空;");
 		}
 		if (!StringUtils.hasText(content.getContent())) {
-			message.append("文章正文不能为空;");
+			message.append("正文不能为空;");
 		}
-		if (message.length() > 1)
-			return Response.failure(message.toString());
-		ContentBO b = cs.saveContent(content);
+		if (!StringUtils.hasText(content.getTags())) {
+			message.append("标签不能为空！");
+		}
+		if (content.getStatus() == 1 && content.getStatus() != 1) {
+			message.append("文章状态不正确！请刷新页面!");
+		}
+		if (message.length() > 1) {
+			String msg = message.toString();
+			// 截取掉最后一个分号
+			if (msg.endsWith(";"))
+				msg = msg.substring(0, msg.length() - 1);
+			return Response.failure(msg);
+		}
+		ContentBO b = cs.saveContent(new ContentBO(content));
 		if (b == null) {
 			return Response.failure("保存失败！请稍后重试");
 		}
@@ -157,10 +168,10 @@ public class AdminController {
 		else
 			return Response.failure();
 	}
-	
-	@RequestMapping(value="/login")
-	public String login(){
-		
+
+	@RequestMapping(value = "/login")
+	public String login() {
+
 		return "back/admin/login";
 	}
 

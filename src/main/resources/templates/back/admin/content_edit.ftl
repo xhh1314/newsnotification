@@ -67,10 +67,11 @@
     }
  .xxxx{border: 1px solid black;}
  div .page-title{display:inline-block;}
- .text-right{margin-left:650px;display:inline-block;}   
+ .text-right{margin-left:550px;display:inline-block;}   
  .returnlist{line-height:30px;width:80px;color: black;border: none;margin-left:10px;}  
- .savebutton{line-height:30px;width:80px;}
- .newbutton{line-height:30px;width:80px;}
+ .savebutton{line-height:30px;width:80px;margin-left:10px;}
+ .publishbutton{line-height:30px;width:80px;margin-left:10px;}
+ .newbutton{line-height:30px;width:80px;margin-left:10px;background:black !important;}
  .contentTitle{height:30px;width:1000px;margin-left:10px;}
  .contentDate{margin-left:10px;;height:30px;width:200px;}
  .contentTags{height:30px;width:400px;margin-left:50px;}
@@ -127,13 +128,16 @@
     
             <div class="text-right">
                
-                <button type="button" class="btn btn-primary waves-effect waves-light savebutton" onclick="saveContent()">
+                <button type="button" class="ui primary button savebutton" onclick="saveContent(0)">
                     保存
                 </button>
-                <button type="button" class="btn btn-warning waves-effect waves-light newbutton" onclick="newContent()">
+               <button type="button" class="ui inverted red button savebutton" onclick="saveContent(1)">
+                    发布
+                </button>
+                <button type="button" class="ui secondary basic button  newbutton" onclick="newContent()">
                     新建
                 </button>
-                 <button  type="button" class="btn btn-default waves-effect waves-light  returnlist" onclick="returnList()">返回列表</button>
+                 <button  type="button" class="  btn btn-default waves-effect waves-light  returnlist" onclick="returnList()">返回列表</button>
             </div>
     <div class="col-md-12">
         <input type="hidden" id="attach_url" value="" />
@@ -153,7 +157,7 @@
             </div>
             <div class="form-group col-md-6" style="padding: 0 10px 0 0;">
             <!-- 暂时不用这个标签 -->
-                <input name="tags" id="tags" type="hidden" class="form-control contentTags" placeholder="文章标签"
+                <input name="tags" id="tag" type="text" class="form-control contentTags" placeholder="文章标签"
                        value=""/>
             </div>
             </div>
@@ -259,7 +263,8 @@ var flag=false;
 
 	});
 
-	function saveContent() {
+	function saveContent(status) {
+		$("#status").val(status);
 		takeout();
 		//var form = document.getElementById("articleForm");
 		var formData = $("#articleForm").serializeJson();

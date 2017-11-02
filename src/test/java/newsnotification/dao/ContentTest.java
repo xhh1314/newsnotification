@@ -1,6 +1,5 @@
 package newsnotification.dao;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -32,31 +31,37 @@ public class ContentTest {
 	@Test
 	public void insertTest() {
 		ContentDO content = new ContentDO();
-		List<TagDO> tags = new ArrayList<TagDO>(6);
-		tags.add(new TagDO("十九大"));
-		tags.add(new TagDO("砥砺奋进的5年"));
-		// content.setTags(tags);
+		Set<TagDO> tags = new HashSet<TagDO>(8);
+		tags.add(new TagDO("清风徐徐45"));
+		tags.add(new TagDO("清风徐徐11"));
+		//tags.remove(new TagDO("清风徐徐4"));
+		//tags.add(new TagDO("砥砺前行的5年"));
+		//content.setId(0);
+		content.setTags(tags);
 		content.setTitle("测试");
 		content.setContent("在我小的时候，熬夜还是一件不常见的事情。那个时候身边的人的作息都十分有规律，");
 		content.setReceiveTime(new Date());
-		dao.saveContent(content);
+		ContentDO cd=dao.saveContent(content);
+		System.out.println(cd);
 	}
 
 	@Test
 	public void updateTest() {
-		ContentDO content = new ContentDO();
-		content.setId(1);
+		ContentBO content = new ContentBO();
+		Set<TagBO> tags = new HashSet<TagBO>();
+		tags.add(new TagBO("清风徐徐55"));
+		tags.add(new TagBO("清风徐徐56"));
+		content.setCid(new Integer(281));
+		content.setTags(tags);
 		content.setTitle("测试");
-		content.setContent("在我小的时候，熬夜还是一件不常见的事情。那个时候身边的人的作息都十分有规律，");
-		// content.setReceiveTime(new Date());
-		System.out.println(dao.updateContent(content));
-
+		content.setContent("在我小的时候，熬夜还是一件不常见的事情。那个时候身边的人的作息都十分有规律");
+		content.setReceiveTime("2017-11-02");
+		cs.saveContent(content);
 	}
 
 	@Test
 	public void regexTest() {
 		String contentDate = "2112-01-01";
-
 		System.out.println(contentDate.matches("^[2][0]\\d{2}\\-\\d{2}\\-\\d{2}"));
 	}
 
@@ -81,5 +86,7 @@ public class ContentTest {
 		List<ContentDO> contents = dao.listContent();
 		System.out.println();
 	}
+	
+	
 
 }

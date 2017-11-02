@@ -1,8 +1,11 @@
 package cn.haiwai.newsnotification.service;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
+import java.util.function.Consumer;
 
 import javax.transaction.Transactional;
 
@@ -16,7 +19,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import cn.haiwai.newsnotification.dao.ContentDao;
+import cn.haiwai.newsnotification.dao.TagDao;
 import cn.haiwai.newsnotification.dao.bean.ContentDO;
+import cn.haiwai.newsnotification.dao.bean.TagDO;
 import cn.haiwai.newsnotification.manage.AbstractPage;
 import cn.haiwai.newsnotification.manage.util.TimeTransfer;
 
@@ -35,20 +40,19 @@ public class ContentService {
 
 	@Autowired
 	private ContentDao contentDao;
+	@Autowired
+	private TagDao tagDao;
 
+	/**
+	 * 保存content的逻辑
+	 * 
+	 * @param content
+	 * @return contentBO
+	 */
 	@Transactional
 	public ContentBO saveContent(ContentBO content) {
-		// TODO Auto-generated method stub
-		if ((content.getCid() == null || content.getCid() == 0) || contentDao.getContent(content.getCid()) == null) {
-			ContentDO c = contentDao.saveContent(new ContentDO(content));
-			return c == null ? null : new ContentBO(c);
-		} else {
-			// 如果已经存在，则更新
-			if (contentDao.updateContent(new ContentDO(content)) == 0)
-				return null;
-			else
-				return new ContentBO(contentDao.getContent(content.getCid()));
-		}
+		ContentDO newContent = contentDao.saveContent(new ContentDO(content));
+		return newContent == null ? null : new ContentBO(newContent);
 	}
 
 	/**
@@ -118,7 +122,7 @@ public class ContentService {
 		List<ContentBO> contents = transferfromContentDO(contentsDO);
 		Collections.sort(contents);
 		return parseHtml(contents);
-		
+
 	}
 
 	/**
@@ -133,6 +137,20 @@ public class ContentService {
 			contentBOs.add(new ContentBO(e));
 		}
 		return contentBOs;
+	}
+	
+	/**
+	 * 把TagDO集合转换成TagBO集合
+	 * 
+	 * @param contents
+	 * @return
+	 */
+	private List<TagBO> transferfromTagDO(List<TagDO> contents) {
+		List<TagBO> TagBOs = new LinkedList<TagBO>();
+		for (TagDO e : contents) {
+			TagBOs.add(new TagBO(e));
+		}
+		return TagBOs;
 	}
 
 	/**
@@ -151,15 +169,17 @@ public class ContentService {
 		return parseHtml(contents);
 
 	}
-	
+
 	/**
 	 * 前台列表只显示一部分正文数据，需要先解析出html文本，再截取前部分的数据
+	 * 
 	 * @param contents
 	 * @return
 	 */
-	private final int  len=120;
-	private List<ContentBO> parseHtml(List<ContentBO> contents){
-		 //由于是列表，正文不全部显示，只截取出其中一部分
+	private final int len = 120;
+
+	private List<ContentBO> parseHtml(List<ContentBO> contents) {
+		// 由于是列表，正文不全部显示，只截取出其中一部分
 		for (ContentBO cb : contents) {
 			// 使用jsoup解析html
 			Document doc = Jsoup.parse(cb.getContent());
@@ -167,13 +187,13 @@ public class ContentService {
 			String str = doc.text();
 			// 替换掉换行和空格
 			str.replaceAll("\\s\\n\\r", "");
-			//再截取出来前len字符
+			// 再截取出来前len字符
 			if (str.length() > len) {
 				str = str.substring(0, len);
 			} else {
 				str = str.substring(0, str.length());
 			}
-			//补上点点点
+			// 补上点点点
 			str = str + "...";
 			cb.setContent(str);
 
@@ -183,6 +203,7 @@ public class ContentService {
 
 	/**
 	 * 根据关键字搜索
+	 * 
 	 * @param key
 	 * @return
 	 */
@@ -194,6 +215,13 @@ public class ContentService {
 		List<ContentBO> contents = transferfromContentDO(contentsDO);
 		Collections.sort(contents);
 		return parseHtml(contents);
+	}
+	
+	public List<TagBO> listAllTag(){
+		List<TagDO> tags=tagDao.listAll();
+		if(tags==null || tags.isEmpty())
+			return null;
+		return transferfromTagDO(tags);
 	}
 
 }

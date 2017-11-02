@@ -19,7 +19,7 @@ import cn.haiwai.newsnotification.dao.bean.ContentDO;
 @Repository
 public interface ContentDaoImplJPA extends JpaRepository<ContentDO, Integer> {
 
-	@Query(value = "select id,title,content,receive_time from content where title like %?1% or content like %?1%", nativeQuery = true)
+	@Query(value = "select id,title,content,status,receive_time from content where title like %?1% or content like %?1%", nativeQuery = true)
 	List<ContentDO> listByKey(String key);
 
 	@Query(value = "select count(*) from content", nativeQuery = true)
@@ -31,13 +31,13 @@ public interface ContentDaoImplJPA extends JpaRepository<ContentDO, Integer> {
 
 	ContentDO getContentById(Integer id);
 
-	@Query(value = "select id,title,content,receive_time from content limit ?1 ,?2", nativeQuery = true)
+	@Query(value = "select id,title,content,status,receive_time from content limit ?1 ,?2", nativeQuery = true)
 	List<ContentDO> listByLimit(int begin, int offset);
 
-	@Query(value = "select id,title,content,receive_time from content where receive_time=?1", nativeQuery = true)
+	@Query(value = "select id,title,content,status,receive_time from content where receive_time=?1", nativeQuery = true)
 	List<ContentDO> listContentByDate(String date);
 
-	@Query(value = "SELECT id,title,content,receive_time FROM content where create_time>=DATE_SUB(CURDATE(), INTERVAL 6 DAY)", nativeQuery = true)
+	@Query(value = "SELECT id,title,content,status,receive_time FROM content where create_time>=DATE_SUB(CURDATE(), INTERVAL 6 DAY)", nativeQuery = true)
 	List<ContentDO> listByRecentSevenDay();
 
 }

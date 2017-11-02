@@ -17,15 +17,12 @@ public class TagBO {
 
 	private Integer id;
 	private String name;
-	private List<ContentBO> contents;
-
 	public TagBO() {
 	}
 
 	public TagBO(TagDO tag) {
 		this.id = tag.getId();
 		this.name = tag.getName();
-		this.contents = transfer(tag.getContents());
 	}
 
 	public TagBO(String name) {
@@ -48,14 +45,7 @@ public class TagBO {
 		this.name = name;
 	}
 
-	public List<ContentBO> getContents() {
-		return contents;
-	}
-
-	public void setContents(List<ContentBO> contents) {
-		this.contents = contents;
-	}
-
+	@SuppressWarnings("unused")
 	private List<ContentBO> transfer(List<ContentDO> contents) {
 		if(contents==null)
 			return null;
@@ -69,19 +59,20 @@ public class TagBO {
 
 	@Override
 	public String toString() {
-		return "TagBO [id=" + id + ", name=" + name + ", contents=" + contents + "]";
+		return "TagBO [id=" + id + ", name=" + name + "]";
 	}
 
 	@Override
 	public int hashCode() {
 		// TODO Auto-generated method stub
-		return this.name.hashCode();
+		return this.name!=null?this.name.hashCode():super.hashCode();
+
 	}
 
 	@Override
 	public boolean equals(Object obj) {
 		// TODO Auto-generated method stub
-		return this.name.equals(((TagBO) obj).getName());
+		return this.name!=null?this.name.equals(((TagBO) obj).getName()):super.equals(obj);
 	}
 
 }

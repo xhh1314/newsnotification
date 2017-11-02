@@ -8,6 +8,7 @@
 div .content-conduct{text-align: center !important;}
 div .content-conduct a{display:inline-block;line-height: 24px;font-size:18px;margin:0px;}
 div .footPageModule{font-size:12px !important;}
+.publishbutton{}
 </style>
 <script type="text/javascript">
 var currentPage=${page?if_exists.currentPage};
@@ -154,11 +155,13 @@ function contentDelete(cid) {
                 <td class="contentTable-second">${content.receiveTime}</td>
                 <td class="contentTable-third">
 						<div class="content-conduct">
+						
 							<a href="${ctx}/admin/updateContent/${content.cid}" target="_blank" class="btn btn-primary btn-sm waves-effect waves-light m-b-5">
 							<i class="fa fa-edit"></i> <span>编辑</span></a> 
-								<a href="javascript:void(0)" 
-								class="btn btn-danger btn-sm waves-effect waves-light m-b-5"  onclick="contentDelete(${content.cid})"> <i
+							<a href="javascript:void(0)" class="btn btn-danger btn-sm waves-effect waves-light m-b-5"  onclick="contentDelete(${content.cid})"> <i
 								class="fa fa-trash-o"></i> <span>删除</span></a> 
+							<a  onclick="updateStatus(${content.cid})"  class="btn btn-warning btn-sm waves-effect waves-light m-b-5 publishbutton"><i
+                            class="fa fa-rocket"></i> <span>发布</span></a>
 						</div>
 					</td>
             </tr>

@@ -6,6 +6,7 @@ import java.util.Set;
 import cn.haiwai.newsnotification.dao.bean.ContentDO;
 import cn.haiwai.newsnotification.dao.bean.TagDO;
 import cn.haiwai.newsnotification.manage.util.TimeTransfer;
+import cn.haiwai.newsnotification.web.controller.ContentVO;
 
 public class ContentBO implements Comparable<ContentBO> {
 
@@ -42,6 +43,14 @@ public class ContentBO implements Comparable<ContentBO> {
 		this.receiveTime = TimeTransfer.dateToLocalDate(content.getReceiveTime()).toString();
 		this.status = content.getStatus();
 		this.tags = transfer(content.getTags());
+	}
+	public ContentBO(ContentVO content){
+		this.cid = content.getCid();
+		this.content = content.getContent();
+		this.title = content.getTitle();
+		this.receiveTime = content.getReceiveTime();
+		this.status = content.getStatus();
+		this.tags = transferTag(content.getTags());
 	}
 
 	public Integer getCid() {
@@ -106,7 +115,7 @@ public class ContentBO implements Comparable<ContentBO> {
 	}
 
 	private Set<TagBO> transfer(Set<TagDO> tags) {
-		if(tags==null)
+		if (tags == null)
 			return null;
 		Set<TagBO> ts = new HashSet<TagBO>(16);
 		for (TagDO e : tags) {
@@ -114,6 +123,16 @@ public class ContentBO implements Comparable<ContentBO> {
 		}
 
 		return ts;
+	}
+	
+	private Set<TagBO> transferTag(String tag){
+		String[] tags = tag.split("\\s+");
+		Set<TagBO> tagSet = new HashSet<TagBO>(16);
+		for (String e : tags) {
+			tagSet.add(new TagBO(e));
+		}
+		// 把拆分出来的tag数组存入content
+		return tagSet;
 	}
 
 }
