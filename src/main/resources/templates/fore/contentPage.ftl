@@ -1,14 +1,17 @@
 <#include "/fore/header.ftl">
 <!-- 正文容器 -->
 <div
-	class="ui raised very padded text container segment notification-content">
+	class="ui  very padded text container segment notification-content">
 
 		<div class="ui divided items">
 			<div class="item">
 				<div class="content">
 					<a class="header contentTitle">${content.title}</a>
 					<div class="meta">
-						<span class="cinema">${content.receiveTime}</span>
+						<span class="right floated time">${content.receiveTime}</span>
+						<#list content.tags?if_exists as tag>
+						<span class="ui label">${tag.name}</span>
+						</#list>
 					</div>
 					<div class="description">
 						${content.content}

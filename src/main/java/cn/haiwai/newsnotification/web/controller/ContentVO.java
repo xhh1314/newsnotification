@@ -45,23 +45,26 @@ public class ContentVO {
 		this.title = content.getTitle();
 		this.receiveTime = content.getReceiveTime();
 		this.status = content.getStatus();
-		this.tagArray = transferTag(content.getTags());
+		transferTag(content.getTags());
 
 	}
 
-	private String[] transferTag(Set<TagBO> tags) {
+	private void transferTag(Set<TagBO> tags) {
 		// TODO Auto-generated method stub
 		String[] tagArray=new String[tags.size()];
+		StringBuffer tagText=new StringBuffer();
 		
 		tags.forEach(new Consumer<TagBO>(){
 			int i=0;
 			@Override
 			public void accept(TagBO t) {
 				tagArray[i]=t.getName();
+				tagText.append(t.getName()+" ");
 				i++;
 			}
 		});
-		return tagArray;
+		this.tags=tagText.toString();
+		this.tagArray=tagArray;
 	}
 
 	public Integer getCid() {

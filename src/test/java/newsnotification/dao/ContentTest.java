@@ -68,13 +68,14 @@ public class ContentTest {
 	@Test
 	public void bitchInsert() {
 		Set<TagBO> tags = new HashSet<TagBO>();
-		tags.add(new TagBO("十九大"));
-		tags.add(new TagBO("砥砺奋进的5年"));
-		for (int i = 0; i < 10; i++) {
+		tags.add(new TagBO("相思"));
+		tags.add(new TagBO("长叹"));
+		for (int i = 0; i < 50; i++) {
 			ContentBO content = new ContentBO();
 			content.setTags(tags);
-			content.setTitle("阳光明媚的一天" + i);
-			content.setContent("在我小的时候，熬夜还是一件不常见的事情。那个时候身边的人的作息都十分有规律；秋尽叶黄，暗香盈袖" + i);
+			content.setStatus(1);
+			content.setTitle("相思" + i);
+			content.setContent("落叶聚还散,寒鸦栖复惊" + i);
 			content.setReceiveTime("2017-10-29");
 			cs.saveContent(content);
 		}
@@ -85,6 +86,11 @@ public class ContentTest {
 		@SuppressWarnings("unused")
 		List<ContentDO> contents = dao.listContent();
 		System.out.println();
+	}
+	@Test
+	public void listByKey(){
+		List<ContentBO> contents=cs.listContentsByKey("相思");
+		System.out.println(contents);
 	}
 	
 	

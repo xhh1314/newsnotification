@@ -5,8 +5,8 @@
 .contentTable-frist{width:50% !important;}
 .contentTable-second{width:25% !important;text-align: center !important;}
 .contentTable-third{width:25% !important; text-align:center !important;}
-div .content-conduct{text-align: center !important;}
-div .content-conduct a{display:inline-block;line-height: 24px;font-size:18px;margin:0px;}
+div .content-conduct{text-align: center !important;line-}
+div .content-conduct a{display:inline-block !important;line-height:16px !important ;font-size:16px !important;padding:0px auto !important;margin-top: 0px !important;margin-bottom:0px !important;}
 div .footPageModule{font-size:12px !important;}
 .publishbutton{}
 </style>
@@ -15,6 +15,11 @@ var currentPage=${page?if_exists.currentPage};
 var beginPage=${page?if_exists.beginPage};
 var endPage=${page?if_exists.endPage};
 var totalPage=${page?if_exists.totalPage};
+function initialListPage(){
+	initialPage();
+	initialStatus();
+}
+
 function initialPage() {
 	// var a=document.getElementById("pageItem");
 	// 如果总页数小于等于1就不显示页码
@@ -48,6 +53,16 @@ function initialPage() {
 		$("#pageNext").css("cursor", "not-allowed");
 	}
 }
+
+function initialStatus() {
+   $(".publishbutton").each(function(){
+   var status=$(this).attr('status');
+   if(status==1)
+	   $(this).addClass("disabled");
+	   });
+}
+
+
 // 下一页
 function pageNext() {
 	if (currentPage == totalPage)
@@ -90,10 +105,35 @@ function contentDelete(cid) {
 			});
 
 }
+
+function updateStatus(tag){
+	var cid=$(tag).attr('cid');
+	var status=$(tag).attr('status');
+ if(status==1)
+	 return false;
+ $.ajax({
+url:"${ctx}/admin/updateStatus?cid="+cid+"&status=1",
+type:"put",
+success:function(data){
+         if(data.meta.success==true){
+      $(tag).attr('status',1)
+      $(tag).addClass("disabled");
+             }
+         else{
+       alert("更新文章状态失败！"+data.meta.message);
+             }
+			},
+error:function(data){
+       alert("系统忙！");
+			}
+
+	 });
+	
+}
 </script>
 
 
-<body class="fixed-left" onload="initialPage()">
+<body class="fixed-left" onload="initialListPage()">
 <div id="wrapper">
      <div class="topbar">
         <div class="topbar-left">
@@ -154,14 +194,14 @@ function contentDelete(cid) {
                 </td>
                 <td class="contentTable-second">${content.receiveTime}</td>
                 <td class="contentTable-third">
-						<div class="content-conduct">
+						<div class="small  ui buttons content-conduct ">
 						
-							<a href="${ctx}/admin/updateContent/${content.cid}" target="_blank" class="btn btn-primary btn-sm waves-effect waves-light m-b-5">
-							<i class="fa fa-edit"></i> <span>编辑</span></a> 
-							<a href="javascript:void(0)" class="btn btn-danger btn-sm waves-effect waves-light m-b-5"  onclick="contentDelete(${content.cid})"> <i
-								class="fa fa-trash-o"></i> <span>删除</span></a> 
-							<a  onclick="updateStatus(${content.cid})"  class="btn btn-warning btn-sm waves-effect waves-light m-b-5 publishbutton"><i
-                            class="fa fa-rocket"></i> <span>发布</span></a>
+							<a href="${ctx}/admin/updateContent/${content.cid}" target="_blank" class="mini compact ui teal   button ">
+							<i class="fa fa-edit"></i> 编辑</a> 
+							<a href="javascript:void(0)" class=" mini compact ui red button"  style="background: #F57474" onclick="contentDelete(${content.cid})"> <i
+								class="fa fa-trash-o"></i>删除</a> 
+							<a  onclick="updateStatus(this)"  cid="${content.cid}" status="${content.status}" class="mini compact ui orange  button publishbutton"><i
+                            class="fa fa-rocket"></i>发布</a>
 						</div>
 					</td>
             </tr>

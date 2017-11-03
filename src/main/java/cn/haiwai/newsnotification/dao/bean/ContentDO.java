@@ -165,4 +165,20 @@ public class ContentDO implements Serializable {
 		return ts;
 	}
 
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("ContentDO [id=").append(id).append(", title=").append(title).append(", content=")
+				.append(content).append(", receiveTime=").append(receiveTime).append(", createTime=").append(createTime)
+				.append(", status=").append(status).append("]");
+		return builder.toString();
+	}
+
+	
+
+	
+	
+
+	
+
 }

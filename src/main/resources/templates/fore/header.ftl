@@ -70,7 +70,7 @@ document.onselectstart=new Function("event.returnValue=false");
 <style type="text/css">
 .notification-nav {position: fixed;top: 0px;left: 0px;height: 60px;margin-bottom: 0px;z-index: 2;min-width:1200px!important;}
 .notification-content {position: fixed;top: 46px;margin-left: auto;margin-right: auto;margin-top: 0px;min-width: 750px;z-index: 1;
-	border-top: none !important;}
+	border-top: none !important;border-bottom:none !important;}
 .notification-nav .nav-left{display:inline-block;line-height:56px;width:125px;}
 .notification-nav .nav-left a{color:#EA6F5A;font-size:20px;padding:10px!important;border-right: none;}
 .notification-nav .nav-left a{margin-top:5px;}

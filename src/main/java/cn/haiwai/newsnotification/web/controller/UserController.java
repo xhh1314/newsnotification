@@ -64,18 +64,16 @@ public class UserController {
 		if (!verifyCodeSession.equalsIgnoreCase(verifyCode)) {
 			return Response.failure("验证码错误!");
 		}
-
-		
 		try {
 			if (userService.register(user)) {
 				// 注册成功
 				return Response.success();
 			} else {
 				return Response.failure("注册失败，未知错误！");
-			} 
+			}
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.error("注册失败！{}",e);
+			logger.error("注册失败！{}", e);
 			return Response.failure("注册失败，未知错误！");
 		}
 
@@ -121,7 +119,7 @@ public class UserController {
 			if (previousUri == null || previousUri.equals("")) {
 				return "redirect:/admin/index";
 			} else {
-				// 截取掉项目前缀，如/shop/forePermission/addOderItem
+				// 截取掉项目根名称，如/shop/forePermission/addOderItem
 				// 截取后为/forePermission/addOderItem
 				return "redirect:" + previousUri.substring(request.getContextPath().length());
 			}
@@ -137,8 +135,8 @@ public class UserController {
 	private final JsonParser jsonParser = new JsonParser();
 
 	/**
-	 * 前台通过ajax传入name，后台判定该name是否可以注册 因为可能包含特殊字符@，直接传入字符串后端出现乱码，所以前台转换成json格式，传入后台
-	 * 使用Gson解析传入的json数据
+	 * 前台通过ajax传入name，后台判定该name是否可以注册
+	 * 因为可能包含特殊字符@，直接传入字符串后端出现乱码，所以前台转换成json格式，传入后台 使用Gson解析传入的json数据
 	 * 
 	 * @param email
 	 * @param response
@@ -231,9 +229,10 @@ public class UserController {
 		}
 		return "redirect:/user/login";
 	}
+
 	@ResponseBody
-	@RequestMapping(value="/resetPassword",method=RequestMethod.PUT)
-	public Response resetPassword(@RequestBody String password,HttpServletRequest request ){
+	@RequestMapping(value = "/resetPassword", method = RequestMethod.PUT)
+	public Response resetPassword(@RequestBody String password, HttpServletRequest request) {
 		JsonElement element = jsonParser.parse(password);
 		JsonObject jsonObj = element.getAsJsonObject();
 		String oldPassword = jsonObj.get("oldPassword").toString();
@@ -242,7 +241,7 @@ public class UserController {
 		// Gson取出的值带有“”号，导致传入数据库的参数多了个“”,所以这里把双引号截取掉
 		oldPassword = oldPassword.substring(oldPassword.indexOf("\"") + 1, oldPassword.lastIndexOf("\""));
 		newPassword = newPassword.substring(newPassword.indexOf("\"") + 1, newPassword.lastIndexOf("\""));
-		UserBO user=(UserBO)request.getSession(false).getAttribute("user");
+		UserBO user = (UserBO) request.getSession(false).getAttribute("user");
 		try {
 			if (userService.resetPassword(oldPassword, newPassword, user))
 				return Response.success();
@@ -250,7 +249,7 @@ public class UserController {
 				return Response.failure();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.error("用户{}更新密码失败！{}",user.getName(),e);
+			logger.error("用户{}更新密码失败！{}", user.getName(), e);
 			return Response.failure();
 		}
 	}

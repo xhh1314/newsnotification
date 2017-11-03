@@ -17,6 +17,10 @@ public class ForeController {
 	@Autowired
 	private ContentService cs;
 
+	/**
+	 * @param model
+	 * @return 返回到主页
+	 */
 	@RequestMapping(value="/index")
 	public String index(ModelMap model){
 	List<ContentBO> contents=cs.listContents();
@@ -26,6 +30,15 @@ public class ForeController {
 	model.addAttribute("contents",contents);
 	  return "fore/index";	
 	}
+	/**
+	 * 所有的没有后缀地址的请求都转发到主页
+	 * @return 转发到主页
+	 */
+	@RequestMapping(value="/")
+	public String everyPath(){
+		return "forward:index";
+	}
+	
 	@RequestMapping(value="/content/{cid}")
 	public String content(@PathVariable("cid") String cid,ModelMap model){
 		ContentBO content=cs.getContent(Integer.parseInt(cid));

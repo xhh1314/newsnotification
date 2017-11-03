@@ -138,7 +138,7 @@ public class ContentService {
 		}
 		return contentBOs;
 	}
-	
+
 	/**
 	 * 把TagDO集合转换成TagBO集合
 	 * 
@@ -216,12 +216,22 @@ public class ContentService {
 		Collections.sort(contents);
 		return parseHtml(contents);
 	}
-	
-	public List<TagBO> listAllTag(){
-		List<TagDO> tags=tagDao.listAll();
-		if(tags==null || tags.isEmpty())
+
+	public List<TagBO> listAllTag() {
+		List<TagDO> tags = tagDao.listAll();
+		if (tags == null || tags.isEmpty())
 			return null;
 		return transferfromTagDO(tags);
+	}
+
+	@Transactional
+	public boolean updateContentStatus(int cid, int status) {
+		// TODO Auto-generated method stub
+		if (contentDao.updateContentStatus(cid, status) == 1)
+			return true;
+		else
+			return false;
+
 	}
 
 }

@@ -17,6 +17,7 @@ import cn.haiwai.newsnotification.manage.AbstractPage;
 import cn.haiwai.newsnotification.manage.response.Response;
 import cn.haiwai.newsnotification.service.ContentBO;
 import cn.haiwai.newsnotification.service.ContentService;
+import cn.haiwai.newsnotification.service.TagBO;
 
 /**
  * 后台管理控制类 所有文章操作都在这里转发
@@ -35,7 +36,7 @@ public class AdminController {
 	 * 后台主页
 	 * 
 	 * @param model
-	 * @return
+	 * @return 返回到后台主页-即列表页
 	 */
 	@RequestMapping(value = "/index")
 	public String index(ModelMap model) {
@@ -54,7 +55,7 @@ public class AdminController {
 	 * @param beginPage
 	 * @param endPage
 	 * @param currentPage
-	 * @return
+	 * @return 返回到后台主页-即列表页
 	 */
 	@RequestMapping(value = "/contentPage")
 	public String contentPage(ModelMap model, @RequestParam("action") String action,
@@ -68,13 +69,31 @@ public class AdminController {
 	}
 
 	/**
-	 * 进入新增content视图
-	 * 
-	 * @return
+	 * @return 新增content视图
 	 */
 	@RequestMapping(value = "/contentEdit")
-	public String contentEdit() {
+	public String contentEdit(ModelMap model) {
+		List<TagBO> tags;
+		if ((tags = cs.listAllTag()) != null)
+			model.addAttribute("tags", tags);
 		return "back/admin/content_edit";
+	}
+
+	/**
+	 * 更新content之前渲染视图
+	 * 
+	 * @param cid
+	 * @param model
+	 * @return 返回到更新编辑文章页面
+	 */
+	@RequestMapping(value = "/updateContent/{cid}")
+	public String updateContent(@PathVariable("cid") String cid, ModelMap model) {
+		ContentBO contentBo = cs.getContent(Integer.parseInt(cid));
+		if (contentBo == null) {
+			return "back/comm/error_404";
+		}
+		model.addAttribute("content", new ContentVO(contentBo));
+		return "back/admin/content_Update";
 	}
 
 	/**
@@ -86,7 +105,7 @@ public class AdminController {
 	 * 保存content
 	 * 
 	 * @param content
-	 * @return
+	 * @return 返回json
 	 */
 	@RequestMapping(value = "/saveContent", method = RequestMethod.POST, produces = "application/json")
 	@ResponseBody
@@ -110,8 +129,9 @@ public class AdminController {
 		if (message.length() > 1) {
 			String msg = message.toString();
 			// 截取掉最后一个分号
-			if (msg.endsWith(";"))
+			if (msg.endsWith(";")) {
 				msg = msg.substring(0, msg.length() - 1);
+			}
 			return Response.failure(msg);
 		}
 		ContentBO b = cs.saveContent(new ContentBO(content));
@@ -127,52 +147,69 @@ public class AdminController {
 	 * 
 	 * @param cid
 	 * @param model
-	 * @return
+	 * @return 返回到前台的文章展示页面
 	 */
 	@RequestMapping(value = "/getContent/{cid}")
 	public String getContent(@PathVariable("cid") String cid, ModelMap model) {
 		ContentBO contentBo = cs.getContent(Integer.parseInt(cid));
-		if (contentBo == null)
+		if (contentBo == null) {
 			return "back/comm/error_404";
+		}
 		model.addAttribute("content", contentBo);
 		return "content";
 	}
 
 	/**
-	 * 更新content之前渲染视图
+	 * 更新文章状态
 	 * 
 	 * @param cid
-	 * @param model
-	 * @return
+	 * @param status
+	 * @return json
 	 */
-	@RequestMapping(value = "/updateContent/{cid}")
-	public String updateContent(@PathVariable("cid") String cid, ModelMap model) {
-		ContentBO contentBo = cs.getContent(Integer.parseInt(cid));
-		if (contentBo == null)
-			return "back/comm/error_404";
-		model.addAttribute("contents", contentBo);
-		return "back/admin/content_update";
+	@RequestMapping(value = "/updateStatus")
+	@ResponseBody
+	public Response updateStatus(@RequestParam("cid") String cid, @RequestParam("status") String status) {
+		if (cid == null || status == null) {
+			return Response.failure("id 或者status 参数缺失！");
+		}
+		if (Integer.parseInt(status) != 0 && Integer.parseInt(status) != 1) {
+			return Response.failure("status字段只能是0或者1");
+		}
+		if (cs.updateContentStatus(Integer.parseInt(cid), Integer.parseInt(status))) {
+			return Response.success();
+		} else {
+			return Response.failure();
+		}
 	}
 
 	/**
 	 * 根据cid删除一条content记录
 	 * 
 	 * @param cid
-	 * @return
+	 * @return json
 	 */
 	@RequestMapping(value = "/deleteContent/{cid}", method = RequestMethod.DELETE)
 	@ResponseBody
 	public Response deleteContent(@PathVariable("cid") String cid) {
-		if (cs.deleteContent(cid))
+		if (cs.deleteContent(cid)) {
 			return Response.success();
-		else
+		} else {
 			return Response.failure();
+		}
 	}
 
+	/**
+	 * @return 返回登录页面
+	 */
 	@RequestMapping(value = "/login")
 	public String login() {
-
 		return "back/admin/login";
+	}
+	
+	@RequestMapping(value="/ueditor")
+	public String UeditorTest(){
+		
+		return "back/admin/ueditor";
 	}
 
 }

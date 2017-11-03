@@ -143,25 +143,29 @@
         <input type="hidden" id="attach_url" value="" />
         <form id="articleForm" method="post">
         <!-- int 类型的值，后台在序列化的时候应该设置为0 -->
-            <input type="hidden" name="cid" id="cid" value="" />
-            <input type="hidden" name="status" value="" id="status"/>
+            <input type="hidden" name="cid" id="cid" value="${content?if_exists.cid!}" />
+            <input type="hidden" name="status" value="${content?if_exists.status!}" id="status"/>
             <input type="hidden" name="content" id="content" value=""/>
             <div  style="padding: 0 10px 0 0;">
                 <input class="form-control contentTitle" placeholder="请输入文章标题（必填）" name="title" id="title" required
-                       value=""/>
+                       value="${content?if_exists.title! }"/>
             </div>
             <div class="form-group articleForm-second">
              <div class="form-group col-md-6" style="padding: 0 10px 0 0;">
                 <input name="receiveTime" id="receiveTime" type="text" class="form-control contentDate" placeholder="请选择日期（必填）"
-                       value=""/>
+                       value="${content?if_exists.receiveTime!}"/>
             </div>
             <div class="form-group col-md-6" style="padding: 0 10px 0 0;">
-            <!-- 暂时不用这个标签 -->
-                <input name="tags" id="tag" type="text" class="form-control contentTags" placeholder="文章标签"
-                       value=""/>
+                <input name="tags" id="tag" list="tags" type="text" class="form-control contentTags" placeholder="文章标签"
+                       value="${content?if_exists.tags!}"/>
+                <datalist id="tags">
+                <#list tags?if_exists as tag>
+                <option>${tag.name}</option>
+                </#list>
+                </datalist>
             </div>
             </div>
-            <div class="clearfix"></div>
+            <div class="clearfix" ></div>
 
             <div id="md-container" class="form-group col-md-12">
                 <!-- 加载uEdit编辑器的容器 -->
@@ -188,6 +192,7 @@
 <link href="${ctx}/admin/plugins/tagsinput/jquery.tagsinput.css" rel="stylesheet">
 <link href="${ctx}/admin/plugins/select2/dist/css/select2-bootstrap.css" rel="stylesheet">
 <link href="${ctx}/admin/plugins/toggles/toggles.css" rel="stylesheet">
+
 
 <!-- 日期控件 -->
 <script type="text/javascript" src="${ctx}/laydate/laydate.js"></script>

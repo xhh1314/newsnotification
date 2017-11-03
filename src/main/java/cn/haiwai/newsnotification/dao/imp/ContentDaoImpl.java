@@ -139,4 +139,10 @@ public class ContentDaoImpl implements ContentDao {
 		return contentJpa.listByRecentSevenDay();
 	}
 
+	@Override
+	public Integer updateContentStatus(int cid,int status) {
+		// TODO Auto-generated method stub
+		return contentJpa.updateContentStatus(cid,status);
+	}
+
 }

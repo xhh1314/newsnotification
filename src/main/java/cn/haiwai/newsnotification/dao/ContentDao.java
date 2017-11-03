@@ -95,4 +95,13 @@ public interface ContentDao {
 	 */
 	List<ContentDO> listByRecentSevenDay();
 
+	/**
+	 * 更新content的status
+	 * @param cid
+	 * @param status 
+	 * @return 更新数量
+ 	 */
+	Integer updateContentStatus(int cid, int status);
+	
+
 }
