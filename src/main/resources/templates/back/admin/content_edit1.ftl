@@ -1,8 +1,126 @@
-  <#include "/back/admin/header.ftl">
-  <!-- 正文容器分割线 -->
-    <div class="main">
+<#include "/back/admin/header.ftl">
 
-<div class="col-sm-12 page-title" >
+<style rel="stylesheet">
+    #tags_tagsinput {
+        background-color: #fafafa;
+        border: 1px solid #eeeeee;
+    }
+
+    #tags_addTag input {
+        width: 100%;
+    }
+
+    #tags_addTag {
+        margin-top: -5px;
+    }
+
+    .mditor .editor{
+        font-size: 14px;
+        font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    }
+    .mditor .backdrop, .mditor .textarea, .mditor .viewer{
+        font-size: 14px;
+    }
+    .markdown-body{
+        font-size: 14px;
+    }
+    .note-toolbar {
+        text-align: center;
+    }
+
+    .note-editor.note-frame {
+        border: none;
+    }
+
+    .note-editor .note-toolbar {
+        background-color: #f5f5f5;
+        padding-bottom: 10px;
+    }
+
+    .note-toolbar .note-btn-group {
+        margin: 0;
+    }
+
+    .note-toolbar .note-btn {
+        border: none;
+    }
+
+    #articleForm #dropzone {
+        min-height: 200px;
+        background-color: #dbdde0;
+        line-height:200px;
+        margin-bottom: 10px;
+    }
+    #articleForm .dropzone {
+        border: 1px dashed #8662c6;
+        border-radius: 5px;
+        background: white;
+    }
+    #articleForm .dropzone .dz-message {
+        font-weight: 400;
+    }
+    #articleForm .dropzone .dz-message .note {
+        font-size: 0.8em;
+        font-weight: 200;
+        display: block;
+        margin-top: 1.4rem;
+    }
+ .xxxx{border: 1px solid black;}
+ div .page-title{display:inline-block;}
+ .text-right{margin-left:550px;display:inline-block;}   
+ .returnlist{line-height:30px;width:80px;color: black;border: none;margin-left:10px;}  
+ .savebutton{line-height:30px;width:80px;margin-left:10px;}
+ .publishbutton{line-height:30px;width:80px;margin-left:10px;}
+ .newbutton{line-height:30px;width:80px;margin-left:10px;background:black !important;}
+ .contentTitle{height:30px;width:1000px;margin-left:10px;}
+ .contentDate{margin-left:10px;;height:30px;width:200px;}
+ .contentTags{height:30px;width:400px;margin-left:50px;}
+ .page-title{margin-left:5px;}
+ .articleForm-second div{display:inline-block;}
+</style>
+
+<body class="fixed-left" onload="loadCalender()">
+<div id="wrapper">
+     <div class="topbar">
+        <div class="topbar-left">
+            <div class="text-center p-t-10" style="margin: 0 auto;">
+                <div class="pull-left" style="padding-left: 10px;border: 0px solid black;">
+                    <a href="/admin/index">
+                        <img src="${ctx}/admin/images/unicorn.png" width="50" height="50"/>
+                    </a>
+                    <a style="margin-left:20px;vertical-align:50%;font-size:25px;font-weight:bold;color:#059AEC">海外网</a>
+                   
+                </div>
+            </div>
+        </div>
+        <div class="navbar navbar-default" role="navigation" style="border: 0px solid black;">
+               <span style="line-height: 50px;font-size:30px;margin-left:35%">新闻提示</span>
+            <a style="line-height: 50px;margin-left:40%;text-decoration:none;color:#337AB7;" href="${ctx }/user/logout">注销</a>
+        </div>
+    </div>
+    <div class="left side-menu">
+        <div class="sidebar-inner slimscrollleft">
+            <div id="sidebar-menu">
+                <ul>
+                <li #if(active=='article') class="active" #end>
+                        <a href="${ctx }/admin/index" class="waves-effect #if(active=='article') active #end"><i class="fa fa-list" aria-hidden="true"></i><span> 文章管理 </span></a>
+                 </li>
+                    <li #if(active=='publish') class="active" #end>
+                        <a href="${ctx}/admin/contentEdit" class="waves-effect #if(active=='publish') active #end"><i class="fa fa-pencil-square-o" aria-hidden="true"></i><span> 发布文章 </span></a>
+                    </li>
+              
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+    <div class="content-page">
+        <div class="content">
+            <div class="container">
+<!-- 正文容器分割线 -->
+<div class="row">
+    <div class="col-sm-12 page-title" >
         <h4 class="page-title">
             发布文章
         </h4>
@@ -61,17 +179,26 @@
 
         </form>
     </div>
-
-    </div>
-
 </div>
-
-
+<!-- 正文容器底线 -->
+<footer class="footer text-right">
+    2017 © <a href="http://www.haiwainet.cn" target="_blank" style="text-decoration:none;color:#58666E">海外网</a>.
+</footer>
+</div>
+</div>
+</div>
+</div>
 </body>
-<script type="text/javascript" src="../laydate/laydate.js"></script>
-<script type="text/javascript" src="../ueditor/ueditor.config.js"></script>
-<script type="text/javascript" src="../ueditor/ueditor.all.js"></script>
-<script type="text/javascript">
+<link href="${ctx}/admin/plugins/tagsinput/jquery.tagsinput.css" rel="stylesheet">
+<link href="${ctx}/admin/plugins/select2/dist/css/select2-bootstrap.css" rel="stylesheet">
+<link href="${ctx}/admin/plugins/toggles/toggles.css" rel="stylesheet">
+
+
+<!-- 日期控件 -->
+<script type="text/javascript" src="${ctx}/laydate/laydate.js"></script>
+<script type="text/javascript" src="${ctx }/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" src="${ctx }/ueditor/ueditor.all.js"></script>
+<script  src="${ctx}/myJSCSS/my.js"></script>
 
 <script type="text/javascript" >
 //执行一个laydate实例
@@ -179,6 +306,6 @@ var flag=false;
 	function newContent() {
 		window.location.href = "${ctx}/admin/contentEdit";
 	}
-
 </script>
-</html>
+<#include "/back/admin/footer.ftl">
+
