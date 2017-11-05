@@ -1,0 +1,563 @@
+
+<!DOCTYPE html>
+<html>
+<a href="${ctx}/admin/updateContent/${content.cid}" target="_blank" class="mini compact ui teal button ">编辑</a>
+<a href="javascript:void(0)" class=" mini compact ui red button"  onclick="contentDelete(${content.cid})">删除</a>
+<a  onclick="updateStatus(this)"  cid="${content.cid}" status="${content.status}" class="mini compact ui orange  button publishbutton">发布</a>
+
+<script type="text/javascript" src="../jquery-3.1.1.min.js"></script>
+<!--<script type="text/javascript" src="../bootstrap/js/bootstrap.min.js"></script>-->
+<!--&lt;!&ndash; 最新版本的 Bootstrap 核心 CSS 文件 &ndash;&gt;-->
+<!--<link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css">-->
+<!--&lt;!&ndash; 可选的 Bootstrap 主题文件（一般不用引入） &ndash;&gt;-->
+<!--<link rel="stylesheet" href="../bootstrap/css/bootstrap-theme.min.css">-->
+<!-- <script type="text/javascript" src="../semanticui/dist/semantic.min.js"></script> -->
+<!-- <link rel="stylesheet" type="text/css" href="../semanticui/dist/semantic.min.css"> -->
+<script type="text/javascript" src="../semanticui/dist/components/modal.min.js"></script>
+<script type="text/javascript" src="../semanticui/dist/components/transition.min.js"></script>
+<script type="text/javascript" src="../semanticui/dist/components/dimmer.min.js"></script>
+<!--分别导入semantic-UI的不同模块css文件，用到哪个模块导入哪个模块!-->
+<link rel="stylesheet" type="text/css" href="../semanticui/dist/components/label.min.css">
+<link rel="stylesheet" type="text/css" href="../semanticui/dist/components/header.min.css">
+<link rel="stylesheet" type="text/css" href="../semanticui/dist/components/menu.min.css">
+<link rel="stylesheet" type="text/css" href="../semanticui/dist/components/button.min.css">
+<link rel="stylesheet" type="text/css" href="../semanticui/dist/components/item.min.css">
+<link rel="stylesheet" type="text/css" href="../semanticui/dist/components/container.min.css">
+<link rel="stylesheet" type="text/css" href="../semanticui/dist/components/icon.min.css">
+<link rel="stylesheet" type="text/css" href="../semanticui/dist/components/divider.min.css">
+<link rel="stylesheet" type="text/css" href="../semanticui/dist/components/reset.min.css">
+<link rel="stylesheet" type="text/css" href="../semanticui/dist/components/site.min.css">
+<link rel="stylesheet" type="text/css" href="../semanticui/dist/components/image.min.css">
+<link rel="stylesheet" type="text/css" href="../semanticui/dist/components/modal.min.css">
+<link rel="stylesheet" type="text/css" href="../semanticui/dist/components/label.min.css">
+<link rel="stylesheet" type="text/css" href="../semanticui/dist/components/popup.min.css">
+<link rel="stylesheet" type="text/css" href="../semanticui/dist/components/dimmer.min.css">
+<link rel="stylesheet" type="text/css" href="../semanticui/dist/components/transition.min.css">
+<link rel="stylesheet" type="text/css" href="../semanticui/dist/components/form.min.css">
+<link rel="stylesheet" type="text/css" href="../semanticui/dist/components/input.min.css">
+<link rel="stylesheet" type="text/css" href="../semanticui/dist/components/table.min.css">
+<link rel="stylesheet" type="text/css" href="../semanticui/dist/components/">
+<link rel="stylesheet" type="text/css" href="../semanticui/dist/components/">
+<link rel="stylesheet" type="text/css" href="../semanticui/dist/components/">
+<link rel="stylesheet" type="text/css" href="../semanticui/dist/components/">
+<link rel="stylesheet" type="text/css" href="../semanticui/dist/components/">
+<link rel="stylesheet" type="text/css" href="../semanticui/dist/components/">
+<link rel="stylesheet" type="text/css" href="../semanticui/dist/components/">
+<link rel="stylesheet" type="text/css" href="../semanticui/dist/components/">
+<link rel="stylesheet" type="text/css" href="../semanticui/dist/components/">
+<link rel="stylesheet" type="text/css" href="../semanticui/dist/components/">
+<head>
+    <link rel="shortcut icon" href="/admin/images/favicon.png"/>
+    <meta charset="UTF-8">
+    <title>新闻提示</title>
+    <style type="text/css">
+        **div{border: 1px solid black;}
+        **body{border: 1px solid red;}
+        .top{position:fixed;top:0;width:100%;height:80px;z-index:100;border-bottom:2px solid #F0F0F0;background: #F9F9F9;}
+        .page-content{position:relative;}
+        .page-content .left{position:fixed;top:80px;left:0;width:250px;height:100%;background: #F9F9F9}
+        .page-content .main {position:absolute;left:250px;top:80px;width:100%;overflow:hidden;}
+        .header-container{position:relative;text-align: center;display: inline-block;line-height: 80px;width:100%;}
+        .header-container .left{float: left;display:inline-block;line-height:80px;width:250px;margin-top:10px;}
+        .header-container .center{margin:0px auto;display:inline-block;line-height:80px;width:400px;}
+        .header-container .right{float:right;display:inline-block;line-height:80px;width:200px;margin-top:10px;}
+        .left .ui.menu{width:250px;}
+        .header-container .header.left a{font-size:24px;}
+        .header-container .header.center a{font-size: 36px;color: #EA6F5A;}
+        .header-container .header.right .resetPassword {cursor:pointer; }
+
+
+
+        .resetPasswordInput{text-align:center;}
+        .resetPasswordInput .input {width:80%;}
+    </style>
+    <script type="text/javascript">
+        //点击菜单激活事件
+        $(document).ready(function () {
+            $(".menu .item").click(function () {
+                $(".menu .item").each(function () {
+                    $(this).removeClass("active");
+                });
+                $(this).addClass("active");
+
+            });
+            $(window)
+        });
+        //重置密码js
+        function resetPassword(){
+            $('.ui.modal').modal('show');
+        }
+        function onApprove() {
+            var oldPassword = $("#oldPassword").val();
+            var newPassword = $("#newPassword").val();
+            //非空字符正则
+            var patter = new RegExp("\\S", "g");
+            if (!patter.test(oldPassword) || !patter.test(newPassword))
+                return false;
+            var password = {
+                "oldPassword" : oldPassword,
+                "newPassword" : newPassword
+            };
+            password=JSON.stringify(password);
+            $.ajax({
+                url : "/user/resetPassword",
+                type : "put",
+                dataType : "json",
+                contentType : "application/json",
+                data : password,
+                success : function(data) {
+                    if (data.meta.success == true) {
+                        return true;
+                    } else {
+                        alert("修改密码失败!");
+                    }
+
+                },
+                error : function(data) {
+                    alert("系统发生错误!");
+                }
+            });
+        }
+    </script>
+</head>
+<div class="ui mini test modal">
+    <div class="header">
+        修改您的密码
+    </div>
+    <div class="content resetPasswordInput">
+        <div class="ui input">
+            <input type="password"  name="oldPassword" id="oldPassword" placeholder="原密码">
+        </div>
+        <div class="ui input">
+            <input type="text" name="newPassword" id="newPassword" placeholder="新密码">
+        </div>
+    </div>
+    <div class="actions">
+        <div class="ui negative button">
+            取消
+        </div>
+        <div class="ui positive right labeled icon button" onclick="onApprove()">
+            确认
+            <i class="checkmark icon"></i>
+        </div>
+    </div>
+</div>
+
+<body>
+<div class="top">
+    <div class="header-container">
+        <div class="header left"></div>
+        <div class="header center">
+            <a class="ui huge header">新闻提示</a>
+        </div>
+        <div class="header right">
+            <a class="ui blue basic label resetPassword" onclick="resetPassword()">修改密码</a>
+            <a class="ui red basic label" href="/user/logout"><i class="sign out icon"></i>注销</a>
+        </div>
+    </div>
+</div>
+<div class="page-content">
+    <div class="left">
+
+        <div class="ui grey  inverted  vertical pointing menu">
+            <a href="/admin/index" class="grey item active">
+                文章管理
+            </a>
+            <a href="/admin/contentEdit" class="yellow item">
+                新建文章
+            </a>
+            <a class="grey item ">
+                标签管理
+            </a>
+        </div>
+
+    </div><style type="text/css">
+
+    .contentTable{width:1000px !important;font-size:16px;}
+    .contentTable-frist{width:50% !important;}
+    .contentTable-second{width:25% !important;text-align: center !important;}
+    .contentTable-third{width:25% !important; text-align:center !important;}
+    div .content-conduct{text-align: center !important;line-}
+    div .content-conduct a{display:inline-block !important;line-height:16px !important ;font-size:16px !important;padding:0px auto !important;margin-top: 0px !important;margin-bottom:0px !important;}
+    div .footPageModule{font-size:12px !important;}
+    .publishbutton{}
+</style>
+    <script type="text/javascript">
+        var currentPage=1;
+        var beginPage=1;
+        var endPage=5;
+        var totalPage=17;
+        function initialListPage(){
+            initialPage();
+            initialStatus();
+        }
+
+        function initialPage() {
+            // var a=document.getElementById("pageItem");
+            // 如果总页数小于等于1就不显示页码
+            if (totalPage <= 1) {
+                $("#pageMenu").hide();
+                $("#pagePreviousImg").hide();
+                $("#pageNextImg").hide();
+                return false;
+            }
+            for (var i = beginPage; i <= endPage; i++) {
+                var a = document.createElement('a');
+                a.href = "/admin/contentPage?action=assign&currentPage=" + i
+                    + "&beginPage=" + beginPage + "&endPage=" + endPage;
+                a.innerHTML = i;
+                a.className = "item";
+                if (i == currentPage) {
+                    a.style.border = "none";
+                    a.style.pointerEvents = "none";
+                    a.style.background = "#337AB7";
+                    a.style.color = "white";
+                }
+                $("#pageNext").before(a);
+            }
+
+            if (currentPage == 1) {
+                $("#pagePrevious").addClass("disabled");
+                $("#pagePrevious").css("cursor", "not-allowed");
+            }
+            if (currentPage == totalPage) {
+                $("#pageNext").addClass("disabled");
+                $("#pageNext").css("cursor", "not-allowed");
+            }
+        }
+
+        function initialStatus() {
+            $(".publishbutton").each(function(){
+                var status=$(this).attr('status');
+                if(status==1)
+                    $(this).addClass("disabled");
+            });
+        }
+
+
+        // 下一页
+        function pageNext() {
+            if (currentPage == totalPage)
+                return;
+            document.location.href = "/admin/contentPage?action=next&currentPage="
+                + currentPage + "&beginPage=" + beginPage + "&endPage=" + endPage;
+        }
+        // 上一页
+        function pagePrevious() {
+            if (currentPage == 1)
+                return;
+            document.location.href = "/admin/contentPage?action=previous&currentPage="
+                + currentPage + "&beginPage=" + beginPage + "&endPage=" + endPage;
+        }
+        //删除函数
+        function contentDelete(cid) {
+            var delMessage = "您确定要删除么！";
+            if (confirm(delMessage) != true)
+                return;
+            $.ajax({
+                url : "/admin/deleteContent/" + cid,
+                type : "delete",
+                dataType : "json",
+                success : function(data) {
+                    if (data.meta.success == true) {
+                        $("tr[cid='+cid+']").remove();
+                        window.location.href = "/admin/contentPage?action=assign&currentPage="
+                            + currentPage
+                            + "&beginPage="
+                            + beginPage
+                            + "&endPage=" + endPage;
+                    } else {
+                        alert("删除失败！");
+                    }
+                },
+                error : function() {
+                    alert("系统错误！");
+                }
+
+            });
+
+        }
+
+        function updateStatus(tag){
+            var cid=$(tag).attr('cid');
+            var status=$(tag).attr('status');
+            if(status==1)
+                return false;
+            $.ajax({
+                url:"/admin/updateStatus?cid="+cid+"&status=1",
+                type:"put",
+                success:function(data){
+                    if(data.meta.success==true){
+                        $(tag).attr('status',1)
+                        $(tag).addClass("disabled");
+                    }
+                    else{
+                        alert("更新文章状态失败！"+data.meta.message);
+                    }
+                },
+                error:function(data){
+                    alert("系统忙！");
+                }
+
+            });
+
+        }
+    </script>
+    <a href="${ctx}/admin/updateContent/${content.cid}" target="_blank" class="mini compact ui teal button ">编辑</a>
+    <a href="javascript:void(0)" class=" mini compact ui red button"  onclick="contentDelete(${content.cid})">删除</a>
+    <a  onclick="updateStatus(this)"  cid="${content.cid}" status="${content.status}" class="mini compact ui orange  button publishbutton">发布</a>
+
+    <body class="fixed-left" onload="initialListPage()">
+    <div id="wrapper">
+        <div class="topbar">
+            <div class="topbar-left">
+                <div class="text-center p-t-10" style="margin: 0 auto;">
+                    <div class="pull-left" style="padding-left: 10px;border: 0px solid black;">
+                        <a href="/admin/index">
+                            <img src="/admin/images/unicorn.png" width="50" height="50"/>
+                        </a>
+                        <a style="margin-left:20px;vertical-align:50%;font-size:25px;font-weight:bold;color:#059AEC">海外网</a>
+
+                    </div>
+                </div>
+            </div>
+            <div class="navbar navbar-default" role="navigation" style="border: 0px solid black;">
+                <span style="line-height: 50px;font-size:30px;margin-left:35%">新闻提示</span>
+                <a style="line-height: 50px;margin-left:40%;text-decoration:none;color:#337AB7;" href="/user/logout">注销</a>
+                <a style="line-height: 50px;margin-left:1%;text-decoration:none;color:#337AB7;cursor: pointer" onclick="resetPassword()">修改密码</a>
+            </div>
+        </div>
+        <div class="left side-menu">
+            <div class="sidebar-inner slimscrollleft">
+                <div id="sidebar-menu">
+                    <ul>
+                        <li #if(active=='article') class="active" #end>
+                            <a href="/admin/index" class="waves-effect #if(active=='article') active #end"><i class="fa fa-list" aria-hidden="true"></i><span> 文章管理 </span></a>
+                        </li>
+                        <li #if(active=='publish') class="active" #end>
+                            <a href="/admin/contentEdit" class="waves-effect #if(active=='publish') active #end"><i class="fa fa-pencil-square-o" aria-hidden="true"></i><span> 发布文章 </span></a>
+                        </li>
+
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+        <div class="content-page">
+            <div class="content">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <h3 class="page-title">文章管理</h3>
+                        </div>
+                        <div class="col-md-12">
+                            <table class="ui  fixed  single line selectable celled table contentTable" >
+                                <thead>
+                                <tr>
+                                    <th width="35%">文章标题</th>
+                                    <th width="15%">发布时间</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr cid="460">
+                                    <td class="contentTable-frist">
+                                        <a href="/content/460" target="_blank">wwwww</a>
+                                    </td>
+                                    <td class="contentTable-second">2017-11-03</td>
+                                    <td class="contentTable-third">
+                                        <div class="small  ui buttons content-conduct ">
+
+                                            <a href="/admin/updateContent/460" target="_blank" class="mini compact ui teal   button ">
+                                                <i class="fa fa-edit"></i> 编辑</a>
+                                            <a href="javascript:void(0)" class=" mini compact ui red button"  style="background: #F57474" onclick="contentDelete(460)"> <i
+                                                    class="fa fa-trash-o"></i>删除</a>
+                                            <a  onclick="updateStatus(this)"  cid="460" status="0" class="mini compact ui orange  button publishbutton"><i
+                                                    class="fa fa-rocket"></i>发布</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr cid="459">
+                                    <td class="contentTable-frist">
+                                        <a href="/content/459" target="_blank">反反复复</a>
+                                    </td>
+                                    <td class="contentTable-second">2017-11-03</td>
+                                    <td class="contentTable-third">
+                                        <div class="small  ui buttons content-conduct ">
+
+                                            <a href="/admin/updateContent/459" target="_blank" class="mini compact ui teal   button ">
+                                                <i class="fa fa-edit"></i> 编辑</a>
+                                            <a href="javascript:void(0)" class=" mini compact ui red button"  style="background: #F57474" onclick="contentDelete(459)"> <i
+                                                    class="fa fa-trash-o"></i>删除</a>
+                                            <a  onclick="updateStatus(this)"  cid="459" status="1" class="mini compact ui orange  button publishbutton"><i
+                                                    class="fa fa-rocket"></i>发布</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr cid="458">
+                                    <td class="contentTable-frist">
+                                        <a href="/content/458" target="_blank">读完这五本书，让你瞬间变身时尚优雅girl！</a>
+                                    </td>
+                                    <td class="contentTable-second">2017-11-02</td>
+                                    <td class="contentTable-third">
+                                        <div class="small  ui buttons content-conduct ">
+
+                                            <a href="/admin/updateContent/458" target="_blank" class="mini compact ui teal   button ">
+                                                <i class="fa fa-edit"></i> 编辑</a>
+                                            <a href="javascript:void(0)" class=" mini compact ui red button"  style="background: #F57474" onclick="contentDelete(458)"> <i
+                                                    class="fa fa-trash-o"></i>删除</a>
+                                            <a  onclick="updateStatus(this)"  cid="458" status="1" class="mini compact ui orange  button publishbutton"><i
+                                                    class="fa fa-rocket"></i>发布</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr cid="457">
+                                    <td class="contentTable-frist">
+                                        <a href="/content/457" target="_blank">相思49</a>
+                                    </td>
+                                    <td class="contentTable-second">2017-10-29</td>
+                                    <td class="contentTable-third">
+                                        <div class="small  ui buttons content-conduct ">
+
+                                            <a href="/admin/updateContent/457" target="_blank" class="mini compact ui teal   button ">
+                                                <i class="fa fa-edit"></i> 编辑</a>
+                                            <a href="javascript:void(0)" class=" mini compact ui red button"  style="background: #F57474" onclick="contentDelete(457)"> <i
+                                                    class="fa fa-trash-o"></i>删除</a>
+                                            <a  onclick="updateStatus(this)"  cid="457" status="1" class="mini compact ui orange  button publishbutton"><i
+                                                    class="fa fa-rocket"></i>发布</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr cid="456">
+                                    <td class="contentTable-frist">
+                                        <a href="/content/456" target="_blank">相思48</a>
+                                    </td>
+                                    <td class="contentTable-second">2017-10-29</td>
+                                    <td class="contentTable-third">
+                                        <div class="small  ui buttons content-conduct ">
+
+                                            <a href="/admin/updateContent/456" target="_blank" class="mini compact ui teal   button ">
+                                                <i class="fa fa-edit"></i> 编辑</a>
+                                            <a href="javascript:void(0)" class=" mini compact ui red button"  style="background: #F57474" onclick="contentDelete(456)"> <i
+                                                    class="fa fa-trash-o"></i>删除</a>
+                                            <a  onclick="updateStatus(this)"  cid="456" status="1" class="mini compact ui orange  button publishbutton"><i
+                                                    class="fa fa-rocket"></i>发布</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr cid="455">
+                                    <td class="contentTable-frist">
+                                        <a href="/content/455" target="_blank">相思47</a>
+                                    </td>
+                                    <td class="contentTable-second">2017-10-29</td>
+                                    <td class="contentTable-third">
+                                        <div class="small  ui buttons content-conduct ">
+
+                                            <a href="/admin/updateContent/455" target="_blank" class="mini compact ui teal   button ">
+                                                <i class="fa fa-edit"></i> 编辑</a>
+                                            <a href="javascript:void(0)" class=" mini compact ui red button"  style="background: #F57474" onclick="contentDelete(455)"> <i
+                                                    class="fa fa-trash-o"></i>删除</a>
+                                            <a  onclick="updateStatus(this)"  cid="455" status="1" class="mini compact ui orange  button publishbutton"><i
+                                                    class="fa fa-rocket"></i>发布</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr cid="454">
+                                    <td class="contentTable-frist">
+                                        <a href="/content/454" target="_blank">相思46</a>
+                                    </td>
+                                    <td class="contentTable-second">2017-10-29</td>
+                                    <td class="contentTable-third">
+                                        <div class="small  ui buttons content-conduct ">
+
+                                            <a href="/admin/updateContent/454" target="_blank" class="mini compact ui teal   button ">
+                                                <i class="fa fa-edit"></i> 编辑</a>
+                                            <a href="javascript:void(0)" class=" mini compact ui red button"  style="background: #F57474" onclick="contentDelete(454)"> <i
+                                                    class="fa fa-trash-o"></i>删除</a>
+                                            <a  onclick="updateStatus(this)"  cid="454" status="1" class="mini compact ui orange  button publishbutton"><i
+                                                    class="fa fa-rocket"></i>发布</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr cid="453">
+                                    <td class="contentTable-frist">
+                                        <a href="/content/453" target="_blank">相思45</a>
+                                    </td>
+                                    <td class="contentTable-second">2017-10-29</td>
+                                    <td class="contentTable-third">
+                                        <div class="small  ui buttons content-conduct ">
+
+                                            <a href="/admin/updateContent/453" target="_blank" class="mini compact ui teal   button ">
+                                                <i class="fa fa-edit"></i> 编辑</a>
+                                            <a href="javascript:void(0)" class=" mini compact ui red button"  style="background: #F57474" onclick="contentDelete(453)"> <i
+                                                    class="fa fa-trash-o"></i>删除</a>
+                                            <a  onclick="updateStatus(this)"  cid="453" status="1" class="mini compact ui orange  button publishbutton"><i
+                                                    class="fa fa-rocket"></i>发布</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr cid="452">
+                                    <td class="contentTable-frist">
+                                        <a href="/content/452" target="_blank">相思44</a>
+                                    </td>
+                                    <td class="contentTable-second">2017-10-29</td>
+                                    <td class="contentTable-third">
+                                        <div class="small  ui buttons content-conduct ">
+
+                                            <a href="/admin/updateContent/452" target="_blank" class="mini compact ui teal   button ">
+                                                <i class="fa fa-edit"></i> 编辑</a>
+                                            <a href="javascript:void(0)" class=" mini compact ui red button"  style="background: #F57474" onclick="contentDelete(452)"> <i
+                                                    class="fa fa-trash-o"></i>删除</a>
+                                            <a  onclick="updateStatus(this)"  cid="452" status="1" class="mini compact ui orange  button publishbutton"><i
+                                                    class="fa fa-rocket"></i>发布</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr cid="451">
+                                    <td class="contentTable-frist">
+                                        <a href="/content/451" target="_blank">相思43</a>
+                                    </td>
+                                    <td class="contentTable-second">2017-10-29</td>
+                                    <td class="contentTable-third">
+                                        <div class="small  ui buttons content-conduct ">
+
+                                            <a href="/admin/updateContent/451" target="_blank" class="mini compact ui teal   button ">
+                                                <i class="fa fa-edit"></i> 编辑</a>
+                                            <a href="javascript:void(0)" class=" mini compact ui red button"  style="background: #F57474" onclick="contentDelete(451)"> <i
+                                                    class="fa fa-trash-o"></i>删除</a>
+                                            <a  onclick="updateStatus(this)"  cid="451" status="1" class="mini compact ui orange  button publishbutton"><i
+                                                    class="fa fa-rocket"></i>发布</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                                <tfoot id="pageMenu">
+                                <tr>
+                                    <th colspan="3">
+                                        <div class="ui right floated pagination menu footPageModule" >
+                                            <a class="icon item" id="pagePrevious" onclick="pagePrevious()">
+                                                <i id="pagePreviousImg" class="left chevron icon"></i>
+                                            </a> <a class="icon item" id="pageNext" onclick="pageNext()"> <i id="pageNextImg"
+                                                                                                             class="right chevron icon"></i>
+                                        </a>
+                                        </div>
+                                    </th>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- 正文容器底线 -->
+                    <footer class="footer text-right">
+                        2017 © <a href="http://www.haiwainet.cn" target="_blank" style="text-decoration:none;color:#58666E">海外网</a>.
+                    </footer>
+                </div>
+            </div>
+        </div>
+    </div>
+    </body>
+
+</html>
+<script src="/admin/js/jquery.app.js?v=v1.0"></script>
+<script src="/admin/js/base.js?v=v1.0"></script>

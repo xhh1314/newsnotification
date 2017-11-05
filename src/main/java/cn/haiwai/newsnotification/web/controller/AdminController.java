@@ -93,7 +93,7 @@ public class AdminController {
 			return "back/comm/error_404";
 		}
 		model.addAttribute("content", new ContentVO(contentBo));
-		return "back/admin/content_Update";
+		return "back/admin/content_edit";
 	}
 
 	/**
@@ -210,6 +210,68 @@ public class AdminController {
 	public String UeditorTest(){
 		
 		return "back/admin/ueditor";
+	}
+	/**
+	 * 列示所有tag
+	 * @param model
+	 * @return tag集合
+	 */
+	@RequestMapping(value="/listTag")
+	public String ListTag(ModelMap model){
+		List<TagBO> tags=cs.listAllTag();
+		if(tags==null)
+			return "back/admin/tagManage";
+		model.addAttribute("tags",tags);
+		return "back/admin/tagManage";
+	}
+
+	/**
+	 * 更新tag名称
+	 * @param tid
+	 * @param name
+	 * @return json 参数为空 或者 参数包含空格，返回false
+	 */
+	@RequestMapping(value = "/updateTag/{tid}")
+	@ResponseBody
+	public Response updateTag(@PathVariable("tid") String tid, @RequestParam String name) {
+		if (tid == null || name == null)
+			return Response.failure("参数不能为空！");
+		if(StringUtils.containsWhitespace(name))
+			return Response.failure("一个标签名称不能包含空格！");
+		
+		if (cs.updateTag(tid, name))
+			return Response.success();
+		else
+			return Response.failure();
+	}
+	
+	/**
+	 * 删除tag
+	 * @param tid
+	 * @return json
+	 */
+	@RequestMapping(value = "/deleteTag/{tid}")
+	@ResponseBody
+	public Response deleteTag(@PathVariable("tid") String tid){
+		if (tid == null)
+			return Response.failure("参数不能为空！");
+		if(cs.deleteTag(tid))
+			return Response.success();
+		else
+			return Response.failure(); 
+		
+	}
+	/**
+	 * 接收一个String 字符串
+	 * @param name
+	 * @return tag列表
+	 */
+	@RequestMapping(value="/addTag")
+	public String addTag(@RequestParam String name){
+		if(!StringUtils.hasText(name))
+			return "forward:/listTag";
+	     cs.addTag(name);
+		return "forward:/listTag";
 	}
 
 }

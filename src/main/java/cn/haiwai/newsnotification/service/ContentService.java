@@ -234,4 +234,31 @@ public class ContentService {
 
 	}
 
+	public boolean updateTag(String tid, String name) {
+		TagDO tag = new TagDO();
+		tag.setId(Integer.getInteger(tid));
+		tag.setName(name);
+		return tagDao.save(tag) != null ? true : false;
+
+	}
+
+	public boolean deleteTag(String tid) {
+		// TODO Auto-generated method stub
+		tagDao.deleteById(Integer.getInteger(tid));
+		return true;
+	}
+
+	/**
+	 * 新增tag对象
+	 * @param name
+	 */
+	public void addTag(String name) {
+		// 有可能前端传过来的是一个带空格的标签
+		String[] names = name.split("\\s+");
+		for (String tagName : names) {
+			if (tagDao.getTagByName(tagName) == null)
+				tagDao.save(new TagDO(tagName));
+		}
+	}
+
 }

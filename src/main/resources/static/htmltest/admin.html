@@ -9,6 +9,10 @@
 <!--<script type="text/javascript" src="../semanticui/dist/semantic.min.js"></script>-->
 <!--<link rel="stylesheet" type="text/css" href="../semanticui/dist/semantic.min.css">-->
 <script type="text/javascript" src="../semanticui/dist/components/modal.min.js"></script>
+<script type="text/javascript" src="../semanticui/dist/components/form.min.js"></script>
+<script type="text/javascript" src="../semanticui/dist/components/transition.min.js"></script>
+<script type="text/javascript" src="../semanticui/dist/components/dimmer.min.js"></script>
+<script type="text/javascript" src="../semanticui/dist/components/popup.min.js"></script>
 
 <!--分别导入semantic-UI的不同模块css文件，用到哪个模块导入哪个模块!-->
 <link rel="stylesheet" type="text/css" href="../semanticui/dist/components/label.min.css">
@@ -24,8 +28,12 @@
 <link rel="stylesheet" type="text/css" href="../semanticui/dist/components/image.min.css">
 <link rel="stylesheet" type="text/css" href="../semanticui/dist/components/input.min.css">
 <link rel="stylesheet" type="text/css" href="../semanticui/dist/components/modal.min.css">
-<link rel="stylesheet" type="text/css" href="../semanticui/dist/components/">
-<link rel="stylesheet" type="text/css" href="../semanticui/dist/components/">
+<link rel="stylesheet" type="text/css" href="../semanticui/dist/components/form.min.css">
+<link rel="stylesheet" type="text/css" href="../semanticui/dist/components/label.min.css">
+<link rel="stylesheet" type="text/css" href="../semanticui/dist/components/popup.min.css">
+<link rel="stylesheet" type="text/css" href="../semanticui/dist/components/dimmer.min.css">
+<link rel="stylesheet" type="text/css" href="../semanticui/dist/components/transition.min.css">
+<link rel="stylesheet" type="text/css" href="../semanticui/dist/components/input.min.css">
 <link rel="stylesheet" type="text/css" href="../semanticui/dist/components/">
 
 <head>
@@ -57,6 +65,10 @@
             $(this).addClass("active");
 
         });
+
+        $(window).on('load',function (){
+          alert("success!");
+        } )
     });
 </script>
 </head>
