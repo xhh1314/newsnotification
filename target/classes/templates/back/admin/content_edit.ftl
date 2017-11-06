@@ -29,6 +29,9 @@
                 <option>${tag.name}</option>
                 </#list>
                 </datalist>
+                <div class="ui ignored info message saveSuccessMessage">
+      <a>保存成功</a>
+    </div>
             </div>
             </div>
 
@@ -54,7 +57,8 @@ ${content?if_exists.content!}
 <script type="text/javascript" src="${ctx}/laydate/laydate.js"></script>
 <script type="text/javascript" src="${ctx}/ueditor/ueditor.config.js"></script>
 <script type="text/javascript" src="${ctx}/ueditor/ueditor.all.js"></script>
-
+<script type="text/javascript">
+</script>
 <script src="${ctx}/myJSCSS/content_edit.js"></script>
 
 <style>
@@ -71,5 +75,6 @@ ${content?if_exists.content!}
  .contentDate{margin-left:10px;;height:30px;width:200px !important;}
  .contentTags{height:30px;width:400px !important;margin-left:50px ;}
  .page-title{margin-left:5px;}
+ .saveSuccessMessage{font-size:16px;background:#D9EDF7;color:#82CDF3;display:none;margin-left:35px;padding:5px;}
 </style>
 </html>

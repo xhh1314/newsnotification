@@ -53,7 +53,7 @@ public class TagDaoImpl implements TagDao {
 	@Override
 	public TagDO getTagById(Integer id) {
 		// TODO Auto-generated method stub
-		return tagDaoJpa.getTagById(id);
+		return tagDaoJpa.getOne(id);
 	}
 
 	@Override
@@ -66,6 +66,12 @@ public class TagDaoImpl implements TagDao {
 	public void deleteById(Integer id) {
 		// TODO Auto-generated method stub
 		tagDaoJpa.delete(id);
+	}
+
+	@Override
+	public TagDO getTagFromContentTagTable(Integer id) {
+		// TODO Auto-generated method stub
+		return tagDaoJpa.getTagFromContentTagTable(id);
 	}
 
 }

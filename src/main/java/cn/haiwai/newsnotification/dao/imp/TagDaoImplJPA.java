@@ -17,6 +17,9 @@ public interface TagDaoImplJPA extends JpaRepository<TagDO,Integer>{
 	TagDO getTagByName(String name);
 
 	TagDO getTagById(Integer id);
+
+	@Query(value="select tag.id,tag.name from tag,content_tag where tag.id=content_tag.t_id and t_id=?1",nativeQuery=true)
+	TagDO getTagFromContentTagTable(Integer id);
 	
 
 }

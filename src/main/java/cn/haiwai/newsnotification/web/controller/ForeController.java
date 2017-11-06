@@ -54,6 +54,7 @@ public class ForeController {
 			model.addAttribute("message",date+"没有信息，请查看其他日期！");
 		}
 		model.addAttribute("contents",contents);
+		model.addAttribute("dateTemp",date);
 		return "fore/index";
 	}
 	
@@ -66,7 +67,10 @@ public class ForeController {
 		model.addAttribute("contents",contents);
 		return "fore/index";
 	}
-	
-	
+	@RequestMapping(value="/exceptionTest")
+	public String exceptionTest(){	
+		int i=1/0;
+		throw new RuntimeException("exceptionTest");
+	}
 	
 }

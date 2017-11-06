@@ -4,20 +4,25 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
+import cn.haiwai.newsnotification.manage.response.Response;
 import cn.haiwai.newsnotification.manage.util.ResponseWrite;
 
 
 
 /**
- * 后台权限拦截器
+ * 后台权限拦截器,拦截admin为前缀的所有访问 例如/admin/index
  * @author lh
  * @time 2017年10月25日
  * @version 1.0
  */
 public class PermissionInterceptor implements HandlerInterceptor{
+	
+	private static final Logger logger=LoggerFactory.getLogger(PermissionInterceptor.class);
 	
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
@@ -32,12 +37,13 @@ public class PermissionInterceptor implements HandlerInterceptor{
 		HttpSession session=request.getSession();
 		if(session.getAttribute("user")!=null) {
 			return true;
+			//权限失效
 		} else{
 			//这里对请求进行判断，看看是否是ajax请求，如果是ajax请求，则直接在拦截器这里给前端返回一个消息，然后再前端ajax函数里进行判断跳转到登录界面
 			String XRequested=request.getHeader("X-Requested-With");
 			if(XRequested!=null && XRequested.equals("XMLHttpRequest"))
 			{
-				ResponseWrite.write(response, "isAjax");
+				ResponseWrite.wirteJson(response, Response.failure("permission"));
 				return false;
 			}
 			else{

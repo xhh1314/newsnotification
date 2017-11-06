@@ -18,6 +18,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
+
 import cn.haiwai.newsnotification.dao.ContentDao;
 import cn.haiwai.newsnotification.dao.TagDao;
 import cn.haiwai.newsnotification.dao.bean.ContentDO;
@@ -104,6 +106,7 @@ public class ContentService {
 			return false;
 		try {
 			contentDao.deleteContent(Integer.parseInt(cid));
+			logger.info("删除了一遍文章id{}",cid);
 			return true;
 		} catch (Exception e) {
 			logger.error("删除content失败,id={}{}", cid, e);
@@ -235,16 +238,15 @@ public class ContentService {
 	}
 
 	public boolean updateTag(String tid, String name) {
-		TagDO tag = new TagDO();
-		tag.setId(Integer.getInteger(tid));
+		TagDO tag=tagDao.getTagById(Integer.valueOf(tid));
 		tag.setName(name);
 		return tagDao.save(tag) != null ? true : false;
 
 	}
 
-	public boolean deleteTag(String tid) {
+	public boolean deleteTag(String tid)  {
 		// TODO Auto-generated method stub
-		tagDao.deleteById(Integer.getInteger(tid));
+		tagDao.deleteById(Integer.valueOf(tid));
 		return true;
 	}
 
@@ -259,6 +261,11 @@ public class ContentService {
 			if (tagDao.getTagByName(tagName) == null)
 				tagDao.save(new TagDO(tagName));
 		}
+	}
+
+	public TagDO getTagFromContentTagTable(String tid) {
+		// TODO Auto-generated method stub
+		return tagDao.getTagFromContentTagTable(Integer.valueOf(tid));
 	}
 
 }

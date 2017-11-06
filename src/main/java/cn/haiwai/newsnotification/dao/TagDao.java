@@ -46,5 +46,11 @@ public interface TagDao {
 	 * @param id
 	 */
 	void deleteById(Integer id);
+	/**
+	 * 查询tag标签是否被引用，与中间表联查下
+	 * @param valueOf
+	 * @return
+	 */
+	TagDO getTagFromContentTagTable(Integer valueOf);
 
 }

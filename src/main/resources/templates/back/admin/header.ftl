@@ -15,6 +15,8 @@
 <script type="text/javascript" src="${ctx}/semanticui/dist/components/transition.min.js"></script>
 <script type="text/javascript" src="${ctx}/semanticui/dist/components/dimmer.min.js"></script>
 <!--分别导入semantic-UI的不同模块css文件，用到哪个模块导入哪个模块!-->
+<link rel="stylesheet" type="text/css" href="${ctx}/semanticui/dist/components/reset.min.css">
+<link rel="stylesheet" type="text/css" href="${ctx}/semanticui/dist/components/site.min.css">
 <link rel="stylesheet" type="text/css" href="${ctx}/semanticui/dist/components/label.min.css">
 <link rel="stylesheet" type="text/css" href="${ctx}/semanticui/dist/components/header.min.css">
 <link rel="stylesheet" type="text/css" href="${ctx}/semanticui/dist/components/menu.min.css">
@@ -23,18 +25,15 @@
 <link rel="stylesheet" type="text/css" href="${ctx}/semanticui/dist/components/container.min.css">
 <link rel="stylesheet" type="text/css" href="${ctx}/semanticui/dist/components/icon.min.css">
 <link rel="stylesheet" type="text/css" href="${ctx}/semanticui/dist/components/divider.min.css">
-<link rel="stylesheet" type="text/css" href="${ctx}/semanticui/dist/components/reset.min.css">
-<link rel="stylesheet" type="text/css" href="${ctx}/semanticui/dist/components/site.min.css">
 <link rel="stylesheet" type="text/css" href="${ctx}/semanticui/dist/components/image.min.css">
 <link rel="stylesheet" type="text/css" href="${ctx}/semanticui/dist/components/modal.min.css">
-<link rel="stylesheet" type="text/css" href="${ctx}/semanticui/dist/components/label.min.css">
 <link rel="stylesheet" type="text/css" href="${ctx}/semanticui/dist/components/popup.min.css">
 <link rel="stylesheet" type="text/css" href="${ctx}/semanticui/dist/components/dimmer.min.css">
 <link rel="stylesheet" type="text/css" href="${ctx}/semanticui/dist/components/transition.min.css">
 <link rel="stylesheet" type="text/css" href="${ctx}/semanticui/dist/components/form.min.css">
 <link rel="stylesheet" type="text/css" href="${ctx}/semanticui/dist/components/input.min.css">
 <head>
-<link rel="shortcut icon" href="${ctx}/images/favicon.png"/>
+<link rel="shortcut icon" href="${ctx}/image/favicon.png"/>
 <meta charset="UTF-8">
 <title>新闻提示</title>
 <style type="text/css">
@@ -61,6 +60,7 @@
 <script type="text/javascript">
 //项目根目录全局变量
 var pageContext="";
+var pageNumberFlag="${pageNumberFlag!"0"}";
 
     //点击菜单激活事件
     $(document).ready(function () {
@@ -73,6 +73,14 @@ var pageContext="";
         });
     });
  //重置密码js   
+
+ $(window).on('load',function(){
+	 $(".menu .item").each(function(){
+    if($(this).attr('pageFlag')==pageNumberFlag){
+     $(this).addClass("active");
+        }
+		 });
+	 });
 function resetPassword(){
 	$('.ui.modal').modal('show');	
 }
@@ -149,13 +157,13 @@ function resetPassword(){
     <div class="left">
 
         <div class="ui grey  inverted  vertical pointing menu">
-            <a href="${ctx }/admin/index" class="grey item ">
+            <a href="${ctx }/admin/index?pageNumberFlag=contentManage" class="grey item " pageFlag="contentManage">
                 文章管理
             </a>
-            <a href="${ctx}/admin/contentEdit" class="yellow item">
+            <a href="${ctx}/admin/contentEdit?pageNumberFlag=contentNew" class="yellow item" pageFlag="contentNew">
                 新建文章
             </a>
-            <a href="${ctx}/admin/listTag" class="grey item ">
+            <a href="${ctx}/admin/listTag?pageNumberFlag=tagManage" class="grey item " pageFlag="tagManage">
                 标签管理
             </a>
         </div>

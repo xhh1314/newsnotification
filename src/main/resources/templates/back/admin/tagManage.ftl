@@ -2,7 +2,7 @@
 
 <div class="tagManageContainer">
  <div>
- <a class="tagHeader">标签管理</a> <button type="button" class="ui button  newbutton" onclick="newTag()">新增</button>
+ <a class="tagHeader ui header">标签管理</a> <button type="button" class="ui button  newbutton" onclick="newTag()">新增</button>
  </div>
   <table class="ui  fixed  single line selectable celled table contentTable" >
             <thead>
@@ -15,7 +15,7 @@
             <#list tags?if_exists as tag>
             <tr tid="${tag.id}">
                 <td class="contentTable-frist">
-                 <a class="tagName">${tag.name}</a>
+                 <a class="tagName" tid="${tag.id}">${tag.name}</a>
                 </td>
                 <td class="contentTable-third">
 						<div class="small  ui buttons content-conduct ">
@@ -42,6 +42,10 @@
 	color:black !important;
 }
 </style>
+<script type="text/javascript">
+
+
+</script>
 
 <div class="ui mini modal addTagModal">
     <div class="header">
@@ -49,7 +53,7 @@
     </div>
 	<div class="content resetPasswordInput">
 		<div class="ui input">
-			<input type="text" name="tagName" id="tagName" placeholder="输入标签名称">
+			<input type="text" name="tagName" id="addTagName" placeholder="输入标签名称">
 		</div>
 	</div>
 	<div class="actions">
@@ -69,7 +73,7 @@
     </div>
 	<div class="content resetPasswordInput">
 		<div class="ui input">
-			<input type="text" name="newTagName" id="newTagName">
+			<input type="text" name="newTagName" id="newTagName" tid="">
 		</div>
 	</div>
 	<div class="actions">

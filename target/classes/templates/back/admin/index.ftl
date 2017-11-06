@@ -15,14 +15,14 @@
             <#list contents?if_exists as content>
             <tr cid="${content.cid}">
                 <td class="contentTable-frist">
-                    <a href="${ctx}/content/${content.cid}" target="_blank">${content.title}</a>
+                    <a href="${ctx}/content/${content.cid!}" target="_blank">${content.title}</a>
                 </td>
-                <td class="contentTable-second">${content.receiveTime}</td>
+                <td class="contentTable-second">${content.receiveTime!}</td>
                 <td class="contentTable-third">
 						<div class="small  ui buttons content-conduct ">
-							<a href="${ctx}/admin/updateContent/${content.cid}" target="_blank" class="ui image label "><i class="edit icon"></i>编辑</a> 
-							<a href="javascript:void(0)" class="ui image label"  onclick="contentDelete(${content.cid})"><i class="remove icon"></i>删除</a> 
-							<a  onclick="updateStatus(this)"  cid="${content.cid}" status="${content.status}" class="ui image label publishbutton"><i class="check circle icon"></i>发布</a>
+							<a href="${ctx}/admin/updateContent/${content.cid!}" target="_blank" class="ui image label "><i class="edit icon"></i>编辑</a> 
+							<a href="javascript:void(0)" class="ui image label"  onclick="contentDelete(${content.cid!})"><i class="remove icon"></i>删除</a> 
+							<a  onclick="updateStatus(this)"  cid="${content.cid!}" status="${content.status!}" class="ui image label publishbutton"><i class="check circle icon"></i>发布</a>
 						</div>
 					</td>
             </tr>
@@ -44,7 +44,6 @@
         </table>
 
 </div>
-
 </div>
 </body>
 <script type="text/javascript">
@@ -64,8 +63,7 @@ var totalPage=${page?if_exists.totalPage};
 .contentTable-third{width:25% !important; text-align:center !important;}
 div .content-conduct{text-align: center !important;line-}
 .ui.table td{padding:5px;}
-*div .content-conduct a{display:inline-block !important;line-height:16px !important ;font-size:16px !important;padding:0px auto !important;margin-top: 0px !important;margin-bottom:0px !important;}
 div .footPageModule{font-size:12px !important;}
-.publishbutton{}
+.indexfooter{position:absolute;left:250px;bottom: 10px;}
 </style>
 

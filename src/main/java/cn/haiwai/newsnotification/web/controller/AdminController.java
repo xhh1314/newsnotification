@@ -2,6 +2,8 @@ package cn.haiwai.newsnotification.web.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -12,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 
 import cn.haiwai.newsnotification.manage.AbstractPage;
 import cn.haiwai.newsnotification.manage.response.Response;
@@ -39,11 +43,14 @@ public class AdminController {
 	 * @return 返回到后台主页-即列表页
 	 */
 	@RequestMapping(value = "/index")
-	public String index(ModelMap model) {
+	public String index(ModelMap model,HttpServletRequest request) {
+		String pageNumberFlag=request.getParameter("pageNumberFlag");
 		AbstractPage page = AbstractPage.getPageInstance(1, 0, 0);
 		List<ContentBO> contents = cs.listContentsByPage(page, "assign");
 		model.addAttribute("contents", contents);
 		model.addAttribute("page", page);
+		if(pageNumberFlag!=null)
+			model.addAttribute("pageNumberFlag",pageNumberFlag);
 		return "back/admin/index";
 	}
 
@@ -72,7 +79,10 @@ public class AdminController {
 	 * @return 新增content视图
 	 */
 	@RequestMapping(value = "/contentEdit")
-	public String contentEdit(ModelMap model) {
+	public String contentEdit(ModelMap model,HttpServletRequest request) {
+		String pageNumberFlag=request.getParameter("pageNumberFlag");
+		if(pageNumberFlag!=null)
+			model.addAttribute("pageNumberFlag",pageNumberFlag);
 		List<TagBO> tags;
 		if ((tags = cs.listAllTag()) != null)
 			model.addAttribute("tags", tags);
@@ -217,7 +227,10 @@ public class AdminController {
 	 * @return tag集合
 	 */
 	@RequestMapping(value="/listTag")
-	public String ListTag(ModelMap model){
+	public String ListTag(ModelMap model,HttpServletRequest request){
+		String pageNumberFlag=request.getParameter("pageNumberFlag");
+		if(pageNumberFlag!=null)
+			model.addAttribute("pageNumberFlag",pageNumberFlag);
 		List<TagBO> tags=cs.listAllTag();
 		if(tags==null)
 			return "back/admin/tagManage";
@@ -231,9 +244,9 @@ public class AdminController {
 	 * @param name
 	 * @return json 参数为空 或者 参数包含空格，返回false
 	 */
-	@RequestMapping(value = "/updateTag/{tid}")
+	@RequestMapping(value = "/updateTag/{tid}",method=RequestMethod.PUT)
 	@ResponseBody
-	public Response updateTag(@PathVariable("tid") String tid, @RequestParam String name) {
+	public Response updateTag(@PathVariable("tid") String tid,@RequestParam String name) {
 		if (tid == null || name == null)
 			return Response.failure("参数不能为空！");
 		if(StringUtils.containsWhitespace(name))
@@ -250,14 +263,19 @@ public class AdminController {
 	 * @param tid
 	 * @return json
 	 */
-	@RequestMapping(value = "/deleteTag/{tid}")
+	@RequestMapping(value = "/deleteTag/{tid}",method=RequestMethod.DELETE)
 	@ResponseBody
 	public Response deleteTag(@PathVariable("tid") String tid){
 		if (tid == null)
 			return Response.failure("参数不能为空！");
+		if(cs.getTagFromContentTagTable(tid)!=null)
+			return Response.failure("标签已经被引用，不能删除！");
+		
 		if(cs.deleteTag(tid))
 			return Response.success();
-		else
+		
+			
+
 			return Response.failure(); 
 		
 	}
@@ -271,7 +289,17 @@ public class AdminController {
 		if(!StringUtils.hasText(name))
 			return "forward:/listTag";
 	     cs.addTag(name);
-		return "forward:/listTag";
+		return "forward:listTag";
+	}
+	
+	/**
+	 * 后台不正确的地址，全部转发到后台首页转发
+	 * @param name
+	 * @return
+	 */
+	@RequestMapping(value="/")
+	public String adminForward(){
+		return "redirect:/admin/index";
 	}
 
 }

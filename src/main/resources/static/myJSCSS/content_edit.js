@@ -56,7 +56,7 @@ function takeout() {
 //保存后弹出提示信息 实现
 var flag=false;
 	$('.savebutton').popup({
-		content : '保存成功',
+		content : '',
 		target : $('#md-container'),
 		position : 'top center',
 		on : 'click',
@@ -68,6 +68,7 @@ var flag=false;
 		}
 
 	});
+
 
 	function saveContent(status) {
 		$("#status").val(status);
@@ -86,11 +87,17 @@ var flag=false;
 			data : JSON.stringify(formData),
 			dataType : "json",
 			success : function(data) {
+				if(data.meta.message=="permission"){
+					alert("会话失效！请重新登录！")
+					return false;
+				}
 				if (data.meta.success == true) {
 					var cid = data.data.cid;
 					$("#cid").val(cid);
 					$("#status").val(data.data.status);
 					flag = true;
+					$(".saveSuccessMessage").css("display","inline-block");
+					setTimeout("saveSuccessAction()",2000);
 				} else {
 					flag=false;
 					alert(data.meta.message);
@@ -98,10 +105,17 @@ var flag=false;
 			},
 			error : function(error) {
 				flag=false;
-				alert(data.meta.message);
+				if(error.meta.message=="permission"){
+					alert("会话失效！请重新登录！")
+					return false;
+				}
+				alert(error);
 			}
 		});
 
+	}
+	function  saveSuccessAction(){
+		$(".saveSuccessMessage").css("display","none");
 	}
 	
 	function checkParam(){
@@ -124,9 +138,14 @@ if(!patter.test($("#receiveTime").val())){
 return true;
 	}
 	
+
+
+	
 $(document).ready(function(){
 	$("#title").click(function(){$("#titleInfo").html("");});
 	$("#tag").click(function(){$("#tagInfo").html("");});
+	
+
 });
 
 	function returnList() {
