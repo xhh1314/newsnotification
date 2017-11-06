@@ -1,0 +1,339 @@
+
+<!DOCTYPE html>
+<html>
+
+
+<script type="text/javascript" src="/jquery-3.1.1.min.js"></script>
+<!--<script type="text/javascript" src="../bootstrap/js/bootstrap.min.js"></script>-->
+<!--&lt;!&ndash; 最新版本的 Bootstrap 核心 CSS 文件 &ndash;&gt;-->
+<!--<link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css">-->
+<!--&lt;!&ndash; 可选的 Bootstrap 主题文件（一般不用引入） &ndash;&gt;-->
+<!--<link rel="stylesheet" href="../bootstrap/css/bootstrap-theme.min.css">-->
+ <script type="text/javascript" src="semanticui/dist/semantic.min.js"></script>
+ <link rel="stylesheet" type="text/css" href="semanticui/dist/semantic.min.css">
+<script type="text/javascript" src="/semanticui/dist/components/modal.min.js"></script>
+<script type="text/javascript" src="/semanticui/dist/components/transition.min.js"></script>
+<script type="text/javascript" src="/semanticui/dist/components/dimmer.min.js"></script>
+<!--分别导入semantic-UI的不同模块css文件，用到哪个模块导入哪个模块!-->
+<link rel="stylesheet" type="text/css" href="/semanticui/dist/components/reset.min.css">
+<link rel="stylesheet" type="text/css" href="/semanticui/dist/components/site.min.css">
+<link rel="stylesheet" type="text/css" href="/semanticui/dist/components/label.min.css">
+<link rel="stylesheet" type="text/css" href="/semanticui/dist/components/header.min.css">
+<link rel="stylesheet" type="text/css" href="/semanticui/dist/components/menu.min.css">
+<link rel="stylesheet" type="text/css" href="/semanticui/dist/components/button.min.css">
+<link rel="stylesheet" type="text/css" href="/semanticui/dist/components/item.min.css">
+<link rel="stylesheet" type="text/css" href="/semanticui/dist/components/container.min.css">
+<link rel="stylesheet" type="text/css" href="/semanticui/dist/components/icon.min.css">
+<link rel="stylesheet" type="text/css" href="/semanticui/dist/components/divider.min.css">
+<link rel="stylesheet" type="text/css" href="/semanticui/dist/components/image.min.css">
+<link rel="stylesheet" type="text/css" href="/semanticui/dist/components/modal.min.css">
+<link rel="stylesheet" type="text/css" href="/semanticui/dist/components/popup.min.css">
+<link rel="stylesheet" type="text/css" href="/semanticui/dist/components/dimmer.min.css">
+<link rel="stylesheet" type="text/css" href="/semanticui/dist/components/transition.min.css">
+<link rel="stylesheet" type="text/css" href="/semanticui/dist/components/form.min.css">
+<link rel="stylesheet" type="text/css" href="/semanticui/dist/components/input.min.css">
+<head>
+    <link rel="shortcut icon" href="/image/favicon.png"/>
+    <meta charset="UTF-8">
+    <title>新闻提示</title>
+    <style type="text/css">
+        **div{border: 1px solid black;}
+        **body{border: 1px solid red;}
+        .top{position:fixed;top:0;width:100%;height:80px;z-index:100;border-bottom:2px solid #F0F0F0;background: #F9F9F9;}
+        .page-content{position:relative;}
+        .page-content div.left{position:fixed;top:80px;left:0;width:250px;height:100%;background: #F9F9F9}
+        .page-content .main {position:absolute;left:250px;top:80px;width:100%;overflow:hidden;padding-left: 10px;padding-top:10px;}
+        .header-container{position:relative;text-align: center;display: inline-block;line-height: 80px;width:100%;}
+        .header-container .left{float: left;display:inline-block;line-height:80px;width:250px;margin-top:10px;}
+        .header-container .center{margin:0px auto;display:inline-block;line-height:80px;width:400px;}
+        .header-container .right{float:right;display:inline-block;line-height:80px;width:200px;margin-top:10px;}
+        .left .ui.menu{width:250px;}
+        .header-container .header.left a{font-size:24px;}
+        .header-container .header.center a{font-size: 36px;color: #EA6F5A;}
+        .header-container .header.right .resetPassword {cursor:pointer; }
+
+
+
+        .resetPasswordInput{text-align:center;}
+        .resetPasswordInput .input {width:80%;}
+    </style>
+    <script type="text/javascript">
+        //项目根目录全局变量
+        var pageContext="";
+        var pageNumberFlag="contentNew";
+
+        //点击菜单激活事件
+        $(document).ready(function () {
+            $(".menu .item").click(function () {
+                $(".menu .item").each(function () {
+                    $(this).removeClass("active");
+                });
+                $(this).addClass("active");
+
+            });
+        });
+        //重置密码js
+
+        $(window).on('load',function(){
+            $(".menu .item").each(function(){
+                if($(this).attr('pageFlag')==pageNumberFlag){
+                    $(this).addClass("active");
+                }
+            });
+        });
+        function resetPassword(){
+            $('.ui.modal').modal('show');
+        }
+        function onApprove() {
+            var oldPassword = $("#oldPassword").val();
+            var newPassword = $("#newPassword").val();
+            //非空字符正则
+            var patter = new RegExp("\\S", "g");
+            if (!patter.test(oldPassword) || !patter.test(newPassword))
+                return false;
+            var password = {
+                "oldPassword" : oldPassword,
+                "newPassword" : newPassword
+            };
+            password=JSON.stringify(password);
+            $.ajax({
+                url : "/user/resetPassword",
+                type : "put",
+                dataType : "json",
+                contentType : "application/json",
+                data : password,
+                success : function(data) {
+                    if (data.meta.success == true) {
+                        return true;
+                    } else {
+                        alert("修改密码失败!");
+                    }
+
+                },
+                error : function(data) {
+                    alert("系统发生错误!");
+                }
+            });
+        }
+    </script>
+</head>
+<div class="ui mini  modal">
+    <div class="header">
+        修改您的密码
+    </div>
+    <div class="content resetPasswordInput">
+        <div class="ui input">
+            <input type="password"  name="oldPassword" id="oldPassword" placeholder="原密码">
+        </div>
+        <div class="ui input">
+            <input type="text" name="newPassword" id="newPassword" placeholder="新密码">
+        </div>
+    </div>
+    <div class="actions">
+        <div class="ui negative button">
+            取消
+        </div>
+        <div class="ui positive right labeled icon button" onclick="onApprove()">
+            确认
+            <i class="checkmark icon"></i>
+        </div>
+    </div>
+</div>
+
+<body>
+<div class="top">
+    <div class="header-container">
+        <div class="header left"></div>
+        <div class="header center">
+            <a class="ui huge header">新闻提示</a>
+        </div>
+        <div class="header right">
+            <a class="ui blue basic label resetPassword" onclick="resetPassword()">修改密码</a>
+            <a class="ui red basic label" href="/user/logout"><i class="sign out icon"></i>注销</a>
+        </div>
+    </div>
+</div>
+<div class="page-content">
+    <div class="left">
+
+        <div class="ui grey  inverted  vertical pointing menu">
+            <a href="/admin/index?pageNumberFlag=contentManage" class="grey item " pageFlag="contentManage">
+                文章管理
+            </a>
+            <a href="/admin/contentEdit?pageNumberFlag=contentNew" class="yellow item" pageFlag="contentNew">
+                新建文章
+            </a>
+            <a href="/admin/listTag?pageNumberFlag=tagManage" class="grey item " pageFlag="tagManage">
+                标签管理
+            </a>
+        </div>
+
+    </div>
+    <!-- 正文容器分割线 -->
+    <div class="main">
+        <div class="formContainer" >
+            <div class="text-right">
+                <a class="header" >发布文章</a>
+                <button  type="button" class="ui button  returnlist" onclick="returnList()">返回列表</button>
+                <button type="button" class="ui button  newbutton" onclick="newContent()">新建 </button>
+                <button type="button" class="ui inverted red button savebutton" onclick="saveContent(1)">发布</button>
+                <button type="button" class="ui  primary button savebutton" onclick="saveContent(0)">保存</button>
+            </div>
+
+            <form  class="ui fluid form" id="articleForm" method="post">
+                <!-- int 类型的值，后台在序列化的时候应该设置为0 -->
+                <input type="hidden" name="cid" id="cid" value="" />
+                <input type="hidden" name="status" value="" id="status"/>
+                <input type="hidden" name="content" id="content" value=""/>
+                <div  class="ui input">
+                <input class="contentTitle" placeholder="请输入文章标题（必填）" name="title" id="title" value=""/><a id="titleInfo" style="color:red"></a>
+        </div>
+            <div class="ui input">
+                <input name="receiveTime" id="receiveTime" type="text" class="contentDate" placeholder="请选择日期（必填）"
+                       value=""/><a id="receiveTimeInfo" style="color:red"></a>
+            </div>
+            <div class="ui input" >
+                <input name="tags" id="tag" list="tags" type="text" class="contentTags" placeholder="文章标签"
+                       value=""/><a id="tagInfo" style="color:red"></a>
+                <datalist id="tags">
+                    <option>十九大</option>
+                    <option>党的领导</option>
+                </datalist>
+                <div class="ui ignored info message saveSuccessMessage">
+                    <a>保存成功</a>
+                </div>
+            </div>
+
+
+
+
+        <div id="md-container">
+            <!-- 加载uEdit编辑器的容器 -->
+            <script id="container" name="uEdit" type="text/plain">
+
+            </script>
+        </div>
+
+
+
+        </form>
+
+            <div class="ui form">
+                <div class="field">
+                    <label>Country</label>
+                    <select multiple="" class="ui dropdown">
+                        <option value="">Select Country</option>
+                        <option value="AF">Afghanistan</option>
+                        <option value="AX">Åland Islands</option>
+                        <option value="AL">Albania</option>
+                        <option value="DZ">Algeria</option>
+                        <option value="AS">American Samoa</option>
+                        <option value="AD">Andorra</option>
+                        <option value="AO">Angola</option>
+                        <option value="AI">Anguilla</option>
+
+                        <option value="RE">Réunion</option>
+                        <option value="RO">Romania</option>
+                        <option value="RU">Russian Federation</option>
+                        <option value="RW">Rwanda</option>
+                        <option value="BL">Saint Barthélemy</option>
+                        <option value="SH">Saint Helena, Ascension and Tristan da Cunha</option>
+                        <option value="KN">Saint Kitts and Nevis</option>
+                        <option value="LC">Saint Lucia</option>
+                        <option value="MF">Saint Martin (French part)</option>
+                        <option value="PM">Saint Pierre and Miquelon</option>
+                        <option value="VC">Saint Vincent and the Grenadines</option>
+                        <option value="WS">Samoa</option>
+                        <option value="SM">San Marino</option>
+                        <option value="ST">Sao Tome and Principe</option>
+                        <option value="SA">Saudi Arabia</option>
+                        <option value="SN">Senegal</option>
+                        <option value="RS">Serbia</option>
+                        <option value="SC">Seychelles</option>
+                        <option value="SL">Sierra Leone</option>
+                        <option value="SG">Singapore</option>
+                        <option value="SX">Sint Maarten (Dutch part)</option>
+                        <option value="SK">Slovakia</option>
+                        <option value="SI">Slovenia</option>
+                        <option value="SB">Solomon Islands</option>
+                        <option value="SO">Somalia</option>
+                        <option value="ZA">South Africa</option>
+                        <option value="GS">South Georgia and the South Sandwich Islands</option>
+                        <option value="SS">South Sudan</option>
+                        <option value="ES">Spain</option>
+                        <option value="LK">Sri Lanka</option>
+                        <option value="SD">Sudan</option>
+                        <option value="SR">Suriname</option>
+                        <option value="SJ">Svalbard and Jan Mayen</option>
+                        <option value="SZ">Swaziland</option>
+                        <option value="SE">Sweden</option>
+                        <option value="CH">Switzerland</option>
+                        <option value="SY">Syrian Arab Republic</option>
+                        <option value="TW">Taiwan, Province of China</option>
+                        <option value="TJ">Tajikistan</option>
+                        <option value="TZ">Tanzania, United Republic of</option>
+                        <option value="TH">Thailand</option>
+                        <option value="TL">Timor-Leste</option>
+                        <option value="TG">Togo</option>
+                        <option value="TK">Tokelau</option>
+                        <option value="TO">Tonga</option>
+                        <option value="TT">Trinidad and Tobago</option>
+                        <option value="TN">Tunisia</option>
+                        <option value="TR">Turkey</option>
+                        <option value="TM">Turkmenistan</option>
+                        <option value="TC">Turks and Caicos Islands</option>
+                        <option value="TV">Tuvalu</option>
+                        <option value="UG">Uganda</option>
+                        <option value="UA">Ukraine</option>
+                        <option value="AE">United Arab Emirates</option>
+                        <option value="GB">United Kingdom</option>
+                        <option value="US">United States</option>
+                        <option value="UM">United States Minor Outlying Islands</option>
+                        <option value="UY">Uruguay</option>
+                        <option value="UZ">Uzbekistan</option>
+                        <option value="VU">Vanuatu</option>
+                        <option value="VE">Venezuela, Bolivarian Republic of</option>
+                        <option value="VN">Viet Nam</option>
+                        <option value="VG">Virgin Islands, British</option>
+                        <option value="VI">Virgin Islands, U.S.</option>
+                        <option value="WF">Wallis and Futuna</option>
+                        <option value="EH">Western Sahara</option>
+                        <option value="YE">Yemen</option>
+                        <option value="ZM">Zambia</option>
+                        <option value="ZW">Zimbabwe</option>
+                    </select>
+                </div>
+            </div>
+    </div>
+
+
+
+
+</div>
+</body>
+<script type="text/javascript" src="/semanticui/dist/components/form.min.js"></script>
+<script type="text/javascript" src="/semanticui/dist/components/popup.min.js"></script>
+<script type="text/javascript" src="/laydate/laydate.js"></script>
+<script type="text/javascript" src="/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" src="/ueditor/ueditor.all.js"></script>
+<script type="text/javascript">
+</script>
+<script src="/myJSCSS/content_edit.js"></script>
+
+<style>
+    #div {border: 1px solid black;}
+    div .page-title{display:inline-block;}
+    .text-right{margin-left:2px;display:inline-block;width:1000px !important;}
+    .text-right .header{float:left;font-size: 18px;font-weight: bolder;margin-top:5px;color:black;}
+    .text-right button{float:right;}
+    .returnlist{line-height:30px;color: black;border: none;}
+    .savebutton{line-height:30px;width:80px;margin-left:10px;}
+    .publishbutton{line-height:30px;width:80px;margin-left:10px;}
+    .newbutton{line-height:30px;width:80px;margin-left:10px;}
+    .contentTitle{display:block;height:30px;width:1000px !important;}
+    .contentDate{margin-left:10px;height:30px;width:200px !important;}
+    .contentTags{height:30px;width:400px !important;margin-left:50px ;}
+    .page-title{margin-left:5px;}
+    .saveSuccessMessage{font-size:16px;background:#D9EDF7;color:#82CDF3;display:none;margin-left:35px;padding:5px;}
+</style>
+</html>

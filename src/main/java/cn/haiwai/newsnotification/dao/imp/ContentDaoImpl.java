@@ -81,7 +81,11 @@ public class ContentDaoImpl implements ContentDao {
 	@Transactional
 	public void deleteContent(Integer id) {
 		// TODO Auto-generated method stub
-		contentJpa.delete(id);
+		ContentDO content=getContent(id);
+		if(content!=null) {
+		contentJpa.delete(content);
+		contentJpa.deleteContentTag(id);
+		}
 	}
 
 	@Override

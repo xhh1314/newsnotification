@@ -13,7 +13,7 @@
             <input type="hidden" name="cid" id="cid" value="${content?if_exists.cid!}" />
             <input type="hidden" name="status" value="${content?if_exists.status!}" id="status"/>
             <input type="hidden" name="content" id="content" value=""/>
-            <div  class="field" ">
+            <div  class="field">
 			<input class="contentTitle" placeholder="请输入文章标题（必填）" name="title" id="title" value="${content?if_exists.title! }"/><a id="titleInfo" style="color:red"></a>
             </div>
             <div class="fields articleForm-second">
@@ -72,7 +72,7 @@ ${content?if_exists.content!}
  .publishbutton{line-height:30px;width:80px;margin-left:10px;}
  .newbutton{line-height:30px;width:80px;margin-left:10px;}
  .contentTitle{height:30px;width:1000px !important;}
- .contentDate{margin-left:10px;;height:30px;width:200px !important;}
+ .contentDate{margin-left:10px;height:30px;width:200px !important;}
  .contentTags{height:30px;width:400px !important;margin-left:50px ;}
  .page-title{margin-left:5px;}
  .saveSuccessMessage{font-size:16px;background:#D9EDF7;color:#82CDF3;display:none;margin-left:35px;padding:5px;}

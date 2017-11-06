@@ -19,13 +19,15 @@ import cn.haiwai.newsnotification.dao.bean.ContentDO;
 @Repository
 public interface ContentDaoImplJPA extends JpaRepository<ContentDO, Integer> {
 
-	static final String sql1="select c.id,c.title,c.content,c.status,c.receive_time,t.name as tags"
-			+" from content c,content_tag ct,tag t  where   c.id=ct.c_id and ct.t_id=t.id "
-			+"and (c.title like %?1% or c.content like %?1% or t.name like %?1% ) and status=1";
+	static final String sql1 = "select c.id,c.title,c.content,c.status,c.receive_time,t.name as tags"
+			+ " from content c,content_tag ct,tag t  where   c.id=ct.c_id and ct.t_id=t.id "
+			+ "and (c.title like %?1% or c.content like %?1% or t.name like %?1% ) and status=1";
+
 	/**
 	 * 前台模糊查询 直接根据关键字查询
+	 * 
 	 * @param key
-	 * @return 
+	 * @return
 	 */
 	@Query(value = sql1, nativeQuery = true)
 	List<ContentDO> listByKey(String key);
@@ -51,5 +53,13 @@ public interface ContentDaoImplJPA extends JpaRepository<ContentDO, Integer> {
 	@Modifying
 	@Query(value = "update content set status=?2 where id=?1", nativeQuery = true)
 	Integer updateContentStatus(int cid, int status);
+
+	/**
+	 * 删除content表数据时，同时删除中间表数据
+	 * @param id
+	 */
+	@Modifying
+	@Query(value = "delete from content_tag where c_id=?1",nativeQuery=true)
+	void deleteContentTag(Integer id);
 
 }
