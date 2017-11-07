@@ -46,7 +46,7 @@ public class AdminController {
 	public String index(ModelMap model,HttpServletRequest request) {
 		String pageNumberFlag=request.getParameter("pageNumberFlag");
 		AbstractPage page = AbstractPage.getPageInstance(1, 0, 0);
-		List<ContentBO> contents = cs.listContentsByPage(page, "assign");
+		List<ContentVO> contents = cs.listContentsByPage(page, "assign");
 		model.addAttribute("contents", contents);
 		model.addAttribute("page", page);
 		if(pageNumberFlag!=null)
@@ -65,11 +65,15 @@ public class AdminController {
 	 * @return 返回到后台主页-即列表页
 	 */
 	@RequestMapping(value = "/contentPage")
-	public String contentPage(ModelMap model, @RequestParam("action") String action,
-			@RequestParam("beginPage") int beginPage, @RequestParam("endPage") int endPage,
-			@RequestParam("currentPage") int currentPage) {
+	public String contentPage(ModelMap model,@RequestParam("beginPage") int beginPage, @RequestParam("endPage") int endPage,
+			@RequestParam("currentPage") int currentPage,HttpServletRequest request) {
+		 String action=request.getParameter("action");
+		 //处理掉线重新登录后没有值得问题
+		 if(action==null || "".equals(action)){
+			 action="assign";
+		 }
 		AbstractPage page = AbstractPage.getPageInstance(currentPage, beginPage, endPage);
-		List<ContentBO> contents = cs.listContentsByPage(page, action);
+		List<ContentVO> contents = cs.listContentsByPage(page, action);
 		model.addAttribute("contents", contents);
 		model.addAttribute("page", page);
 		return "back/admin/index";
@@ -102,6 +106,9 @@ public class AdminController {
 		if (contentBo == null) {
 			return "back/comm/error_404";
 		}
+		List<TagBO> tags;
+		if ((tags = cs.listAllTag()) != null)
+			model.addAttribute("tags", tags);
 		model.addAttribute("content", new ContentVO(contentBo));
 		return "back/admin/content_edit";
 	}

@@ -12,7 +12,7 @@
 <script type="text/javascript">
 //无法登陆提示
 function failHint(){
-	
+	alert("无法找回密码哦！");
 }
 
 
@@ -35,7 +35,7 @@ button{width:100%;margin-top:20px;font-size:20px !important;}
 <body>
 <div class="loginBody">
 <div class="title">
-<h1>新闻提示</h1>
+<h1>报道提示</h1>
 </div>
 <div class="login" >
 <form action="${ctx}/user/login"  method="post" >

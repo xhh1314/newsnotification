@@ -2,10 +2,13 @@ package cn.haiwai.newsnotification.web.controller;
 import java.util.Set;
 import java.util.function.Consumer;
 
+import cn.haiwai.newsnotification.dao.bean.ContentDO;
+import cn.haiwai.newsnotification.dao.bean.TagDO;
+import cn.haiwai.newsnotification.manage.util.TimeTransfer;
 import cn.haiwai.newsnotification.service.ContentBO;
 import cn.haiwai.newsnotification.service.TagBO;
 
-public class ContentVO {
+public class ContentVO implements Comparable<ContentVO>{
 
 	/**
 	 * 自增id
@@ -37,6 +40,7 @@ public class ContentVO {
 	 * 当向前台传输数据的时候，使用String[] 数组格式，方便json压缩
 	 */
 	private String[] tagArray;
+	
 	public ContentVO() {
 	}
 	public ContentVO(ContentBO content) {
@@ -47,6 +51,15 @@ public class ContentVO {
 		this.status = content.getStatus();
 		transferTag(content.getTags());
 
+	}
+	public ContentVO(ContentDO content){
+		this.cid=content.getId();
+		this.content=content.getContent();
+		this.title=content.getTitle();
+		this.receiveTime=TimeTransfer.dateToLocalDate(content.getReceiveTime()).toString();
+		this.status=content.getStatus();
+		transferTagFromDO(content.getTags());
+		
 	}
 
 	private void transferTag(Set<TagBO> tags) {
@@ -64,6 +77,23 @@ public class ContentVO {
 			}
 		});
 		this.tags=tagText.toString();
+		this.tagArray=tagArray;
+	}
+	private void transferTagFromDO(Set<TagDO> tags) {
+		// TODO Auto-generated method stub
+		String[] tagArray=new String[tags.size()];
+		StringBuffer tagText=new StringBuffer();
+		
+		tags.forEach(new Consumer<TagDO>(){
+			int i=0;
+			@Override
+			public void accept(TagDO t) {
+				tagArray[i]=t.getName();
+				tagText.append(t.getName()+"、");
+				i++;
+			}
+		});
+		this.tags=tagText.toString().substring(0,tagText.toString().length()-1);
 		this.tagArray=tagArray;
 	}
 
@@ -119,6 +149,14 @@ public class ContentVO {
 	}
 	public void setTagArray(String[] tagArray) {
 		this.tagArray = tagArray;
+	}
+	
+	@Override
+	public int compareTo(ContentVO o) {
+		// TODO Auto-generated method stub
+		if (this.getCid() == o.getCid())
+			return 0;
+		return this.getCid() > o.getCid() ? -1 : 1;
 	}
 	
 	

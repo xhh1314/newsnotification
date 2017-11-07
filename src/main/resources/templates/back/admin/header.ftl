@@ -32,10 +32,11 @@
 <link rel="stylesheet" type="text/css" href="${ctx}/semanticui/dist/components/transition.min.css">
 <link rel="stylesheet" type="text/css" href="${ctx}/semanticui/dist/components/form.min.css">
 <link rel="stylesheet" type="text/css" href="${ctx}/semanticui/dist/components/input.min.css">
+<link rel="stylesheet" type="text/css" href="${ctx}/semanticui/dist/components/dropdown.min.css">
 <head>
 <link rel="shortcut icon" href="${ctx}/image/favicon.png"/>
 <meta charset="UTF-8">
-<title>新闻提示</title>
+<title>报道提示</title>
 <style type="text/css">
 **div{border: 1px solid black;}
 **body{border: 1px solid red;}
@@ -72,7 +73,7 @@ var pageNumberFlag="${pageNumberFlag!"0"}";
 
         });
     });
- //重置密码js   
+
 
  $(window).on('load',function(){
 	 $(".menu .item").each(function(){
@@ -81,8 +82,10 @@ var pageNumberFlag="${pageNumberFlag!"0"}";
         }
 		 });
 	 });
+
+ //重置密码js   
 function resetPassword(){
-	$('.ui.modal').modal('show');	
+	$('.resetPassword').modal('show');	
 }
 	function onApprove() {
 		var oldPassword = $("#oldPassword").val();
@@ -117,7 +120,7 @@ function resetPassword(){
 	}
 </script>
 </head>
-<div class="ui mini  modal">
+<div class="ui mini  modal resetPassword">
     <div class="header">
      修改您的密码
     </div>
@@ -145,7 +148,7 @@ function resetPassword(){
 		<div class="header-container">
 			<div class="header left"></div>
 			<div class="header center">
-				<a class="ui huge header">新闻提示</a>
+				<a class="ui huge header">报道提示</a>
 			</div>
 			<div class="header right">
 				<a class="ui blue basic label resetPassword" onclick="resetPassword()">修改密码</a> 
@@ -158,10 +161,10 @@ function resetPassword(){
 
         <div class="ui grey  inverted  vertical pointing menu">
             <a href="${ctx }/admin/index?pageNumberFlag=contentManage" class="grey item " pageFlag="contentManage">
-                文章管理
+               内容管理
             </a>
             <a href="${ctx}/admin/contentEdit?pageNumberFlag=contentNew" class="yellow item" pageFlag="contentNew">
-                新建文章
+                新建内容
             </a>
             <a href="${ctx}/admin/listTag?pageNumberFlag=tagManage" class="grey item " pageFlag="tagManage">
                 标签管理

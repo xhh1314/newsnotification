@@ -49,7 +49,7 @@
 
 <div class="ui mini modal addTagModal">
     <div class="header">
-    新增标签
+    新增标签(多个标签用空格分开)
     </div>
 	<div class="content resetPasswordInput">
 		<div class="ui input">

@@ -26,6 +26,7 @@ import cn.haiwai.newsnotification.dao.bean.ContentDO;
 import cn.haiwai.newsnotification.dao.bean.TagDO;
 import cn.haiwai.newsnotification.manage.AbstractPage;
 import cn.haiwai.newsnotification.manage.util.TimeTransfer;
+import cn.haiwai.newsnotification.web.controller.ContentVO;
 
 /**
  * 处理content业务的类
@@ -64,7 +65,7 @@ public class ContentService {
 	 * @param action
 	 * @return
 	 */
-	public List<ContentBO> listContentsByPage(AbstractPage page, String action) {
+	public List<ContentVO> listContentsByPage(AbstractPage page, String action) {
 		// TODO Auto-generated method stub
 		Integer count = contentDao.countContent();
 		if (count == null)
@@ -80,9 +81,10 @@ public class ContentService {
 		List<ContentDO> contentDOs = contentDao.listByLimit(page.getBeginNumber(), page.getOffset());
 		if (contentDOs.isEmpty())
 			return null;
-		List<ContentBO> contentBOs = transferfromContentDO(contentDOs);
-		Collections.sort(contentBOs);
-		return contentBOs;
+		//List<ContentBO> contentBOs = transferfromContentDO(contentDOs);
+		List<ContentVO> contentVOs = transferContentVOfromContentDO(contentDOs);
+		Collections.sort(contentVOs);
+		return contentVOs;
 	}
 
 	/**
@@ -140,6 +142,13 @@ public class ContentService {
 			contentBOs.add(new ContentBO(e));
 		}
 		return contentBOs;
+	}
+	private List<ContentVO> transferContentVOfromContentDO(List<ContentDO> contents) {
+		List<ContentVO> ContentVOs = new LinkedList<ContentVO>();
+		for (ContentDO e : contents) {
+			ContentVOs.add(new ContentVO(e));
+		}
+		return ContentVOs;
 	}
 
 	/**

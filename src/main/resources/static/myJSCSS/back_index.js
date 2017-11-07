@@ -82,7 +82,7 @@ function contentDelete(cid) {
 								+ beginPage
 								+ "&endPage=" + endPage;
 					} else {
-						alert("删除失败！");
+						alert("删除失败！"+data.meta.message);
 					}
 				},
 				error : function() {
@@ -108,7 +108,7 @@ success:function(data){
       $(tag).removeClass("red");
              }
          else{
-       alert("更新文章状态失败！"+data.meta.message);
+       alert("更新状态失败！"+data.meta.message);
              }
 			},
 error:function(data){

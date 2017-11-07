@@ -1,3 +1,21 @@
+$(document).ready(function(){
+	//标签选择下拉效果js
+	$('#tagArrayInt').dropdown({
+		on:'hover',
+			forceSelection:false,
+			fullTextSearch:true,
+			match:'value'
+	});
+	
+	
+});
+
+$(window).on('load',function(){
+    var tagArray=getTagArray();
+	$('#tagArrayInt').dropdown('set selected',tagArray);
+	
+});
+
 //执行一个laydate实例
 laydate.render({
   elem: '.contentDate',
@@ -69,6 +87,22 @@ var flag=false;
 
 	});
 
+	//把标签的select数组值转换成一个以空格分割的字符串，并赋给隐藏的input(下策)
+	function transferTag(){
+		var tagIntValue=$("#tagArrayInt").val();
+		var tagString="";
+		for(var i=0;i<tagIntValue.length;i++){
+			tagString+=tagIntValue[i]+" ";
+		}
+		$("#tags").val(tagString);
+	}
+	
+	function getTagArray(){
+		var tagString=$("#tags").val();
+		var tagArray=tagString.split(/\s+/g);
+		return tagArray;
+		
+	}
 
 	function saveContent(status) {
 		$("#status").val(status);
@@ -77,6 +111,7 @@ var flag=false;
 			flag=false;
 			return false;
 		}
+		transferTag();
 		//var form = document.getElementById("articleForm");
 		var formData = $("#articleForm").serializeJson();
 		$.ajax({
@@ -105,10 +140,6 @@ var flag=false;
 			},
 			error : function(error) {
 				flag=false;
-				if(error.meta.message=="permission"){
-					alert("会话失效！请重新登录！")
-					return false;
-				}
 				alert(error);
 			}
 		});
@@ -118,35 +149,40 @@ var flag=false;
 		$(".saveSuccessMessage").css("display","none");
 	}
 	
-	function checkParam(){
-//非空字符正则
-var patter = new RegExp("\\S", "g");
 
-if(!patter.test($("#title").val())){
-	$("#titleInfo").html("标题不能为空！");
-	return false;
-}
-if(!patter.test($("#tag").val())){
-	$("#tagInfo").html("标签不能为空！");
-    return false;
-}
-if(!patter.test($("#receiveTime").val())){
-	$("#receiveTimeInfo").html("日期不能为空！");
-	return false;
-}
-//check通过返回true
-return true;
-	}
 	
 
 
 	
 $(document).ready(function(){
+
 	$("#title").click(function(){$("#titleInfo").html("");});
-	$("#tag").click(function(){$("#tagInfo").html("");});
-	
+	$("#tagArrayInt").click(function(){$("#tagInfo").html("");});
+
 
 });
+
+function checkParam(){
+	//非空字符正则
+	var patter = new RegExp("\\S", "g");
+
+	if(!patter.test($("#title").val())){
+		$("#titleInfo").html("标题不能为空！");
+		return false;
+	}
+	var tagsValue=$("#tagArrayInt").val();
+	var tagsTextValue=$("#tagArrayInt").text();
+	if(!patter.test(tagsValue) || tagsValue.length==0){
+		$("#tagInfo").html("标签不能为空！");
+	    return false;
+	}
+	if(!patter.test($("#receiveTime").val())){
+		$("#receiveTimeInfo").html("日期不能为空！");
+		return false;
+	}
+	//check通过返回true
+	return true;
+		}
 
 	function returnList() {
 		window.location.href = pageContext+"/admin/index";
