@@ -20,6 +20,8 @@
 <link rel="stylesheet" type="text/css" href="${ctx}/semanticui/dist/components/divider.min.css">
 
 <script type="text/javascript">
+//项目目录全局变量
+var pageContext="${ctx!""}";
 //禁止复制
 document.oncontextmenu=new Function("event.returnValue=false"); 
 document.onselectstart=new Function("event.returnValue=false"); 
@@ -54,6 +56,7 @@ document.onselectstart=new Function("event.returnValue=false");
 	}
 
 	//js也需要转义\
+
 	//日期正则
 
 	var patter1 = new RegExp("^[2][0]\\d{2}\-\\d{2}\-\\d{2}$", "g");
@@ -64,7 +67,7 @@ document.onselectstart=new Function("event.returnValue=false");
 			alert("不符的日期格式");
 			return false;
 		}
-		location.href = "${ctx}/listByDate/" + date;
+		location.href = pageContext + "/listByDate/" + date;
 	}
 	//非空字符正则
 	var patter2 = new RegExp("\\S", "g");
@@ -75,7 +78,7 @@ document.onselectstart=new Function("event.returnValue=false");
 			return false;
 		}
 
-		location.href = "${ctx}/listByKey/" + key;
+		location.href = pageContext+"$/listByKey/" + key;
 	}
 </script>
 <style type="text/css">

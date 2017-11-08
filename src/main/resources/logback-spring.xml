@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- 
+注意:logback.xml文件只能放在resources目录下才能被检测到，不能放到config目录下，很坑
 scan:
 当此属性设置为true时，配置文件如果发生改变，将会被重新加载，默认值为true。
 scanPeriod:
@@ -12,9 +13,10 @@ debug:
 <statusListener class="ch.qos.logback.core.status.OnConsoleStatusListener" /> 
 -->
 	    <!-- 应用名称 -->
-    <property name="APP_NAME" value="SHOP" />
+    <property name="APP_NAME" value="newsnotification" />
     <!--日志文件的保存路径,首先查找系统属性-Dlog.dir,如果存在就使用其；否则，在当前目录下创建名为logs目录做日志存放的目录 -->
-    <property name="LOG_HOME" value="${log.dir:-logs}/${APP_NAME}" />
+ <!--    <property name="LOG_HOME" value="${log.dir:-logs}/${APP_NAME}" /> -->
+    <property name="LOG_HOME" value="${LOG_PATH}/${APP_NAME}" />
     <!-- 日志输出格式 -->
     <property name="ENCODER_PATTERN"
               value="%d{yyyy-MM-dd  HH:mm:ss.SSS} [%thread] %-5level %logger{80} - %msg%n" />
@@ -30,8 +32,7 @@ debug:
 
     <!-- 文件日志：输出全部日志到文件 -->
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-    <!-- 生产环境把立即刷新设置为false提高性能 -->
-    <immediateFlush>false</immediateFlush>
+ 
               <!-- 启用滚动日志模块 -->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>${LOG_HOME}/output.%d{yyyy-MM-dd}.log</fileNamePattern>
@@ -78,7 +79,7 @@ debug:
 
 <!-- 配置日志级别 和 需要输出到的文件 -->
     <root>
-        <level value="DEBUG" />
+        <level value="debug" />
         <appender-ref ref="STDOUT" />
         <appender-ref ref="FILE" />
         <appender-ref ref="ERROR_FILE" />

@@ -1,4 +1,5 @@
 create database notification default charset utf8;
+use notification;
 create table users(
   id int(11) auto_increment,
   name varchar(255) not null,
@@ -7,7 +8,7 @@ create table users(
   primary key(id)
 );
 create unique index uk_name on users(name(20)); 
-
+insert into users(name,password) values('admin','gdyb21LQTcIANtvYMT7QVQ==');
 create table content(
  id int(11) auto_increment,
  title varchar(255) not null,

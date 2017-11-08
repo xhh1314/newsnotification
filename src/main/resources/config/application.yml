@@ -1,5 +1,13 @@
+spring: 
+  profiles: 
+    active : prod
+---
 #各个key的冒号后边必须跟一个空格
+server:
+  address : localhost
+  port : 8080
 spring:
+  profiles : dev
 #数据源信息
   datasource:
     type : com.alibaba.druid.pool.DruidDataSource
@@ -49,7 +57,11 @@ spring:
 #配置freemarker
   freemarker:
     request-context-attribute : request
-    
+#开发环境配置日志级别
+logging:
+  level:
+    root : info
+  path : d:/log   
 #添加对jsp的支持
 #  mvc:
 #    view:
@@ -60,4 +72,74 @@ myproperties:
   imageroot : static/image
 #是否启用redis
   isRedis : no
-    
+---
+#各个key的冒号后边必须跟一个空格
+server: 
+  port : 8081
+spring:
+  profiles : prod
+#数据源信息
+  datasource:
+    type : com.alibaba.druid.pool.DruidDataSource
+    url : jdbc:mysql://localhost:3306/notification
+    username : root
+    password : Root123!
+    driver-class-name : com.mysql.jdbc.Driver
+#配置druid连接池
+    druid:
+          initial-size : 10
+          max-active : 100
+#      min-idle:
+#      max-wait:
+#      pool-prepared-statements:
+#      max-pool-prepared-statement-per-connection-size:
+#      validation-query:
+#      validation-query-timeout:
+#      test-on-borrow:
+#      test-on-return:
+#      test-while-idle:
+#      time-between-eviction-runs-millis:
+#      min-evictable-idle-time-millis:
+#      max-evictable-idle-time-millis:
+          filter:
+         # 配置StatFilter 
+                 stat:
+                      db-type : h2
+                      log-slow-sql : true
+                      slow-sql-millis : 2000
+         # 配置WallFilter 
+                 wall:
+                      enabled : true
+                      db-type : h2
+                      delete-allow : false
+                      drop-table-allow : false
+  jpa:
+  #hibernate显示sql语句
+    show-sql : false 
+    database-platform : org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto : none
+      naming:
+        physical-strategy : org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    properties:
+      hibernate:
+        dialect : org.hibernate.dialect.MySQL5InnoDBDialect
+#配置freemarker
+  freemarker:
+    request-context-attribute : request
+#生产环境配置日志级别
+logging:
+  level:
+    root : info
+  path : /var/log
+   
+#添加对jsp的支持
+#  mvc:
+#    view:
+#      prefix : /WEB-INF/views/
+#      suffix : .jsp
+#图片存储位置
+myproperties:
+  imageroot : static/image
+#是否启用redis
+  isRedis : no

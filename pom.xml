@@ -83,6 +83,11 @@
 			<artifactId>jsoup</artifactId>
 			<version>1.10.3</version>
 		</dependency>
+		<!-- Enabling production-ready features -->
+		<dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
 
 	<dependency>
 		<groupId>com.alibaba</groupId>
@@ -93,7 +98,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>springbootshop</finalName>
+		<finalName>newsnotification</finalName>
 		<!-- Spring Boot includes a Maven plugin that can package the project as 
 			an executable jar. Add the plugin to your <plugins> section if you want to 
 			use it: -->

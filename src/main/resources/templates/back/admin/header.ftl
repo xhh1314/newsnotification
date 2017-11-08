@@ -60,7 +60,7 @@
 </style>
 <script type="text/javascript">
 //项目根目录全局变量
-var pageContext="";
+var pageContext="${ctx!""}";
 var pageNumberFlag="${pageNumberFlag!"0"}";
 
     //点击菜单激活事件
@@ -85,7 +85,7 @@ var pageNumberFlag="${pageNumberFlag!"0"}";
 
  //重置密码js   
 function resetPassword(){
-	$('.resetPassword').modal('show');	
+	$('.resetPasswordDiv').modal('show');	
 }
 	function onApprove() {
 		var oldPassword = $("#oldPassword").val();
@@ -120,7 +120,7 @@ function resetPassword(){
 	}
 </script>
 </head>
-<div class="ui mini  modal resetPassword">
+<div class="ui mini  modal resetPasswordDiv">
     <div class="header">
      修改您的密码
     </div>
