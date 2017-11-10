@@ -28,7 +28,7 @@ public class ContentTest {
 	@Autowired
 	private ContentService cs;
 
-	@Test
+	//@Test
 	public void insertTest() {
 		ContentDO content = new ContentDO();
 		Set<TagDO> tags = new HashSet<TagDO>(8);
@@ -45,7 +45,7 @@ public class ContentTest {
 		System.out.println(cd);
 	}
 
-	@Test
+	//@Test
 	public void updateTest() {
 		ContentBO content = new ContentBO();
 		Set<TagBO> tags = new HashSet<TagBO>();
@@ -65,7 +65,7 @@ public class ContentTest {
 		System.out.println(contentDate.matches("^[2][0]\\d{2}\\-\\d{2}\\-\\d{2}"));
 	}
 
-	@Test
+//	@Test
 	public void bitchInsert() {
 		Set<TagBO> tags = new HashSet<TagBO>();
 		tags.add(new TagBO("相思"));
