@@ -32,7 +32,6 @@
                 <a id="tagInfo" style="color:red"></a>
             </div>
             <div class="ui ignored info message saveSuccessMessage">
-			<a>保存成功</a>
 		</div>
             </div>
 		

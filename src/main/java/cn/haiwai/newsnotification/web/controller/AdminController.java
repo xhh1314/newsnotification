@@ -134,9 +134,6 @@ public class AdminController {
 		if (!StringUtils.hasText(content.getTitle())) {
 			message.append("标题不能为空;");
 		}
-		if (!StringUtils.hasText(content.getContent())) {
-			message.append("正文不能为空;");
-		}
 		if (!StringUtils.hasText(content.getTags())) {
 			message.append("标签不能为空！");
 		}

@@ -3,6 +3,8 @@ package cn.haiwai.newsnotification.service;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.springframework.util.StringUtils;
+
 import cn.haiwai.newsnotification.dao.bean.ContentDO;
 import cn.haiwai.newsnotification.dao.bean.TagDO;
 import cn.haiwai.newsnotification.manage.util.TimeTransfer;
@@ -39,6 +41,9 @@ public class ContentBO implements Comparable<ContentBO> {
 	public ContentBO(ContentDO content) {
 		this.cid = content.getId();
 		this.content = content.getContent();
+		//业务允许正文为空，如果正文无内容，则前台显示的时候，补上一段说明，以美观
+		if(!StringUtils.hasText(this.content))
+			this.content="无更多内容";
 		this.title = content.getTitle();
 		this.receiveTime = TimeTransfer.dateToLocalDate(content.getReceiveTime()).toString();
 		this.status = content.getStatus();

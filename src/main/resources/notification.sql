@@ -1,5 +1,5 @@
-create database notification default charset utf8;
-use notification;
+create database newsnotification default charset utf8;
+use newsnotification;
 create table users(
   id int(11) auto_increment,
   name varchar(255) not null,
@@ -33,3 +33,4 @@ primary key(id),
 constraint fk_tag foreign key(t_id) references tag(id),
 constraint fk_content foreign key(c_id) references content(id)
 );
+

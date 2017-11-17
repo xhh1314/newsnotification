@@ -39,6 +39,12 @@ public class ForeController {
 		return "forward:index";
 	}
 	
+	/**
+	 * 根据id展示一条content
+	 * @param cid
+	 * @param model
+	 * @return 
+	 */
 	@RequestMapping(value="/content/{cid}")
 	public String content(@PathVariable("cid") String cid,ModelMap model){
 		ContentBO content=cs.getContent(Integer.parseInt(cid));
@@ -51,7 +57,7 @@ public class ForeController {
 	public String listByDate(@PathVariable("date") String date,ModelMap model){
 		List<ContentBO> contents=cs.listContentsByDate(date);
 		if(contents==null){
-			model.addAttribute("message",date+"没有信息，请查看其他日期！");
+			model.addAttribute("message",date+"没有内容，请查看其他日期！");
 		}
 		model.addAttribute("contents",contents);
 		model.addAttribute("dateTemp",date);

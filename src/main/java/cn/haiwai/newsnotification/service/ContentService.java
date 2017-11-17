@@ -188,7 +188,7 @@ public class ContentService {
 	 * @param contents
 	 * @return
 	 */
-	private final int len = 120;
+	private final int LEN = 120;
 
 	private List<ContentBO> parseHtml(List<ContentBO> contents) {
 		// 由于是列表，正文不全部显示，只截取出其中一部分
@@ -200,13 +200,10 @@ public class ContentService {
 			// 替换掉换行和空格
 			str.replaceAll("\\s\\n\\r", "");
 			// 再截取出来前len字符
-			if (str.length() > len) {
-				str = str.substring(0, len);
-			} else {
-				str = str.substring(0, str.length());
-			}
-			// 补上点点点
-			str = str + "...";
+			if (str.length() > LEN) {
+				//截取再补上...
+				str = str.substring(0, LEN)+"...";
+			} 
 			cb.setContent(str);
 
 		}

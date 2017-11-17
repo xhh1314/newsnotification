@@ -132,6 +132,12 @@ var flag=false;
 					$("#status").val(data.data.status);
 					flag = true;
 					$(".saveSuccessMessage").css("display","inline-block");
+					if(status==1){
+						$(".saveSuccessMessage").html("<a>发布成功</a>");
+					}
+					else{
+						$(".saveSuccessMessage").html("<a>保存成功</a>");
+					}
 					setTimeout("saveSuccessAction()",2000);
 				} else {
 					flag=false;

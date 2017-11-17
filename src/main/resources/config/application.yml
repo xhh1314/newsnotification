@@ -1,6 +1,6 @@
 spring: 
   profiles: 
-    active : prod
+    active : dev
 ---
 #各个key的冒号后边必须跟一个空格
 server:
@@ -75,15 +75,15 @@ myproperties:
 ---
 #各个key的冒号后边必须跟一个空格
 server: 
-  port : 8081
+  port : 8080
 spring:
   profiles : prod
 #数据源信息
   datasource:
     type : com.alibaba.druid.pool.DruidDataSource
-    url : jdbc:mysql://localhost:3306/notification
-    username : root
-    password : Root123!
+    url : jdbc:mysql://10.1.11.28:3306/newsnotification?useSSL=false
+    username : newsnotification
+    password : Newsnotification123!
     driver-class-name : com.mysql.jdbc.Driver
 #配置druid连接池
     druid:
