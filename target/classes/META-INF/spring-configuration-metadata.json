@@ -4,7 +4,7 @@
     {
       "sourceType": "cn.haiwai.newsnotification.config.DatasourceConfiguration",
       "name": "spring.datasource",
-      "sourceMethod": "public javax.sql.DataSource dataSource() ",
+      "sourceMethod": "dataSource()",
       "type": "javax.sql.DataSource"
     }
   ],

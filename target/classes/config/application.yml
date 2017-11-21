@@ -1,6 +1,6 @@
 spring: 
   profiles: 
-    active : dev
+    active : prod
 ---
 #各个key的冒号后边必须跟一个空格
 server:
@@ -72,6 +72,13 @@ myproperties:
   imageroot : static/image
 #是否启用redis
   isRedis : no
+#支持http关闭springboot
+endpoints:
+  beans:
+    sensitive : false
+  shutdown:
+    enabled : true
+    sensitive : false
 ---
 #各个key的冒号后边必须跟一个空格
 server: 
@@ -132,7 +139,12 @@ logging:
   level:
     root : info
   path : /var/log
-   
+endpoints:
+  beans:
+    sensitive : false
+  shutdown:
+    enabled : true
+    sensitive : false
 #添加对jsp的支持
 #  mvc:
 #    view:
