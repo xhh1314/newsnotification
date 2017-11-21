@@ -149,4 +149,34 @@ public class ContentDaoImpl implements ContentDao {
 		return contentJpa.updateContentStatus(cid,status);
 	}
 
+	@Override
+	public List<ContentDO> listByKeyAndDateAndTag(String word, String date, String tag) {
+		// TODO Auto-generated method stub
+		return contentJpa.listByKeyAndDateAndTag(word,date,tag);
+	}
+
+	@Override
+	public List<ContentDO> listByDateAndTag(String date, String tag) {
+		// TODO Auto-generated method stub
+		return contentJpa.listByDateAndTag(date,tag);
+	}
+
+	@Override
+	public List<ContentDO> ListByKeyAndTag(String word, String tag) {
+		// TODO Auto-generated method stub
+		return contentJpa.ListByKeyAndTag(word,tag);
+	}
+
+	@Override
+	public List<ContentDO> listByKeyAndDate(String word, String date) {
+		// TODO Auto-generated method stub
+		return contentJpa.listByKeyAndDate(word,date);
+	}
+
+	@Override
+	public List<ContentDO> listByTagAndLimit(String tag, int i, int j) {
+		// TODO Auto-generated method stub
+		return contentJpa.listByTagAndLimit(tag,i,j);
+	}
+
 }

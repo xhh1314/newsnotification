@@ -19,7 +19,7 @@ import cn.haiwai.newsnotification.dao.bean.ContentDO;
 @Repository
 public interface ContentDaoImplJPA extends JpaRepository<ContentDO, Integer> {
 
-	static final String sql1 = "select c.id,c.title,c.content,c.status,c.receive_time,t.name as tags"
+	static final String SQL1 = "select c.id,c.title,c.content,c.status,c.receive_time,t.name as tags"
 			+ " from content c,content_tag ct,tag t  where   c.id=ct.c_id and ct.t_id=t.id "
 			+ "and (c.title like %?1% or c.content like %?1% or t.name like %?1% ) and status=1";
 
@@ -29,7 +29,7 @@ public interface ContentDaoImplJPA extends JpaRepository<ContentDO, Integer> {
 	 * @param key
 	 * @return
 	 */
-	@Query(value = sql1, nativeQuery = true)
+	@Query(value = SQL1, nativeQuery = true)
 	List<ContentDO> listByKey(String key);
 
 	@Query(value = "select count(*) from content", nativeQuery = true)
@@ -41,7 +41,7 @@ public interface ContentDaoImplJPA extends JpaRepository<ContentDO, Integer> {
 	@Query(value = "select id,title,content,status,receive_time from content where receive_time=?1 and status=1", nativeQuery = true)
 	List<ContentDO> listContentByDate(String date);
 
-	@Query(value = "SELECT id,title,content,status,receive_time FROM content where create_time>=DATE_SUB(CURDATE(), INTERVAL 6 DAY) and status=1", nativeQuery = true)
+	@Query(value = "SELECT id,title,content,status,receive_time FROM content where receive_time>=DATE_SUB(CURDATE(), INTERVAL 6 DAY) and status=1", nativeQuery = true)
 	List<ContentDO> listByRecentSevenDay();
 
 	ContentDO getContentById(Integer id);
@@ -56,10 +56,46 @@ public interface ContentDaoImplJPA extends JpaRepository<ContentDO, Integer> {
 
 	/**
 	 * 删除content表数据时，同时删除中间表数据
+	 * 
 	 * @param id
 	 */
 	@Modifying
-	@Query(value = "delete from content_tag where c_id=?1",nativeQuery=true)
+	@Query(value = "delete from content_tag where c_id=?1", nativeQuery = true)
 	void deleteContentTag(Integer id);
+
+	// @Query(value="",nativeQuery=true)
+	static final String SQL2 = "select c.id,c.title,c.content,c.status,c.receive_time,t.name as tags"
+			+ " from content c,content_tag ct,tag t  where   c.id=ct.c_id and ct.t_id=t.id "
+			+ "and (c.title like %?1% or c.content like %?1% ) and c.receive_time=?2 and t.name=?3 and status=1";
+
+	@Query(value = SQL2, nativeQuery = true)
+	List<ContentDO> listByKeyAndDateAndTag(String word, String date, String tag);
+
+	static final String SQL3 = "select c.id,c.title,c.content,c.status,c.receive_time,t.name as tags"
+			+ " from content c,content_tag ct,tag t  where   c.id=ct.c_id and ct.t_id=t.id "
+			+ " and c.receive_time=?1 and t.name=?2 and status=1";
+
+	@Query(value = SQL3, nativeQuery = true)
+	List<ContentDO> listByDateAndTag(String date, String tag);
+
+	static final String SQL4 = "select c.id,c.title,c.content,c.status,c.receive_time,t.name as tags"
+			+ " from content c,content_tag ct,tag t  where   c.id=ct.c_id and ct.t_id=t.id "
+			+ "and (c.title like %?1% or c.content like %?1% ) and t.name=?2 and status=1";
+
+	@Query(value = SQL4, nativeQuery = true)
+	List<ContentDO> ListByKeyAndTag(String word, String tag);
+
+	static final String SQL5 = "select c.id,c.title,c.content,c.status,c.receive_time,t.name as tags"
+			+ " from content c,content_tag ct,tag t  where   c.id=ct.c_id and ct.t_id=t.id "
+			+ "and (c.title like %?1% or c.content like %?1% or t.name like %?1% ) and c.receive_time=?2 and status=1";
+
+	@Query(value = SQL5, nativeQuery = true)
+	List<ContentDO> listByKeyAndDate(String word, String date);
+
+	static final String SQL6 = "select c.id,c.title,c.content,c.status,c.receive_time,t.name as tags"
+			+ " from content c,content_tag ct,tag t  where   c.id=ct.c_id and ct.t_id=t.id "
+			+ " and  t.name=?1 and status=1 limit ?2,?3 ";
+	@Query(value = SQL6, nativeQuery = true)
+	List<ContentDO> listByTagAndLimit(String tag, int i, int j);
 
 }

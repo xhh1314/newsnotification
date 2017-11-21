@@ -81,7 +81,7 @@ public class ContentService {
 		List<ContentDO> contentDOs = contentDao.listByLimit(page.getBeginNumber(), page.getOffset());
 		if (contentDOs.isEmpty())
 			return null;
-		//List<ContentBO> contentBOs = transferfromContentDO(contentDOs);
+		// List<ContentBO> contentBOs = transferfromContentDO(contentDOs);
 		List<ContentVO> contentVOs = transferContentVOfromContentDO(contentDOs);
 		Collections.sort(contentVOs);
 		return contentVOs;
@@ -108,7 +108,7 @@ public class ContentService {
 			return false;
 		try {
 			contentDao.deleteContent(Integer.parseInt(cid));
-			logger.info("删除了一遍文章id{}",cid);
+			logger.info("删除了一遍文章id{}", cid);
 			return true;
 		} catch (Exception e) {
 			logger.error("删除content失败,id={}{}", cid, e);
@@ -143,6 +143,7 @@ public class ContentService {
 		}
 		return contentBOs;
 	}
+
 	private List<ContentVO> transferContentVOfromContentDO(List<ContentDO> contents) {
 		List<ContentVO> ContentVOs = new LinkedList<ContentVO>();
 		for (ContentDO e : contents) {
@@ -166,17 +167,14 @@ public class ContentService {
 	}
 
 	/**
-	 * @return 默认返回当天的数据，如果当天没有数据，则返回最近一周数据，最近一周都没有数据，则返回null
+	 * @return 默认返回返回最近一周数据，最近一周都没有数据，则返回null
 	 */
 	public List<ContentBO> listContents() {
-		List<ContentBO> contents = listContentsByDate(TimeTransfer.getToday());
-		if (contents != null)
-			return contents;
 		// 获取最近7天数据
 		List<ContentDO> contentsDO = contentDao.listByRecentSevenDay();
 		if (contentsDO == null || contentsDO.isEmpty())
 			return null;
-		contents = transferfromContentDO(contentsDO);
+		List<ContentBO> contents = transferfromContentDO(contentsDO);
 		Collections.sort(contents);
 		return parseHtml(contents);
 
@@ -201,9 +199,9 @@ public class ContentService {
 			str.replaceAll("\\s\\n\\r", "");
 			// 再截取出来前len字符
 			if (str.length() > LEN) {
-				//截取再补上...
-				str = str.substring(0, LEN)+"...";
-			} 
+				// 截取再补上...
+				str = str.substring(0, LEN) + "...";
+			}
 			cb.setContent(str);
 
 		}
@@ -244,20 +242,69 @@ public class ContentService {
 	}
 
 	public boolean updateTag(String tid, String name) {
-		TagDO tag=tagDao.getTagById(Integer.valueOf(tid));
+		TagDO tag = tagDao.getTagById(Integer.valueOf(tid));
 		tag.setName(name);
 		return tagDao.save(tag) != null ? true : false;
 
 	}
 
-	public boolean deleteTag(String tid)  {
+	public boolean deleteTag(String tid) {
 		// TODO Auto-generated method stub
 		tagDao.deleteById(Integer.valueOf(tid));
 		return true;
 	}
 
 	/**
+	 * 根据多个查询条件查询
+	 * 
+	 * @param word
+	 * @param date
+	 * @param tag
+	 * @return
+	 */
+	public List<ContentBO> searchByArgus(String word, String date, String tag) {
+		// 如果传入的参数为空，则调用listContens方法，查询最近一周或者一天的数据
+		if (!StringUtils.hasText(word) && !StringUtils.hasText(date) && !StringUtils.hasText(tag))
+			return listContents();
+		List<ContentDO> contentDOs = searchByArgusAction(word, date, tag);
+		if (contentDOs == null || contentDOs.isEmpty())
+			return null;
+		List<ContentBO> contents = transferfromContentDO(contentDOs);
+		// 按id降序
+		Collections.sort(contents);
+		return parseHtml(contents);
+	}
+
+	/**
+	 * 以时间 标签 关键字为维度进行查询，分析关键字是否为空，来决定使用哪种查询
+	 * 
+	 * @param word
+	 * @param date
+	 * @param tag
+	 * @return
+	 */
+	private List<ContentDO> searchByArgusAction(String word, String date, String tag) {
+		if (StringUtils.hasText(word) && StringUtils.hasText(date) && StringUtils.hasText(tag))
+			return contentDao.listByKeyAndDateAndTag(word, date, tag);
+		if (!StringUtils.hasText(word) && StringUtils.hasText(date) && StringUtils.hasText(tag))
+			return contentDao.listByDateAndTag(date, tag);
+		if (!StringUtils.hasText(date) && StringUtils.hasText(word) && StringUtils.hasText(tag))
+			return contentDao.ListByKeyAndTag(word, tag);
+		if (!StringUtils.hasText(tag) && StringUtils.hasText(word) && StringUtils.hasText(date))
+			return contentDao.listByKeyAndDate(word, date);
+		if (StringUtils.hasText(word))
+			return contentDao.listByKey(word);
+		if (StringUtils.hasText(date))
+			return contentDao.listByDate(date);
+		if (StringUtils.hasText(tag))
+			// 直接使用标签进行分类查询时，最多返回200条数据，以防数据太多
+			return contentDao.listByTagAndLimit(tag, 0, 200);
+		return null;
+	}
+
+	/**
 	 * 新增tag对象
+	 * 
 	 * @param name
 	 */
 	public void addTag(String name) {

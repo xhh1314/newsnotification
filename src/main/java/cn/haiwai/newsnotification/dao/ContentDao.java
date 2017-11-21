@@ -102,6 +102,49 @@ public interface ContentDao {
 	 * @return 更新数量
  	 */
 	Integer updateContentStatus(int cid, int status);
+
+	/**
+	 * 以 关键字 时间 标签三个维度查询
+	 * @param word
+	 * @param date
+	 * @param tag
+	 * @return
+	 */
+	List<ContentDO> listByKeyAndDateAndTag(String word, String date, String tag);
+
+	/**
+	 * 以时间 标签两个维度查询
+	 * @param date
+	 * @param tag
+	 * @return
+	 */
+	List<ContentDO> listByDateAndTag(String date, String tag);
+
+	/**
+	 * 以关键字  标签两个维度查询
+	 * @param word
+	 * @param tag
+	 * @return
+	 */
+	List<ContentDO> ListByKeyAndTag(String word, String tag);
+
+	/**
+	 * 以关键字 时间两个维度查询
+	 * @param word
+	 * @param date
+	 * @return
+	 */
+	List<ContentDO> listByKeyAndDate(String word, String date);
+
+	
+	/**
+	 * 以标签为维度查询 同时分页
+	 * @param tag
+	 * @param i 起始位置
+	 * @param j 偏移量
+	 * @return
+	 */
+	List<ContentDO> listByTagAndLimit(String tag, int i, int j);
 	
 
 }
