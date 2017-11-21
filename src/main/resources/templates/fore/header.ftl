@@ -36,12 +36,6 @@ var keyTagInitial="${keyTag!""}";
 //document.oncontextmenu=new Function("event.returnValue=false"); 
 //document.onselectstart=new Function("event.returnValue=false"); 
 
-	//执行一个laydate实例
-	laydate.render({
-		elem : '#input-newsTime',
-		calender : true
-	//指定元素
-	});
 
 
 	function pageInitial() {
@@ -60,7 +54,7 @@ var keyTagInitial="${keyTag!""}";
 			elem : '#input-newsTime',
 			calender : true, //指定元素
 			done : function(value, date, endDate) {
-				selectByDate(value);
+				keyDate=value;
 			}
 		});
 	}
@@ -68,21 +62,15 @@ var keyTagInitial="${keyTag!""}";
 	//js也需要转义\
 
 	//日期正则
-
-	var patter1 = new RegExp("^[2][0]\\d{2}\-\\d{2}\-\\d{2}$", "g");
-	function selectByDate(date) {
-		if (date == null || date == "" || date == undefined)
-			return false;
-		if (!patter1.test(date)) {
-			keyDate="";
-			alert("日期格式不正确!请录入正确的格式：YYYY-MM-DD");
-			return false;
-		}
-		keyDate=date;
-	}
+	var patter1 = new RegExp("^[2][0]\\d{2}\\-\\d{2}\\-\\d{2}", "g");
 	//非空字符正则
 	var patter2 = new RegExp("\\S", "g");
 	function doSearch() {
+		if (!(keyDate == null || keyDate == "" || keyDate == undefined) && !patter1.test(keyDate)) {
+			keyDate="";
+			alert("日期"+value+"格式不正确!请录入正确的格式：YYYY-MM-DD");
+			return false;
+		}
 		var key = $(".keyinput").val();
 		if (patter2.test(key)) {
 			keyWord = key;
@@ -94,12 +82,46 @@ var keyTagInitial="${keyTag!""}";
 				+ "&keyWord=" + keyWord + "&keyTag=" + keyTag;
 	}
 
+	$(window).on('load', function() {
+		if (keyTagInitial == "" || keyTagInitial == undefined) {
+			$('.dropdown .text').text("选择标签");
+		} else {
+			$('.dropdown .text').text(keyTagInitial);
+			keyTag = keyTagInitial;
+			
+		}
+		
+	});
+
 	$(document).ready(function() {
 		$(".dropdown").dropdown({
 			on : 'click',
 			allowCategorySelection : true,
 			onChange : function(value, text, $choice) {
-				keyTag = value;
+				if (value == 0)
+					text = "";
+				keyTag = text;
+			}
+		});
+
+
+	//关键字 回车事件
+		$("#keyword").on('keypress', function(event) {
+			if (event.which == 13) {
+				doSearch();
+			}
+		});
+		//日期 回车事件
+		$("#input-newsTime").on('keypress', function(event) {
+			if (event.which == 13) {
+				doSearch();
+			}
+		});
+
+		//CTRL+Q 查询快捷键
+		$(document).on('keydown', function(event) {
+			if (event.ctrlKey && event.which == 81) {
+				doSearch();
 			}
 		});
 
@@ -143,7 +165,7 @@ var keyTagInitial="${keyTag!""}";
 				<div class="ui  labeled input calender">
 				    <label for="input-newsTime" class="ui label"><i class="calendar icon"></i></label>
 					<input type="text" placeholder="日期查询" id="input-newsTime"
-						value="${dateTemp?if_exists}">
+						value="${keyDate?if_exists}">
 				</div>
 				<div class="ui search keysearch">
 					<div class="ui labeled input">
@@ -155,15 +177,15 @@ var keyTagInitial="${keyTag!""}";
 				</div>
 				<div class="tagSelect">
 					<div class="ui labeled icon dropdown ">
-						<i class="tags icon"></i> <span class="text">选择标签</span>
+						<i class="tags icon"></i> <span class="text"></span>
 						<div class="menu">
 							<div class="header">
 								<i class="filter icon"></i>标签过滤
 							</div>
 							<div class="divider"></div>
-							<div class="item" data-value="1">指示</div>
-							<div class="item" data-value="2">禁止</div>
-							<div class="item" data-value="3">鼓励</div>
+							<#list tags?if_exists as tag>
+							<div class="item" data-value="${tag.id!}">${tag.name!}</div>
+							</#list>
 							<div class="item" data-value="0">无分类...</div>
 						</div>
 					</div>
