@@ -106,7 +106,7 @@ spring:
 #配置druid连接池
     druid:
           initial-size : 10
-          max-active : 100
+          max-active : 100  
 #      min-idle:
 #      max-wait:
 #      pool-prepared-statements:
