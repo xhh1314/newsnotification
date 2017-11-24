@@ -1,9 +1,12 @@
 package cn.haiwai.newsnotification.web.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 
 import cn.haiwai.newsnotification.manage.AbstractPage;
+import cn.haiwai.newsnotification.manage.elasticsearch.ElasticSearchDataInitial;
 import cn.haiwai.newsnotification.manage.response.Response;
 import cn.haiwai.newsnotification.service.ContentBO;
 import cn.haiwai.newsnotification.service.ContentService;
@@ -35,7 +39,10 @@ import cn.haiwai.newsnotification.service.TagBO;
 public class AdminController {
 	@Autowired
 	private ContentService cs;
+	@Autowired
+	private ElasticSearchDataInitial esi;
 
+	private static final Logger logger=LoggerFactory.getLogger(AdminController.class);
 	/**
 	 * 后台主页
 	 * 
@@ -148,7 +155,14 @@ public class AdminController {
 			}
 			return Response.failure(msg);
 		}
-		ContentBO b = cs.saveContent(new ContentBO(content));
+		ContentBO b = null;
+		 try {
+			b = cs.saveContent(content);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			logger.error("es新增post索引失败!title:{}异常:{}",content.getTitle(),e);
+			return Response.failure("新增索引失败!");
+		}
 		if (b == null) {
 			return Response.failure("保存失败！请稍后重试");
 		}
@@ -305,5 +319,6 @@ public class AdminController {
 	public String adminForward(){
 		return "redirect:/admin/index";
 	}
+	
 
 }

@@ -1,6 +1,6 @@
 spring: 
   profiles: 
-    active : prod
+    active : dev
 ---
 #各个key的冒号后边必须跟一个空格
 server:
@@ -79,6 +79,17 @@ endpoints:
   shutdown:
     enabled : true
     sensitive : false
+#ElasticSearch配置文件
+ElasticSearch:
+  address : 10.1.11.28
+  tcpPort : 9300
+  httpPort : 9200
+  clusterName : elasticsearch
+#文件index
+  document : newsnotification
+#初始化一个类型
+  type : article
+    
 ---
 #各个key的冒号后边必须跟一个空格
 server: 
@@ -145,6 +156,14 @@ endpoints:
   shutdown:
     enabled : true
     sensitive : false
+    
+#ElasticSearch配置文件
+ElasticSearch:
+  address : 10.1.11.28
+  tcpPort : 9300
+  httpPort : 9200
+  cluster:
+    name : elasticsearch
 #添加对jsp的支持
 #  mvc:
 #    view:

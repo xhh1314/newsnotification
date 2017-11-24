@@ -30,6 +30,7 @@ import org.junit.Test;
 import com.alibaba.fastjson.JSON;
 
 import cn.haiwai.newsnotification.dao.bean.ContentDO;
+import cn.haiwai.newsnotification.manage.elasticsearch.ElasticSearchDataInitial;
 
 @SuppressWarnings("resource")
 public class ElasticTest {
@@ -37,7 +38,8 @@ public class ElasticTest {
 	private static TransportClient client=null;
 	static{
 	try {
-		client=new PreBuiltTransportClient(Settings.EMPTY)
+		Settings settings = Settings.builder().put("cluster.name", "elasticsearch").build();
+		client=new PreBuiltTransportClient(settings)
 		        .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName("10.1.11.28"), 9300));
 	} catch (UnknownHostException e) {
 		// TODO Auto-generated catch block
@@ -58,7 +60,7 @@ public class ElasticTest {
 		content1.put("content", "通古今之变");
 		content1.put("id", "1");
 		
-		//Settings settings = Settings.builder().put("cluster.name", "test").build();
+		
 		IndexRequestBuilder indexBuilder=client.prepareIndex("newsnotification","article","1");
 		//indexBuilder.setRouting(routing);
 		IndexResponse response=indexBuilder.setSource(content1).get();
@@ -125,6 +127,7 @@ public class ElasticTest {
 	//	search.set
 		
 	}
+	
 	
 
 }

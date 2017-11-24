@@ -1,7 +1,10 @@
 package cn.haiwai.newsnotification.web.controller;
 
+import java.io.IOException;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -21,7 +24,7 @@ public class ForeController {
 	@Autowired
 	private ContentService cs;
 
-
+    private static final Logger logger=LoggerFactory.getLogger(ForeController.class);
 	/**
 	 * @param model
 	 * @return 返回到主页
@@ -100,7 +103,13 @@ public class ForeController {
 	@RequestMapping(value = "/search", method = RequestMethod.GET)
 	public String searchByArgus(ModelMap model, @RequestParam("keyWord") String keyWord,
 			@RequestParam("keyDate") String keyDate, @RequestParam("keyTag") String keyTag) {
-		List<ContentBO> contents = cs.searchByArgus(keyWord, keyDate, keyTag);
+		List<ContentBO> contents = null;
+		try {
+			contents=cs.searchByArgus(keyWord, keyDate, keyTag);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			logger.error("ElasticSearch搜索发生IO异常{}",e);
+		}
 		if (contents == null) {
 			model.addAttribute("message", "未搜索到内容，请调整日期、关键字或标签分类参数。");
 		}

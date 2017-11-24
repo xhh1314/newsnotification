@@ -81,10 +81,10 @@ public class ContentDaoImpl implements ContentDao {
 	@Transactional
 	public void deleteContent(Integer id) {
 		// TODO Auto-generated method stub
-		ContentDO content=getContent(id);
-		if(content!=null) {
-		contentJpa.delete(content);
-		contentJpa.deleteContentTag(id);
+		ContentDO content = getContent(id);
+		if (content != null) {
+			contentJpa.delete(content);
+			contentJpa.deleteContentTag(id);
 		}
 	}
 
@@ -144,39 +144,48 @@ public class ContentDaoImpl implements ContentDao {
 	}
 
 	@Override
-	public Integer updateContentStatus(int cid,int status) {
+	public Integer updateContentStatus(int cid, int status) {
 		// TODO Auto-generated method stub
-		return contentJpa.updateContentStatus(cid,status);
+		return contentJpa.updateContentStatus(cid, status);
 	}
 
 	@Override
 	public List<ContentDO> listByKeyAndDateAndTag(String word, String date, String tag) {
 		// TODO Auto-generated method stub
-		return contentJpa.listByKeyAndDateAndTag(word,date,tag);
+		return contentJpa.listByKeyAndDateAndTag(word, date, tag);
 	}
 
 	@Override
 	public List<ContentDO> listByDateAndTag(String date, String tag) {
 		// TODO Auto-generated method stub
-		return contentJpa.listByDateAndTag(date,tag);
+		return contentJpa.listByDateAndTag(date, tag);
 	}
 
 	@Override
 	public List<ContentDO> ListByKeyAndTag(String word, String tag) {
 		// TODO Auto-generated method stub
-		return contentJpa.ListByKeyAndTag(word,tag);
+		return contentJpa.ListByKeyAndTag(word, tag);
 	}
 
 	@Override
 	public List<ContentDO> listByKeyAndDate(String word, String date) {
 		// TODO Auto-generated method stub
-		return contentJpa.listByKeyAndDate(word,date);
+		return contentJpa.listByKeyAndDate(word, date);
 	}
 
 	@Override
 	public List<ContentDO> listByTagAndLimit(String tag, int i, int j) {
 		// TODO Auto-generated method stub
-		return contentJpa.listByTagAndLimit(tag,i,j);
+		return contentJpa.listByTagAndLimit(tag, i, j);
+	}
+
+	@Override
+	public List<ContentDO> listByIdArray(String[] ids) {
+		// TODO Auto-generated method stub	
+		//占位符可以直接接收一个数组参数，会自动转换,不能自己转换成(1,2,3)这样的形式，会识别不出来
+		if(ids==null || ids.length==0)
+			return null;
+		return contentJpa.listByIdArray(ids);
 	}
 
 }

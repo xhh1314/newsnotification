@@ -1,0 +1,43 @@
+#使用http请求初始化
+#初始化index type
+curl -XPUT "http://10.1.11.28:9200/newsnotification" -H 'Content-Type: application/json' -d'
+{
+  "mappings":{
+    "article":{
+      "properties":{
+        "id":{"type": "keyword"},
+          "tag":{
+          "type": "keyword"
+        },
+        "title":{"type":"text",
+          "analyzer": "ik_max_word",
+          "search_analyzer": "ik_smart"
+        },
+      
+        "content":{"type": "text",
+                "analyzer": "ik_max_word",
+                "search_analyzer": "ik_smart"
+        }
+      }
+    }
+  }
+}'
+
+#删除document操作
+curl -XDELETE "http://10.1.11.28:9200/newsnotification"
+
+#根据id查询一条记录
+#pretty参数表示格式化json，使其看着美观
+curl -XGET "http://10.1.11.28:9200/newsnotification/article/643?pretty"
+
+#根据条件查询记录
+#例：查询tag标签内容
+curl -XGET "http://10.1.11.28:9200/newsnotification/article/_search" -H 'Content-Type: application/json' -d'
+{
+  "query": {
+    "match": {
+      "tag": "测试"
+    }
+  }
+}'
+

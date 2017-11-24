@@ -2,11 +2,62 @@
   "hints": [],
   "groups": [
     {
+      "sourceType": "cn.haiwai.newsnotification.manage.elasticsearch.ElasticSearchConnection",
+      "name": "ElasticSearch",
+      "type": "cn.haiwai.newsnotification.manage.elasticsearch.ElasticSearchConnection"
+    },
+    {
+      "sourceType": "cn.haiwai.newsnotification.manage.elasticsearch.ElasticSearchDataInitial",
+      "name": "ElasticSearch",
+      "type": "cn.haiwai.newsnotification.manage.elasticsearch.ElasticSearchDataInitial"
+    },
+    {
       "sourceType": "cn.haiwai.newsnotification.config.DatasourceConfiguration",
       "name": "spring.datasource",
       "sourceMethod": "public javax.sql.DataSource dataSource() ",
       "type": "javax.sql.DataSource"
     }
   ],
-  "properties": []
+  "properties": [
+    {
+      "sourceType": "cn.haiwai.newsnotification.manage.elasticsearch.ElasticSearchConnection",
+      "name": "ElasticSearch.address",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "cn.haiwai.newsnotification.manage.elasticsearch.ElasticSearchDataInitial",
+      "name": "ElasticSearch.address",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "cn.haiwai.newsnotification.manage.elasticsearch.ElasticSearchConnection",
+      "name": "ElasticSearch.cluster-name",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "cn.haiwai.newsnotification.manage.elasticsearch.ElasticSearchDataInitial",
+      "name": "ElasticSearch.cluster-name",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "cn.haiwai.newsnotification.manage.elasticsearch.ElasticSearchConnection",
+      "name": "ElasticSearch.document",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "cn.haiwai.newsnotification.manage.elasticsearch.ElasticSearchConnection",
+      "name": "ElasticSearch.http-port",
+      "type": "java.lang.Integer"
+    },
+    {
+      "sourceType": "cn.haiwai.newsnotification.manage.elasticsearch.ElasticSearchDataInitial",
+      "name": "ElasticSearch.tcp-port",
+      "type": "java.lang.Integer"
+    },
+    {
+      "sourceType": "cn.haiwai.newsnotification.manage.elasticsearch.ElasticSearchConnection",
+      "name": "ElasticSearch.type",
+      "type": "java.lang.String"
+    }
+  ]
 }

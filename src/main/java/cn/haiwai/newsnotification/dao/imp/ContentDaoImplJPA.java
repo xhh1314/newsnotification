@@ -98,4 +98,11 @@ public interface ContentDaoImplJPA extends JpaRepository<ContentDO, Integer> {
 	@Query(value = SQL6, nativeQuery = true)
 	List<ContentDO> listByTagAndLimit(String tag, int i, int j);
 
+	static final String SQL7 = "select c.id,c.title,c.content,c.status,c.receive_time,t.name as tags"
+			+ " from content c,content_tag ct,tag t  where   c.id=ct.c_id and ct.t_id=t.id "
+			+ " and  c.id in ?1";
+	@Query(value=SQL7,nativeQuery=true)
+	List<ContentDO> listByIdArray(String[] id);
+
+
 }

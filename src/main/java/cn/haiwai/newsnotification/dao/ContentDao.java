@@ -7,6 +7,7 @@ import cn.haiwai.newsnotification.dao.bean.ContentDO;
 
 /**
  * 存储正文内容的dao类
+ * 
  * @author lh
  * @time 2017年10月25日
  * @version 1.0
@@ -14,7 +15,7 @@ import cn.haiwai.newsnotification.dao.bean.ContentDO;
 public interface ContentDao {
 
 	/**
-	 * 插入内容
+	 * 插入内容 插入之前检查tag是否存在，同时检查content.id是否数据库存在，如果存在则update
 	 * 
 	 * @param content
 	 * @return
@@ -46,7 +47,8 @@ public interface ContentDao {
 	/**
 	 * 根据某一个日期查询内容
 	 * 
-	 * @param date 日期格式为yyyy-MM-dd
+	 * @param date
+	 *            日期格式为yyyy-MM-dd
 	 * @return
 	 */
 	List<ContentDO> listByDate(String date);
@@ -91,20 +93,23 @@ public interface ContentDao {
 
 	/**
 	 * 返回最近7天创建的数据,以实际创建时期为准
+	 * 
 	 * @return
 	 */
 	List<ContentDO> listByRecentSevenDay();
 
 	/**
 	 * 更新content的status
+	 * 
 	 * @param cid
-	 * @param status 
+	 * @param status
 	 * @return 更新数量
- 	 */
+	 */
 	Integer updateContentStatus(int cid, int status);
 
 	/**
 	 * 以 关键字 时间 标签三个维度查询
+	 * 
 	 * @param word
 	 * @param date
 	 * @param tag
@@ -114,6 +119,7 @@ public interface ContentDao {
 
 	/**
 	 * 以时间 标签两个维度查询
+	 * 
 	 * @param date
 	 * @param tag
 	 * @return
@@ -121,7 +127,8 @@ public interface ContentDao {
 	List<ContentDO> listByDateAndTag(String date, String tag);
 
 	/**
-	 * 以关键字  标签两个维度查询
+	 * 以关键字 标签两个维度查询
+	 * 
 	 * @param word
 	 * @param tag
 	 * @return
@@ -130,21 +137,31 @@ public interface ContentDao {
 
 	/**
 	 * 以关键字 时间两个维度查询
+	 * 
 	 * @param word
 	 * @param date
 	 * @return
 	 */
 	List<ContentDO> listByKeyAndDate(String word, String date);
 
-	
 	/**
 	 * 以标签为维度查询 同时分页
+	 * 
 	 * @param tag
-	 * @param i 起始位置
-	 * @param j 偏移量
+	 * @param i
+	 *            起始位置
+	 * @param j
+	 *            偏移量
 	 * @return
 	 */
 	List<ContentDO> listByTagAndLimit(String tag, int i, int j);
-	
+
+	/**
+	 * 根据id集合查询数据
+	 * 
+	 * @param ids
+	 * @return
+	 */
+	List<ContentDO> listByIdArray(String[] ids);
 
 }

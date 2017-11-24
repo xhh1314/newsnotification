@@ -1,5 +1,6 @@
 package newsnotification.dao;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -19,6 +20,7 @@ import cn.haiwai.newsnotification.dao.bean.TagDO;
 import cn.haiwai.newsnotification.service.ContentBO;
 import cn.haiwai.newsnotification.service.ContentService;
 import cn.haiwai.newsnotification.service.TagBO;
+import cn.haiwai.newsnotification.web.controller.ContentVO;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.NONE, classes = NewsNotificationApplication.class)
@@ -44,6 +46,20 @@ public class ContentTest {
 		ContentDO cd=dao.saveContent(content);
 		System.out.println(cd);
 	}
+	@Test
+	public void insertTest2(){
+		ContentVO c=new ContentVO();
+		c.setTitle("旧时光");
+		c.setReceiveTime("2017-11-22");
+		c.setContent("最理想的客户端生命周期是与应用相同，在应用停止服务之前应该关闭客户端链接，释放资源。");
+		c.setTags("开发  java 测试");
+		try {
+			cs.saveContent(c);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	//@Test
 	public void updateTest() {
@@ -56,7 +72,7 @@ public class ContentTest {
 		content.setTitle("测试");
 		content.setContent("在我小的时候，熬夜还是一件不常见的事情。那个时候身边的人的作息都十分有规律");
 		content.setReceiveTime("2017-11-02");
-		cs.saveContent(content);
+	//	cs.saveContent(content);
 	}
 
 	@Test
@@ -77,7 +93,7 @@ public class ContentTest {
 			content.setTitle("相思" + i);
 			content.setContent("落叶聚还散,寒鸦栖复惊" + i);
 			content.setReceiveTime("2017-10-29");
-			cs.saveContent(content);
+			//cs.saveContent(content);
 		}
 	}
 

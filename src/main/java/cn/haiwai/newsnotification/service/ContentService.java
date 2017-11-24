@@ -1,6 +1,9 @@
 package cn.haiwai.newsnotification.service;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -25,6 +28,7 @@ import cn.haiwai.newsnotification.dao.TagDao;
 import cn.haiwai.newsnotification.dao.bean.ContentDO;
 import cn.haiwai.newsnotification.dao.bean.TagDO;
 import cn.haiwai.newsnotification.manage.AbstractPage;
+import cn.haiwai.newsnotification.manage.elasticsearch.ElasticSearchConduct;
 import cn.haiwai.newsnotification.manage.util.TimeTransfer;
 import cn.haiwai.newsnotification.web.controller.ContentVO;
 
@@ -45,16 +49,27 @@ public class ContentService {
 	private ContentDao contentDao;
 	@Autowired
 	private TagDao tagDao;
+	@Autowired
+	private ElasticSearchConduct esc;
+
+	private static final String DOCUMENT = "newsnotification";
+	private static final String TYPE = "article";
 
 	/**
 	 * 保存content的逻辑
 	 * 
 	 * @param content
 	 * @return contentBO
+	 * @throws IOException
 	 */
 	@Transactional
-	public ContentBO saveContent(ContentBO content) {
+	public ContentBO saveContent(ContentVO contentVO) throws IOException {
+		ContentBO content = new ContentBO(contentVO);
 		ContentDO newContent = contentDao.saveContent(new ContentDO(content));
+		contentVO.setTagArray(contentVO.getTags().split("\\s+"));
+		contentVO.setCid(newContent.getId());
+		if (!esc.insertIndex(DOCUMENT, TYPE, contentVO))
+			return null;
 		return newContent == null ? null : new ContentBO(newContent);
 	}
 
@@ -261,28 +276,85 @@ public class ContentService {
 	 * @param date
 	 * @param tag
 	 * @return
+	 * @throws IOException
 	 */
-	public List<ContentBO> searchByArgus(String word, String date, String tag) {
+	public List<ContentBO> searchByArgus(String word, String date, String tag) throws IOException {
 		// 如果传入的参数为空，则调用listContens方法，查询最近一周或者一天的数据
 		if (!StringUtils.hasText(word) && !StringUtils.hasText(date) && !StringUtils.hasText(tag))
 			return listContents();
-		List<ContentDO> contentDOs = searchByArgusAction(word, date, tag);
+		List<ContentDO> contentDOs = searchByArgusActionFromES(word, date, tag);
 		if (contentDOs == null || contentDOs.isEmpty())
 			return null;
 		List<ContentBO> contents = transferfromContentDO(contentDOs);
-		// 按id降序
-		Collections.sort(contents);
 		return parseHtml(contents);
 	}
 
 	/**
-	 * 以时间 标签 关键字为维度进行查询，分析关键字是否为空，来决定使用哪种查询
+	 * 根据多个维度查询，涉及关键字的查询,从ElasticSearch搜索结果
+	 * 
+	 * @param word
+	 * @param date
+	 * @param tag
+	 * @return
+	 * @throws IOException
+	 */
+	private List<ContentDO> searchByArgusActionFromES(String word, String date, String tag) throws IOException {
+		String[] ids = null;
+		List<ContentDO> contents = null;
+		if (StringUtils.hasText(word) && StringUtils.hasText(date) && StringUtils.hasText(tag))
+			contents = contentDao
+					.listByIdArray(ids = esc.searchIndexByKeyAndDateAndTag(DOCUMENT, TYPE, word, date, tag));
+		else if (!StringUtils.hasText(word) && StringUtils.hasText(date) && StringUtils.hasText(tag))
+			contents = contentDao.listByDateAndTag(date, tag);
+		else if (!StringUtils.hasText(date) && StringUtils.hasText(word) && StringUtils.hasText(tag))
+			contents = contentDao.listByIdArray(ids = esc.searchIndexByKeyAndTag(DOCUMENT, TYPE, word, tag));
+		else if (!StringUtils.hasText(tag) && StringUtils.hasText(word) && StringUtils.hasText(date))
+			contents = contentDao.listByIdArray(ids = esc.searchIndexByKeyAndDate(DOCUMENT, TYPE, word, date));
+		else if (StringUtils.hasText(word))
+			contents = contentDao.listByIdArray(ids = esc.searchIndexByKey(DOCUMENT, TYPE, word));
+		else if (StringUtils.hasText(date))
+			contents = contentDao.listByDate(date);
+		else if (StringUtils.hasText(tag))
+			// 直接使用标签进行分类查询时，最多返回200条数据，以防数据太多
+			contents = contentDao.listByTagAndLimit(tag, 0, 200);
+		if(contents==null || contents.isEmpty())
+			return null;
+		if (ids == null || ids.length==0) {
+			//降序排列
+			Collections.sort(contents, new Comparator<ContentDO>() {
+				@Override
+				public int compare(ContentDO o1, ContentDO o2) {
+					if (o1.getId() == o2.getId())
+						return 0;
+					return o1.getId() > o2.getId() ? -1 : 1;
+				}
+
+			});
+			return contents;
+		}else{
+		List<ContentDO> contentSort=new ArrayList<ContentDO>(contents.size());
+		for(String id:ids){
+			for(ContentDO e:contents){
+				if(Integer.parseInt(id)==e.getId()){
+					contentSort.add(e);
+					break;
+				}
+			}
+			
+		}
+		return contentSort;
+		}
+	}
+
+	/**
+	 * 以时间 标签 关键字为维度进行查询，分析关键字是否为空，来决定使用哪种查询 直接从数据库查询实现
 	 * 
 	 * @param word
 	 * @param date
 	 * @param tag
 	 * @return
 	 */
+	@SuppressWarnings("unused")
 	private List<ContentDO> searchByArgusAction(String word, String date, String tag) {
 		if (StringUtils.hasText(word) && StringUtils.hasText(date) && StringUtils.hasText(tag))
 			return contentDao.listByKeyAndDateAndTag(word, date, tag);
