@@ -1,4 +1,4 @@
 /.apt_generated/
-/target/
+target/
 /.setting/
 data/
