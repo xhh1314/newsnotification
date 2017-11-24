@@ -19,18 +19,19 @@ spring:
     druid:
           initial-size : 2
           max-active : 10
-#      min-idle:
-#      max-wait:
-#      pool-prepared-statements:
-#      max-pool-prepared-statement-per-connection-size:
+          min-idle: 1
+          max-wait: 60000
+          pool-prepared-statements: false
+          max-pool-prepared-statement-per-connection-size: 20
 #      validation-query:
 #      validation-query-timeout:
-#      test-on-borrow:
-#      test-on-return:
-#      test-while-idle:
+          validationQuery : select * from users where id=1; 
+          test-on-borrow: false
+          test-on-return: false
+          test-while-idle: true
 #      time-between-eviction-runs-millis:
-#      min-evictable-idle-time-millis:
-#      max-evictable-idle-time-millis:
+          min-evictable-idle-time-millis: 60000
+          max-evictable-idle-time-millis: 300000
           filter:
          # 配置StatFilter 
                  stat:
@@ -96,18 +97,19 @@ spring:
     druid:
           initial-size : 10
           max-active : 100
-#      min-idle:
-#      max-wait:
-#      pool-prepared-statements:
-#      max-pool-prepared-statement-per-connection-size:
+          min-idle: 10
+          max-wait: 60000
+          pool-prepared-statements: false
+          max-pool-prepared-statement-per-connection-size: 20
 #      validation-query:
 #      validation-query-timeout:
-#      test-on-borrow:
-#      test-on-return:
-#      test-while-idle:
+          validationQuery : select * from users where id=1; 
+          test-on-borrow: false
+          test-on-return: false
+          test-while-idle: true
 #      time-between-eviction-runs-millis:
-#      min-evictable-idle-time-millis:
-#      max-evictable-idle-time-millis:
+          min-evictable-idle-time-millis: 60000
+          max-evictable-idle-time-millis: 300000
           filter:
          # 配置StatFilter 
                  stat:
