@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import cn.haiwai.newsnotification.manage.util.TimeTransfer;
 import cn.haiwai.newsnotification.service.ContentBO;
 import cn.haiwai.newsnotification.service.ContentService;
 import cn.haiwai.newsnotification.service.TagBO;
@@ -34,6 +35,8 @@ public class ForeController {
 		}
 		List<TagBO> tags=cs.listAllTag();
 		model.addAttribute("tags",tags);
+		//访问首页时，默认显示当天日期
+		model.addAttribute("keyDate", TimeTransfer.getToday());
 		model.addAttribute("contents", contents);
 		return "fore/index";
 	}
@@ -61,6 +64,8 @@ public class ForeController {
 		if (content == null)
 			return "admin/comm/error_404";
 		List<TagBO> tags=cs.listAllTag();
+		//访问首页时，默认显示当天日期
+		model.addAttribute("keyDate", TimeTransfer.getToday());
 		model.addAttribute("tags",tags);
 		model.addAttribute("content", content);
 		return "fore/contentPage";

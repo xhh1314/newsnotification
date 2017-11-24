@@ -33,10 +33,8 @@ var keyTag="";
 //记住刷新页面后的keyTag
 var keyTagInitial="${keyTag!""}";
 //禁止复制
-//document.oncontextmenu=new Function("event.returnValue=false"); 
-//document.onselectstart=new Function("event.returnValue=false"); 
-
-
+document.oncontextmenu=new Function("event.returnValue=false"); 
+document.onselectstart=new Function("event.returnValue=false"); 
 
 	function pageInitial() {
 		showTitle();
@@ -83,12 +81,12 @@ var keyTagInitial="${keyTag!""}";
 	}
 
 	$(window).on('load', function() {
+		pageInitial();
 		if (keyTagInitial == "" || keyTagInitial == undefined) {
 			$('.dropdown .text').text("选择标签");
 		} else {
 			$('.dropdown .text').text(keyTagInitial);
 			keyTag = keyTagInitial;
-			
 		}
 		
 	});
@@ -100,7 +98,10 @@ var keyTagInitial="${keyTag!""}";
 			onChange : function(value, text, $choice) {
 				if (value == 0)
 					text = "";
+				var keyTagTemp=keyTag;
 				keyTag = text;
+				if(keyTagTemp!=text)
+				doSearch();
 			}
 		});
 
@@ -149,7 +150,7 @@ var keyTagInitial="${keyTag!""}";
 <meta charset="UTF-8">
 <title>${(content.title)!""}</title>
 </head>
-<body onload="pageInitial()">
+<body>
 <noscript> 
 <iframe src="*.htm"></iframe> 
 </noscript> 
@@ -164,7 +165,7 @@ var keyTagInitial="${keyTag!""}";
 			<div class="nav-middle">
 				<div class="ui  labeled input calender">
 				    <label for="input-newsTime" class="ui label"><i class="calendar icon"></i></label>
-					<input type="text" placeholder="日期查询" id="input-newsTime"
+					<input type="text" placeholder="日期过滤" id="input-newsTime"
 						value="${keyDate?if_exists}">
 				</div>
 				<div class="ui search keysearch">
