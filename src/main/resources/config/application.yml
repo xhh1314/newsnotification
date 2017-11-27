@@ -1,6 +1,6 @@
 spring: 
   profiles: 
-    active : dev
+    active : prod
 ---
 #各个key的冒号后边必须跟一个空格
 server:
