@@ -1,6 +1,6 @@
 spring: 
   profiles: 
-    active : prod
+    active : dev
 ---
 #各个key的冒号后边必须跟一个空格
 server:
@@ -11,7 +11,7 @@ spring:
 #数据源信息
   datasource:
     type : com.alibaba.druid.pool.DruidDataSource
-    url : jdbc:mysql://localhost:3306/notification?useSSL=true
+    url : jdbc:mysql://localhost:3306/notification?useSSL=true&autoReconnect=true
     username : root
     password : root
     driver-class-name : com.mysql.jdbc.Driver
@@ -25,7 +25,7 @@ spring:
           max-pool-prepared-statement-per-connection-size: 20
 #      validation-query:
 #      validation-query-timeout:
-          validationQuery : select * from users where id=1; 
+          validationQuery : select id from users where id=1; 
           test-on-borrow: false
           test-on-return: false
           test-while-idle: true
@@ -89,7 +89,7 @@ spring:
 #数据源信息
   datasource:
     type : com.alibaba.druid.pool.DruidDataSource
-    url : jdbc:mysql://10.1.11.28:3306/newsnotification?useSSL=false
+    url : jdbc:mysql://10.1.11.28:3306/newsnotification?useSSL=false&autoReconnect=true
     username : newsnotification
     password : Newsnotification123!
     driver-class-name : com.mysql.jdbc.Driver
@@ -103,7 +103,7 @@ spring:
           max-pool-prepared-statement-per-connection-size: 20
 #      validation-query:
 #      validation-query-timeout:
-          validationQuery : select * from users where id=1; 
+          validationQuery : select id from users where id=1; 
           test-on-borrow: false
           test-on-return: false
           test-while-idle: true
