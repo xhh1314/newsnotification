@@ -14,6 +14,7 @@ import org.jsoup.nodes.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -45,6 +46,8 @@ public class ContentService {
 	private ContentDao contentDao;
 	@Autowired
 	private TagDao tagDao;
+	@Value("${myproperties.limitNumber}")
+	private int limitNumber;
 
 	/**
 	 * 保存content的逻辑
@@ -298,7 +301,7 @@ public class ContentService {
 			return contentDao.listByDate(date);
 		if (StringUtils.hasText(tag))
 			// 直接使用标签进行分类查询时，最多返回200条数据，以防数据太多
-			return contentDao.listByTagAndLimit(tag, 0, 200);
+			return contentDao.listByTagAndLimit(tag, 0, limitNumber);
 		return null;
 	}
 

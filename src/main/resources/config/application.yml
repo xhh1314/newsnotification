@@ -71,6 +71,8 @@ logging:
 #图片存储位置
 myproperties:
   imageroot : static/image
+#数据太多时，最多查询多少数据
+  limitNumber: 1000
 #是否启用redis
   isRedis : no
 #支持http关闭springboot
@@ -155,5 +157,7 @@ endpoints:
 #图片存储位置
 myproperties:
   imageroot : static/image
+#数据太多时，最多查询多少数据
+  limitNumber: 1000
 #是否启用redis
   isRedis : no
