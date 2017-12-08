@@ -8,7 +8,7 @@
 				<div class="content">
 					<a class="header" href="${ctx}/content/${content.cid}" target="_blank">${content.title}</a>
 					<div class="meta">
-						<span class="cinema">${content.receiveTime}</span>
+						<span class="cinema">${content.createTime}</span>
 					</div>
 					<div class="description">
 						<p>${content.content}</p>
