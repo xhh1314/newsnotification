@@ -28,6 +28,11 @@ public class ContentBO implements Comparable<ContentBO> {
 	 * 网新办下发日期
 	 */
 	private String receiveTime;
+
+	/**
+	 * 文章创建时间
+	 */
+	private String createTime;
 	/**
 	 * 文章状态
 	 */
@@ -41,15 +46,18 @@ public class ContentBO implements Comparable<ContentBO> {
 	public ContentBO(ContentDO content) {
 		this.cid = content.getId();
 		this.content = content.getContent();
-		//业务允许正文为空，如果正文无内容，则前台显示的时候，补上一段说明，以美观
-		if(!StringUtils.hasText(this.content))
-			this.content="无更多内容";
+		// 业务允许正文为空，如果正文无内容，则前台显示的时候，补上一段说明，以美观
+		if (!StringUtils.hasText(this.content))
+			this.content = "无更多内容";
 		this.title = content.getTitle();
 		this.receiveTime = TimeTransfer.dateToLocalDate(content.getReceiveTime()).toString();
+		if (content.getCreateTime() != null)
+			this.createTime = TimeTransfer.LocalDateTimeString(content.getCreateTime());
 		this.status = content.getStatus();
 		this.tags = transfer(content.getTags());
 	}
-	public ContentBO(ContentVO content){
+
+	public ContentBO(ContentVO content) {
 		this.cid = content.getCid();
 		this.content = content.getContent();
 		this.title = content.getTitle();
@@ -106,6 +114,14 @@ public class ContentBO implements Comparable<ContentBO> {
 		this.tags = tags;
 	}
 
+	public String getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(String createTime) {
+		this.createTime = createTime;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -129,8 +145,8 @@ public class ContentBO implements Comparable<ContentBO> {
 
 		return ts;
 	}
-	
-	private Set<TagBO> transferTag(String tag){
+
+	private Set<TagBO> transferTag(String tag) {
 		String[] tags = tag.split("\\s+");
 		Set<TagBO> tagSet = new HashSet<TagBO>(16);
 		for (String e : tags) {
