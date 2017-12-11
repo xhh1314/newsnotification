@@ -13,6 +13,8 @@ import org.springframework.stereotype.Component;
 
 import cn.haiwai.newsnotification.dao.ContentDao;
 
+import javax.annotation.PreDestroy;
+
 /**
  * 定时查询数据库，保证数据库连接不断开 实现ApplicationRunner类，在springboot项目启动完成后执行代码
  * 注意：mysql查询异常会阻塞任务的执行
@@ -26,7 +28,7 @@ public class TimingSelectMysql implements Runnable, ApplicationRunner {
 	private static final Logger logger = LoggerFactory.getLogger(TimingSelectMysql.class);
 	@Autowired
 	private ContentDao contentDao;
-	private ScheduledExecutorService schedule = Executors.newScheduledThreadPool(1);
+	private final ScheduledExecutorService schedule = Executors.newScheduledThreadPool(1);
 	private final long initialDelay = 1;
 	private final long period = 240;
 
@@ -50,5 +52,19 @@ public class TimingSelectMysql implements Runnable, ApplicationRunner {
 		// TODO Auto-generated method stub
 		startTask();
 	}
+
+	/**
+	 *注册一个shutdown hook，关闭应用时关闭连接池
+	 *@date 2017/12/11
+	 *@param
+	 *@author lh
+	 *@since
+	 */
+	@PreDestroy
+	public void destroy(){
+		schedule.shutdown();
+		logger.info("关闭定时查询Mysql连接池{}", schedule.toString());
+	}
+
 
 }
