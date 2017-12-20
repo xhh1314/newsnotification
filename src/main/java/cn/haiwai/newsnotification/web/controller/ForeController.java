@@ -31,7 +31,7 @@ public class ForeController {
 	public String index(ModelMap model) {
 		List<ContentBO> contents = cs.listContents();
 		if (contents == null) {
-			model.addAttribute("message", "最近7天没有数据，请查看其他日期！");
+			model.addAttribute("message", "最近7天无数据，请查看其他日期！");
 		}
 		List<TagBO> tags=cs.listAllTag();
 		model.addAttribute("tags",tags);
@@ -102,6 +102,14 @@ public class ForeController {
 		throw new RuntimeException("exceptionTest");
 	}
 
+	/**
+	 * 按参数查询数据，如果三个参数都为空，则直接返回最近7天数据
+	 * @param model
+	 * @param keyWord
+	 * @param keyDate
+	 * @param keyTag
+	 * @return
+	 */
 	@RequestMapping(value = "/search", method = RequestMethod.GET)
 	public String searchByArgus(ModelMap model, @RequestParam("keyWord") String keyWord,
 			@RequestParam("keyDate") String keyDate, @RequestParam("keyTag") String keyTag) {

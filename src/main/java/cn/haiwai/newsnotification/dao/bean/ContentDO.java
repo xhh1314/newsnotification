@@ -120,7 +120,7 @@ public class ContentDO implements Serializable {
 	 * 
 	 * @return
 	 */
-	@Transient
+	@Column(name="create_time")
 	public Date getCreateTime() {
 		return createTime;
 	}

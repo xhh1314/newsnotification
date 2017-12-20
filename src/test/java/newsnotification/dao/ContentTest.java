@@ -58,6 +58,12 @@ public class ContentTest {
 		content.setReceiveTime("2017-11-02");
 		cs.saveContent(content);
 	}
+	@Test
+	public void getContentById(){
+		@SuppressWarnings("unused")
+		ContentDO content=dao.getContent(650);
+		
+	}
 
 	@Test
 	public void regexTest() {
@@ -89,7 +95,8 @@ public class ContentTest {
 	}
 	@Test
 	public void listByKey(){
-		List<ContentBO> contents=cs.listContentsByKey("相思");
+		List<ContentBO> contents=cs.listContentsByKey("中宣部");
+		//List<ContentDO> contents=dao.listByKey("中宣部");
 		System.out.println(contents);
 	}
 	

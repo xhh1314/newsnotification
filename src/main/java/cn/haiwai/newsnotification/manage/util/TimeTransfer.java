@@ -2,6 +2,7 @@ package cn.haiwai.newsnotification.manage.util;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -15,66 +16,97 @@ import java.util.Locale;
  * @date 2017年10月27日
  * @version 1.0
  */
+/**
+ * 
+ * @author Administrator
+ * @date 2017年12月8日
+ * @version
+ */
 public class TimeTransfer {
-	 /**
+	/**
 	 * 时区
 	 */
 	private static final ZoneId zoneId = ZoneId.systemDefault();
-	
+
 	/**
 	 * 2017-10-27 的日期格式
 	 */
-	private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.SIMPLIFIED_CHINESE);
+	private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd",
+			Locale.SIMPLIFIED_CHINESE);
+	/**
+	 * 2017-10-27 11:11 精确到分钟的日期格式
+	 */
+	private static final DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm",
+			Locale.SIMPLIFIED_CHINESE);
 
-	
 	/**
 	 * 把字符串日期转换成 Date对象
+	 * 
 	 * @param date
-	 * @return Date 
+	 * @return Date
 	 */
-	public static Date stringToDate(String date){
-		return localDateToDate(stringToLocalDate(date)); 
+	public static Date stringToDate(String date) {
+		return localDateToDate(stringToLocalDate(date));
 	}
-	
-	
+
 	/**
 	 * LocalDate 转换成Date
+	 * 
 	 * @param date
 	 * @return LocalDate
 	 */
-	public static Date localDateToDate(LocalDate date){
+	public static Date localDateToDate(LocalDate date) {
 		ZonedDateTime zdt = date.atStartOfDay(zoneId);
 		return Date.from(zdt.toInstant());
 	}
-	
+
 	/**
 	 * Date 转换成LocalDate
+	 * 
 	 * @param date
 	 * @return
 	 */
-	public static LocalDate dateToLocalDate(Date date){
-		if(date instanceof java.sql.Date) {
-			date=new java.util.Date(date.getTime());
+	public static LocalDate dateToLocalDate(Date date) {
+		if (date instanceof java.sql.Date) {
+			date = new java.util.Date(date.getTime());
 		}
 		Instant instant = date.toInstant();
 		return instant.atZone(zoneId).toLocalDate();
-		
+
 	}
-	
 	/**
-	 * 把字符串日期转换成 LocalDate对象
+	 * 把date 转换成精确到分钟的时间格式字符串s
 	 * @param date
 	 * @return
 	 */
-	public static LocalDate stringToLocalDate(String date){
-		return LocalDate.parse(date,formatter);
+	public static LocalDateTime dateToLocalDateTime(Date date) {
+		if (date instanceof java.sql.Date) {
+			date = new java.util.Date(date.getTime());
+		}
+		Instant instant = date.toInstant();
+		return instant.atZone(zoneId).toLocalDateTime();
+
 	}
 	
-	public static String getToday(){
-		LocalDate date=LocalDate.now();
+	public static String LocalDateTimeString(Date date){
+		LocalDateTime localDate=dateToLocalDateTime(date);
+		return localDate.format(formatter2);
+	
+	}
+
+	/**
+	 * 把字符串日期转换成 LocalDate对象
+	 * 
+	 * @param date
+	 * @return
+	 */
+	public static LocalDate stringToLocalDate(String date) {
+		return LocalDate.parse(date, formatter);
+	}
+
+	public static String getToday() {
+		LocalDate date = LocalDate.now();
 		return date.toString();
 	}
-	
-	
 
 }
