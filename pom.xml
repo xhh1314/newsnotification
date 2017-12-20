@@ -13,6 +13,9 @@
 		<version>1.5.6.RELEASE</version>
 		<relativePath></relativePath>
 	</parent>
+	<properties>
+		<docker.image.prefix>newsnotification</docker.image.prefix>
+	</properties>
 	<dependencies>
 		<!-- Add typical dependencies for a web application 同时会附带对logback的支持 -->
 		<dependency>
@@ -74,7 +77,12 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-tomcat</artifactId>
-			<scope>provided</scope>
+			<!--<scope>provided</scope>-->
+		</dependency>
+		<dependency>
+			<groupId>org.apache.tomcat.embed</groupId>
+			<artifactId>tomcat-embed-jasper</artifactId>
+			<!--<scope>provided</scope>-->
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/org.jsoup/jsoup -->
