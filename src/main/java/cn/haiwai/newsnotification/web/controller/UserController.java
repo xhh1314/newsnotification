@@ -6,6 +6,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.*;
+import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +29,7 @@ import cn.haiwai.newsnotification.manage.response.Response;
 import cn.haiwai.newsnotification.manage.util.VerifyCodeUtil;
 import cn.haiwai.newsnotification.service.UserBO;
 import cn.haiwai.newsnotification.service.UserService;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
  * 用户控制类，处理用户登录、注册、刷新验证码操作
@@ -92,42 +96,49 @@ public class UserController {
 
 	/**
 	 * 登录
-	 * 
-	 * @param name
-	 * @param password
-	 * @param request
-	 * @param model
-	 * @param response
+	 *
 	 * @return
 	 * @throws UnsupportedEncodingException
 	 */
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public String login(@RequestParam("name") String name, @RequestParam("password") String password,
-			HttpServletRequest request, ModelMap model, HttpServletResponse response)
+	public String login(@RequestParam("name") String username, @RequestParam("password") String password, RedirectAttributes redirectAttributes)
 			throws UnsupportedEncodingException {
 		UserBO user = new UserBO();
-		user.setName(name);
+		user.setName(username);
 		user.setPassword(password);
-		UserBO newUser = userService.verificationUser(user);
-		// 验证user用户名密码是否匹配
-		if (newUser != null) {
-			logger.info("用户:{}登录了系统！", newUser.getName());
-			HttpSession session = request.getSession();
-			session.setAttribute("user", newUser);
-			String previousUri = request.getParameter("previousUri");// previousUri是登录页面隐藏表单
-			// 如果是从其他链接跳转到登录界面的，则登录成功之后返回登录之前的页面
-			if (previousUri == null || previousUri.equals("")) {
-				return "redirect:/admin/index";
-			} else {
-				// 截取掉项目根名称，如/shop/forePermission/addOderItem
-				// 截取后为/forePermission/addOderItem
-				return "redirect:" + previousUri.substring(request.getContextPath().length());
-			}
-		} else {
-			model.addAttribute("user", user);
-			model.addAttribute("message", "用户名或者密码错误！");
-			return "back/admin/login";
-
+		UsernamePasswordToken token=new UsernamePasswordToken(username,password);
+		//获取当前的subject
+		Subject currentUser= SecurityUtils.getSubject();
+		try {
+			//在调用了login方法后,SecurityManager会收到AuthenticationToken,并将其发送给已配置的Realm执行必须的认证检查
+			//每个Realm都能在必要时对提交的AuthenticationTokens作出反应
+			//所以这一步在调用login(token)方法时,它会走到MyRealm.doGetAuthenticationInfo()方法中,具体验证方式详见此方法
+			logger.info("对用户[" + username + "]进行登录验证..验证开始");
+			currentUser.login(token);
+			logger.info("对用户[" + username + "]进行登录验证..验证通过");
+		}catch(UnknownAccountException uae){
+			logger.info("对用户[" + username + "]进行登录验证..验证未通过,未知账户");
+			redirectAttributes.addFlashAttribute("message", "未知账户");
+		}catch(IncorrectCredentialsException ice){
+			logger.info("对用户[" + username + "]进行登录验证..验证未通过,错误的凭证");
+			redirectAttributes.addFlashAttribute("message", "密码不正确");
+		}catch(LockedAccountException lae){
+			logger.info("对用户[" + username + "]进行登录验证..验证未通过,账户已锁定");
+			redirectAttributes.addFlashAttribute("message", "账户已锁定");
+		}catch(ExcessiveAttemptsException eae){
+			logger.info("对用户[" + username + "]进行登录验证..验证未通过,错误次数过多");
+			redirectAttributes.addFlashAttribute("message", "用户名或密码错误次数过多");
+		}catch(AuthenticationException ae){
+			//通过处理Shiro的运行时AuthenticationException就可以控制用户登录失败或密码错误时的情景
+			logger.info("对用户[" + username + "]进行登录验证..验证未通过,堆栈轨迹如下");
+			ae.printStackTrace();
+			redirectAttributes.addFlashAttribute("message", "用户名或密码不正确");
+		}
+		//验证是否通过
+		if(currentUser.isAuthenticated()){
+			return "redirect:/admin/index";
+		}else {
+			return "redirect:/user/login";
 		}
 
 	}
@@ -137,8 +148,7 @@ public class UserController {
 	/**
 	 * 前台通过ajax传入name，后台判定该name是否可以注册
 	 * 因为可能包含特殊字符@，直接传入字符串后端出现乱码，所以前台转换成json格式，传入后台 使用Gson解析传入的json数据
-	 * 
-	 * @param email
+	 *
 	 * @param response
 	 * @param request
 	 * @return
@@ -222,11 +232,10 @@ public class UserController {
 	 * @return
 	 */
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
-	public String logout(HttpServletRequest request) {
-		HttpSession session = request.getSession();
-		if (session.getAttribute("user") != null) {
-			session.removeAttribute("user");
-		}
+	public String logout(HttpServletRequest request,RedirectAttributes redirectAttributes ) {
+		//使用权限管理工具进行用户的退出，跳出登录，给出提示信息
+		SecurityUtils.getSubject().logout();
+		redirectAttributes.addFlashAttribute("message", "您已安全退出");
 		return "redirect:/user/login";
 	}
 
