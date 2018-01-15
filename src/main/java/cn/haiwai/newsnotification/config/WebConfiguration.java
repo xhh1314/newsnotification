@@ -36,11 +36,11 @@ public class WebConfiguration  extends WebMvcConfigurerAdapter{
 		 * (non-Javadoc)
 		 * @see org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter#addResourceHandlers(org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry)
 		 */
-		@Override
+	/*	@Override
 	    public void addResourceHandlers(ResourceHandlerRegistry registry) {
 			registry.addResourceHandler("/staic/**").addResourceLocations("/static/");
 			registry.addResourceHandler("/staic/**").addResourceLocations("/templates/static/");
-		}
+		}*/
 
 
 }
