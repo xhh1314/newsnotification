@@ -34,3 +34,37 @@ constraint fk_tag foreign key(t_id) references tag(id),
 constraint fk_content foreign key(c_id) references content(id)
 );
 
+
+create table module(
+  mid int(11) auto_increment PRIMARY key,
+  name VARCHAR(255) not null
+);
+create table role(
+  rid int(11) auto_increment primary key,
+  name varchar(100) not null
+);
+create table role_module(
+  mid int(11) not null,
+  rid int(11) not null,
+  PRIMARY key(mid,rid)
+);
+create table user_role(
+  uid int(11) not null,
+  rid int(11) not null,
+  PRIMARY key(uid,rid)
+);
+
+INSERT INTO `module` VALUES ('1', 'add');
+INSERT INTO `module` VALUES ('2', 'delete');
+INSERT INTO `module` VALUES ('3', 'query');
+INSERT INTO `module` VALUES ('4', 'update');
+
+INSERT INTO `role_module` VALUES ('1', '1');
+INSERT INTO `role_module` VALUES ('1', '2');
+INSERT INTO `role_module` VALUES ('1', '3');
+INSERT INTO `role_module` VALUES ('1', '4');
+INSERT INTO `role_module` VALUES ('2', '1');
+INSERT INTO `role_module` VALUES ('2', '3');
+
+INSERT INTO `role` VALUES ('1', 'admin');
+INSERT INTO `role` VALUES ('2', 'customer');

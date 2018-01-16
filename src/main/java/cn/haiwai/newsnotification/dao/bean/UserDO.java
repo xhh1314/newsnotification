@@ -2,13 +2,9 @@ package cn.haiwai.newsnotification.dao.bean;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Set;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 
 import cn.haiwai.newsnotification.service.UserBO;
 
@@ -42,6 +38,8 @@ public class UserDO implements Serializable {
 	 * 用户创建时间戳
 	 */
 	private Date createTime;
+
+	private Set<RoleDO> roles;
 
 	public UserDO(){};
 	public UserDO(UserBO user) {
@@ -87,4 +85,13 @@ public class UserDO implements Serializable {
 		this.createTime = createTime;
 	}
 
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "user_role",joinColumns = @JoinColumn(name = "uid",referencedColumnName = "id"),inverseJoinColumns=@JoinColumn(name="rid",referencedColumnName = "rid"))
+	public Set<RoleDO> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(Set<RoleDO> roles) {
+		this.roles = roles;
+	}
 }

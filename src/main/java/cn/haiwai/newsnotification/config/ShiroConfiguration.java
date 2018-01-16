@@ -11,9 +11,13 @@ import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.filter.DelegatingFilterProxy;
 
+import javax.servlet.Filter;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -29,13 +33,6 @@ public class ShiroConfiguration {
         return em;
     }
 
-    @Bean(name = "myShiroRealm")
-    public MyShiroRealm myShiroRealm(EhCacheManager cacheManager) {
-        MyShiroRealm realm = new MyShiroRealm();
-       // realm.setCacheManager(cacheManager);
-        return realm;
-    }
-
     /**
      * 注册DelegatingFilterProxy（Shiro）
      * 集成Shiro有2种方法：
@@ -49,16 +46,48 @@ public class ShiroConfiguration {
      * @create 2016年1月13日
      */
 
- /*   @Bean
- public FilterRegistrationBean filterRegistrationBean() {
-      FilterRegistrationBean filterRegistration = new FilterRegistrationBean();
-      filterRegistration.setFilter(new DelegatingFilterProxy("shiroFilter"));
-      //  该值缺省为false,表示生命周期由SpringApplicationContext管理,设置为true则表示由ServletContainer管理
-      filterRegistration.addInitParameter("targetFilterLifecycle", "true");
-     filterRegistration.setEnabled(true);
-     filterRegistration.addUrlPatterns("/*");// 可以自己灵活的定义很多，避免一些根本不需要被Shiro处理的请求被包含进来
-      return filterRegistration;
-  }*/
+    @Bean
+    public FilterRegistrationBean filterRegistrationBean() {
+        FilterRegistrationBean filterRegistration = new FilterRegistrationBean();
+        filterRegistration.setFilter(new DelegatingFilterProxy("shiroFilter"));
+        //  该值缺省为false,表示生命周期由SpringApplicationContext管理,设置为true则表示由ServletContainer管理
+        filterRegistration.addInitParameter("targetFilterLifecycle", "true");
+        filterRegistration.setEnabled(true);
+        filterRegistration.addUrlPatterns("/admin/*");// 可以自己灵活的定义很多，避免一些根本不需要被Shiro处理的请求被包含进来
+        return filterRegistration;
+    }
+
+    /**
+     * 配置自定义的权限登录器
+     *
+     * @param cacheManager
+     * @param matcher
+     * @return
+     */
+    @Bean(name = "myShiroRealm")
+    public MyShiroRealm myShiroRealm(EhCacheManager cacheManager, @Qualifier("credentialsMatcher") CredentialsMatcher matcher) {
+        MyShiroRealm realm = new MyShiroRealm();
+        realm.setCacheManager(cacheManager);
+        realm.setCredentialsMatcher(matcher);
+        return realm;
+    }
+
+    //配置自定义的密码比较器
+    @Bean(name = "credentialsMatcher")
+    public CredentialsMatcher credentialsMatcher() {
+        CredentialsMatcher credentialsMatcher = new cn.haiwai.newsnotification.config.CredentialsMatcher();
+        return credentialsMatcher;
+    }
+
+    @Bean(name = "securityManager")
+    public DefaultWebSecurityManager getDefaultWebSecurityManager(@Qualifier("myShiroRealm") MyShiroRealm myShiroRealm) {
+        DefaultWebSecurityManager dwsm = new DefaultWebSecurityManager();
+        dwsm.setRealm(myShiroRealm);
+//      <!-- 用户授权/认证信息Cache, 采用EhCache 缓存 -->
+        dwsm.setCacheManager(getEhCacheManager());
+        return dwsm;
+    }
+
     @Bean(name = "lifecycleBeanPostProcessor")
     public LifecycleBeanPostProcessor getLifecycleBeanPostProcessor() {
         return new LifecycleBeanPostProcessor();
@@ -69,22 +98,6 @@ public class ShiroConfiguration {
         DefaultAdvisorAutoProxyCreator daap = new DefaultAdvisorAutoProxyCreator();
         daap.setProxyTargetClass(true);
         return daap;
-    }
-
-    //配置自定义的密码比较器
-    @Bean(name="credentialsMatcher")
-    public CredentialsMatcher credentialsMatcher() {
-        HashedCredentialsMatcher matcher=new HashedCredentialsMatcher();
-        matcher.setHashAlgorithmName("MD5");
-        return matcher;
-    }
-    @Bean(name = "securityManager")
-    public DefaultWebSecurityManager getDefaultWebSecurityManager(MyShiroRealm myShiroRealm) {
-        DefaultWebSecurityManager dwsm = new DefaultWebSecurityManager();
-        dwsm.setRealm(myShiroRealm);
-//      <!-- 用户授权/认证信息Cache, 采用EhCache 缓存 -->
-       // dwsm.setCacheManager(getEhCacheManager());
-        return dwsm;
     }
 
     @Bean
@@ -104,14 +117,17 @@ public class ShiroConfiguration {
         /////////////////////// 下面这些规则配置最好配置到配置文件中 ///////////////////////
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<String, String>();
         // authc：该过滤器下的页面必须验证后才能访问，它是Shiro内置的一个拦截器org.apache.shiro.web.filter.authc.FormAuthenticationFilter
-        filterChainDefinitionMap.put("/admin/**", "authc");// 这里为了测试，只限制/user，实际开发中请修改为具体拦截的请求规则
-
         logger.info("##################从数据库读取权限规则，加载到shiroFilter中##################");
-       // filterChainDefinitionMap.put("/user/edit/**", "authc,perms[user:edit]");// 这里为了测试，固定写死的值，也可以从数据库或其他配置中读取
+        // filterChainDefinitionMap.put("/user/edit/**", "authc,perms[user:edit]");
         // anon：它对应的过滤器里面是空的,什么都没做
+        // 这里为了测试，固定写死的值，也可以从数据库或其他配置中读取
+        //TODO 务必注意这里的拦截器顺序，特殊路径应该配置在前面，比如/*这样的路径应该配置在拦截器后边,所以封装对象的时候应该用Link来存，保证有序
         filterChainDefinitionMap.put("/admin/login", "anon");
-       // filterChainDefinitionMap.put("/**", "anon");//anon 可以理解为不拦截
-
+        filterChainDefinitionMap.put("user/logout","logout");
+        filterChainDefinitionMap.put("/admin/index", "roles[admin,customer]");
+        filterChainDefinitionMap.put("/admin/contentEdit", "perms[admin:add]");
+        filterChainDefinitionMap.put("/admin/**", "authc");
+        filterChainDefinitionMap.put("/**", "anon");//anon 可以理解为不拦截
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
     }
 
@@ -126,15 +142,18 @@ public class ShiroConfiguration {
      */
     @Bean(name = "shiroFilter")
     public ShiroFilterFactoryBean getShiroFilterFactoryBean(DefaultWebSecurityManager securityManager) {
-
-        ShiroFilterFactoryBean shiroFilterFactoryBean = new MShiroFilterFactoryBean();
+        ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         // 必须设置 SecurityManager
         shiroFilterFactoryBean.setSecurityManager(securityManager);
         // 如果不设置默认会自动寻找Web工程根目录下的"/login.jsp"页面
         shiroFilterFactoryBean.setLoginUrl("/user/login");
         // 登录成功后要跳转的连接
         shiroFilterFactoryBean.setSuccessUrl("/admin/index");
-        shiroFilterFactoryBean.setUnauthorizedUrl("/403");
+        shiroFilterFactoryBean.setUnauthorizedUrl("/user/403");
+        Map<String, Filter> filterMap=shiroFilterFactoryBean.getFilters();
+        //重写roles判断器，具体含义请看@CustomRolesAuthorizationFilter注解描述
+        filterMap.put("roles",new CustomRolesAuthorizationFilter());
+        shiroFilterFactoryBean.setFilters(filterMap);
         loadShiroFilterChain(shiroFilterFactoryBean);
         return shiroFilterFactoryBean;
     }

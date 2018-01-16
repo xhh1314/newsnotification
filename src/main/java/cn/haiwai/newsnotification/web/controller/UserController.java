@@ -262,5 +262,9 @@ public class UserController {
 			return Response.failure();
 		}
 	}
+	@RequestMapping(value = "/403")
+	public String get403(){
+		return "common/403";
+	}
 
 }
