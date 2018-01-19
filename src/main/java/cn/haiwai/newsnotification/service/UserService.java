@@ -53,22 +53,13 @@ public class UserService {
         if (user1 == null) {
             return null;
         }
-        try {
-            //验证密码是否符合
-            if (user1.getPassword().equals(Md5.getMd5(user.getPassword()))) {
-
-                return new UserBO(user1);
-            } else {
-                return null;
-            }
-        } catch (NoSuchAlgorithmException e) {
-            // TODO Auto-generated catch block
-
-            throw new RuntimeException(e);
-        } catch (UnsupportedEncodingException e) {
-            // TODO Auto-generated catch block
-            throw new RuntimeException("编码格式不符合规范");
+        //验证密码是否符合
+        if (user1.getPassword().equals(Md5.getMd5(user.getPassword()))) {
+            return new UserBO(user1);
+        } else {
+            return null;
         }
+
 
     }
 

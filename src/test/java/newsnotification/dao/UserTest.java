@@ -8,6 +8,8 @@ import cn.haiwai.newsnotification.dao.UserDao;
 import cn.haiwai.newsnotification.dao.bean.ModuleDO;
 import cn.haiwai.newsnotification.dao.bean.RoleDO;
 import cn.haiwai.newsnotification.dao.bean.UserDO;
+import cn.haiwai.newsnotification.manage.util.Md5;
+import org.apache.tomcat.util.security.MD5Encoder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,5 +57,11 @@ public class UserTest {
 		for(RoleDO roleDO:roles){
 			System.out.println(roleDO.getModules());
 		}
+	}
+	@Test
+	public void testPassword(){
+		String password="1234";
+		System.out.println(Md5.getMd5(password));
+
 	}
 }

@@ -6,6 +6,7 @@ import cn.haiwai.newsnotification.dao.bean.UserDO;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
+import org.apache.shiro.cas.CasRealm;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.slf4j.Logger;
@@ -16,7 +17,7 @@ import org.springframework.stereotype.Component;
 import java.util.Set;
 
 @Component
-public class MyShiroRealm extends AuthorizingRealm {
+public class MyShiroRealm extends CasRealm {
 
     private static final Logger logger = LoggerFactory.getLogger(MyShiroRealm.class);
 
@@ -25,6 +26,8 @@ public class MyShiroRealm extends AuthorizingRealm {
 
     @Autowired
     private UserDao userDao;
+
+
 
     /**
      * 权限认证，为当前登录的Subject授予角色和权限
@@ -35,7 +38,7 @@ public class MyShiroRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
-        logger.info("##################执行Shiro权限认证##################");
+        logger.info("————————————————————执行Shiro权限认证————————————————");
         //获取当前登录输入的用户名，等价于(String) principalCollection.fromRealm(getName()).iterator().next();
         String loginName = (String) super.getAvailablePrincipal(principalCollection);
         //到数据库查是否有此对象
@@ -54,6 +57,7 @@ public class MyShiroRealm extends AuthorizingRealm {
         for (RoleDO role : roleDOS) {
             info.addStringPermissions(role.getModulesName());
         }
+        logger.info("——————————————执行Shiro权限认证完成，添加角色 资源完成——————————————————————");
         // 或者按下面这样添加
         //添加一个角色,不是配置意义上的添加,而是证明该用户拥有admin角色
 //            simpleAuthorInfo.addRole("admin");
@@ -69,7 +73,10 @@ public class MyShiroRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
-        //UsernamePasswordToken对象用来存放提交的登录信息
+
+        return  super.doGetAuthenticationInfo(authenticationToken);
+        //集成cas后不用执行密码登录
+       /* //UsernamePasswordToken对象用来存放提交的登录信息
         UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
         token.setRememberMe(true);
         logger.info("验证当前Subject时获取到token为：" + token.toString());
@@ -79,6 +86,6 @@ public class MyShiroRealm extends AuthorizingRealm {
             // 若存在，将此用户存放到登录认证info中，无需自己做密码对比，Shiro CredentialsMatcher会为我们进行密码对比校验
             return new SimpleAuthenticationInfo(user.getName(), user.getPassword(), getName());
         }
-        return null;
+        return null;*/
     }
 }
