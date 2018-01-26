@@ -1,11 +1,17 @@
 package cn.haiwai.newsnotification.config;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
-@Configuration
-@Component
+
+/**
+ * 这里的属性如果直接从.yml文件加载，@Value("${cas.casServerUrlPrefix}") 后面的shiroConfiguration,注入bean的属性的时候，会注入null值，应该是加载顺序问题
+ * 所以，这里的属性，单独放到application.properties文件，使用ConfigurationProperties的方式加载
+ */
+@ConfigurationProperties(prefix = "cas")
+@Component("casAutoconfig")
 public class SpringCasAutoconfig {
 
     private String validateFilters;
@@ -13,43 +19,65 @@ public class SpringCasAutoconfig {
     private String authFilters;
     private String assertionFilters;
     private String requestWrapperFilters;
+
+    @Value("casServerName")
+    private String casServerName;
     /**
      * https://sso.lihao.com:8443/cas
      */
-    @Value("${cas.casServerUrlPrefix}")
+    @Value("casServerUrlPrefix")
     private String casServerUrlPrefix;
     /**
      * https://sso.lihao.com:8443/cas/login
      */
-    @Value("${cas.casServerLoginUrl}")
+    @Value("casServerLoginUrl")
     private String casServerLoginUrl;
     /**
-     *https://sso.lihao.com:8443/cas/logout
+     * https://sso.lihao.com:8443/cas/logout
      */
-    @Value("${cas.casServerLogoutUrl}")
+    @Value("casServerLogoutUrl")
     private String casServerLogoutUrl;
     /**
      * http://localhost:8080
      */
-    @Value("${cas.localServerUrlPrefix}")
+    @Value("localServerUrlPrefix")
     private String localServerUrlPrefix;
     /**
      * /shiro-cas
      */
-    @Value("${cas.casFilterUrlPattern}")
+    @Value("casFilterUrlPattern")
     private String casFilterUrlPattern;
-    @Value("${cas.serverName}")
+    @Value("serverName")
     private String serverName;
-    @Value("${cas.useSession}")
-    private boolean useSession = true;
-    @Value("${cas.redirectAfterValidation}")
-    private boolean redirectAfterValidation = true;
-    @Value("${cas.localServerLoginUrl}")
+    /**
+     * http://sso.lihao.com:8443/cas/login?service=http://localhost:8080/admin/index
+     */
+    @Value("loginUrl")
+    private String loginUrl;
+
+    @Value("logoutUrl")
+    private String logoutUrl;
+
+    @Value("loginSuccessUrl")
+    private String loginSuccessUrl;
+    @Value("loginFailUrl")
+    private String loginFailUrl;
+
+    @Value("useSession")
+    private String useSession ;
+    @Value("redirectAfterValidation")
+    private String redirectAfterValidation;
+    @Value("localServerLoginUrl")
     private String localServerLoginUrl;
 
-    private String loginUrl=casServerLoginUrl+"?service="+localServerUrlPrefix+casFilterUrlPattern;
 
-    private String logoutUrl=casServerLogoutUrl+"?service="+localServerLoginUrl;
+    public String getCasServerName() {
+        return casServerName;
+    }
+
+    public void setCasServerName(String casServerName) {
+        this.casServerName = casServerName;
+    }
 
     public String getValidateFilters() {
         return validateFilters;
@@ -115,19 +143,19 @@ public class SpringCasAutoconfig {
         this.serverName = serverName;
     }
 
-    public boolean isUseSession() {
+    public String isUseSession() {
         return useSession;
     }
 
-    public void setUseSession(boolean useSession) {
+    public void setUseSession(String useSession) {
         this.useSession = useSession;
     }
 
-    public boolean isRedirectAfterValidation() {
+    public String isRedirectAfterValidation() {
         return redirectAfterValidation;
     }
 
-    public void setRedirectAfterValidation(boolean redirectAfterValidation) {
+    public void setRedirectAfterValidation(String redirectAfterValidation) {
         this.redirectAfterValidation = redirectAfterValidation;
     }
 
@@ -149,6 +177,22 @@ public class SpringCasAutoconfig {
 
     public String getLoginUrl() {
         return loginUrl;
+    }
+
+    public String getLoginSuccessUrl() {
+        return loginSuccessUrl;
+    }
+
+    public void setLoginSuccessUrl(String loginSuccessUrl) {
+        this.loginSuccessUrl = loginSuccessUrl;
+    }
+
+    public String getLoginFailUrl() {
+        return loginFailUrl;
+    }
+
+    public void setLoginFailUrl(String loginFailUrl) {
+        this.loginFailUrl = loginFailUrl;
     }
 
     public void setLoginUrl(String loginUrl) {

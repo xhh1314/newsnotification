@@ -234,9 +234,10 @@ public class UserController {
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
 	public String logout(HttpServletRequest request,RedirectAttributes redirectAttributes ) {
 		//使用权限管理工具进行用户的退出，跳出登录，给出提示信息
+		System.out.println("用户注销!");
 		SecurityUtils.getSubject().logout();
 		redirectAttributes.addFlashAttribute("message", "您已安全退出");
-		return "redirect:/user/login";
+		return "redirect:/admin/login";
 	}
 
 	@ResponseBody

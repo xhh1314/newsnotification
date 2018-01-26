@@ -1,5 +1,6 @@
 package cn.haiwai.newsnotification.manage.util;
 
+import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -12,12 +13,14 @@ import java.util.Locale;
 /**
  * 时间转换工具类  转换localDate 与 Date
  * 使用jdk1.8日期类，线程安全、便捷
+ *
  * @author lh
  * @date 2017年10月27日
  * @version 1.0
  */
+
 /**
- * 
+ *
  * @author Administrator
  * @date 2017年12月8日
  * @version
@@ -41,7 +44,7 @@ public class TimeTransfer {
 
 	/**
 	 * 把字符串日期转换成 Date对象
-	 * 
+	 *
 	 * @param date
 	 * @return Date
 	 */
@@ -51,7 +54,7 @@ public class TimeTransfer {
 
 	/**
 	 * LocalDate 转换成Date
-	 * 
+	 *
 	 * @param date
 	 * @return LocalDate
 	 */
@@ -62,7 +65,7 @@ public class TimeTransfer {
 
 	/**
 	 * Date 转换成LocalDate
-	 * 
+	 *
 	 * @param date
 	 * @return
 	 */
@@ -74,6 +77,7 @@ public class TimeTransfer {
 		return instant.atZone(zoneId).toLocalDate();
 
 	}
+
 	/**
 	 * 把date 转换成精确到分钟的时间格式字符串s
 	 * @param date
@@ -87,21 +91,30 @@ public class TimeTransfer {
 		return instant.atZone(zoneId).toLocalDateTime();
 
 	}
-	
-	public static String LocalDateTimeString(Date date){
-		LocalDateTime localDate=dateToLocalDateTime(date);
+
+	public static String LocalDateTimeString(Date date) {
+		LocalDateTime localDate = dateToLocalDateTime(date);
 		return localDate.format(formatter2);
-	
+
 	}
 
 	/**
 	 * 把字符串日期转换成 LocalDate对象
-	 * 
+	 *
 	 * @param date
 	 * @return
 	 */
 	public static LocalDate stringToLocalDate(String date) {
 		return LocalDate.parse(date, formatter);
+	}
+
+	/**
+	 * 获取当前时间
+	 * @return Timestamp
+	 */
+	public static Timestamp getCurrentTimestamp() {
+		Timestamp timestamp = new Timestamp(new Date().getTime());
+		return timestamp;
 	}
 
 	public static String getToday() {

@@ -1,5 +1,7 @@
 package cn.haiwai.newsnotification.config;
 
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -28,7 +30,8 @@ public class WebConfiguration  extends WebMvcConfigurerAdapter{
 			//registry.addInterceptor(new PermissionInterceptor()).addPathPatterns("/admin/*");
 			registry.addInterceptor(new EncodingFilter()).addPathPatterns("/**");
 		}
-		
+
+
 		
 		/* 
 		 * 注册资源路径

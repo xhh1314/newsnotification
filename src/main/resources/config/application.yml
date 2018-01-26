@@ -58,21 +58,7 @@ spring:
 #配置freemarker
   freemarker:
     request-context-attribute : request
-cas:
-  signOutFilters: /user/logout
-  authFilters: /admin/**
-  validateFilters: /admin/**
-  requestWrapperFilters: /admin/**
-  assertion-filter: /admin/**
-  casServerUrlPrefix: https://sso.lihao.com:8443/cas
-  casServerLoginUrl: ${cas.casServerUrlPrefix}/login
-  casServerLogoutUrl: ${cas.casServerUrlPrefix}/logout
-  redirectAfterValidation: true
-  useSession: true
-  serverName: http://${server.address}:${server.port}
-  localServerUrlPrefix: http://${server.address}:${server.port}
-  casFilterUrlPattern: /shiro-cas
-  localServerLoginUrl: ${cas.serverName}/admin/login
+
 #开发环境配置日志级别
 logging:
   level:
