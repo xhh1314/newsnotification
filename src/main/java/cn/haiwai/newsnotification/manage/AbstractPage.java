@@ -21,7 +21,7 @@ public abstract class AbstractPage {
 	protected int bound;
 
 	/**
-	 * 一个页面要展示几个页码，默认值5
+	 * 一个页面要展示几个页码，默认值10
 	 */
 	protected int eachPage;
 
@@ -66,11 +66,11 @@ public abstract class AbstractPage {
 	}
 
 	/**
-	 * 每页显示的行数使用默认 10 最多5个页码 初始化当前页码为1
+	 * 每页显示的行数使用默认 10 最多10个页码 初始化当前页码为1
 	 */
 	protected AbstractPage() {
 		this.eachPageNumber = 10;
-		this.eachPage = 5;
+		this.eachPage = 10;
 		this.currentPage = 1; // 初始化当前页为第一页
 	}
 

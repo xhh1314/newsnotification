@@ -1,6 +1,6 @@
 spring: 
   profiles: 
-    active : dev
+    active : prod
 ---
 #各个key的冒号后边必须跟一个空格
 server:
@@ -58,6 +58,8 @@ spring:
 #配置freemarker
   freemarker:
     request-context-attribute : request
+    settings:
+          number_format: 0.##########
 #开发环境配置日志级别
 logging:
   level:
@@ -138,6 +140,8 @@ spring:
 #配置freemarker
   freemarker:
     request-context-attribute : request
+    settings:
+      number_format: 0.##########
 #生产环境配置日志级别
 logging:
   level:

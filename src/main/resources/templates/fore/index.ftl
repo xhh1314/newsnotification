@@ -6,7 +6,7 @@
 <#list contents?if_exists as content>
 			<div class="item">
 				<div class="content">
-					<a class="header" href="${ctx}/content/${content.cid}" target="_blank">${content.title}</a>
+					<a class="header" href="${ctx}/content/${content.cid?c}" target="_blank">${content.title}</a>
 					<div class="meta">
 						<span class="cinema">${content.createTime}</span>
 					</div>

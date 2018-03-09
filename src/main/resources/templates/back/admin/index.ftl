@@ -6,10 +6,10 @@
         <table class="ui  fixed  single line selectable celled table contentTable" >
             <thead>
             <tr>
-                <th width="25%">标题</th>
-                <th width="25%" >标签</th>
+                <th width="40%">标题</th>
+                <th width="15%" >标签</th>
                 <th width="15%">发布时间</th>
-                <th width="35%" >操作</th>
+                <th width="30%" >操作</th>
             </tr>
             </thead>
             <tbody>

@@ -65,12 +65,21 @@ public class AdminController {
 	 * @return 返回到后台主页-即列表页
 	 */
 	@RequestMapping(value = "/contentPage")
-	public String contentPage(ModelMap model,@RequestParam("beginPage") int beginPage, @RequestParam("endPage") int endPage,
-			@RequestParam("currentPage") int currentPage,HttpServletRequest request) {
+	public String contentPage(ModelMap model, Integer beginPage,  Integer endPage,
+			 Integer currentPage,HttpServletRequest request) {
 		 String action=request.getParameter("action");
 		 //处理掉线重新登录后没有值得问题
 		 if(action==null || "".equals(action)){
 			 action="assign";
+		 }
+		 if(beginPage==null){
+		 	beginPage=1;
+		 }
+		 if(endPage==null){
+		 	endPage=10;
+		 }
+		 if(currentPage==null){
+		 	currentPage=1;
 		 }
 		AbstractPage page = AbstractPage.getPageInstance(currentPage, beginPage, endPage);
 		List<ContentVO> contents = cs.listContentsByPage(page, action);
